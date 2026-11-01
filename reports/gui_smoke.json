@@ -1,13 +1,13 @@
 {
   "mode": "actual Tk widget smoke test",
   "passed": true,
-  "ui_saved_note_id": "4d08f464-af97-4284-8774-18c362ee7420",
+  "ui_saved_note_id": "98b2f10f-59f9-4ac6-b4d3-7e096170ab78",
   "preview_nonempty": true,
   "visible": true,
   "stats": {
-    "active": 6,
+    "active": 7,
     "trash": 1,
     "tags": 9,
-    "versions": 10
+    "versions": 12
   }
 }

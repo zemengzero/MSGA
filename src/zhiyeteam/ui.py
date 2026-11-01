@@ -16,6 +16,7 @@ class NotebookApp:
     def __init__(self,root,store,data_dir,demo=False):
         self.root,self.store,self.data_dir,self.demo=root,store,Path(data_dir),demo
         self.current=None;self.dirty=False;self.loading=False;self.trash=False;self.after_save=None;self.after_preview=None;self.after_search=None;self.smoke_error=None
+        self.modal_guard=False
         self.title_var=tk.StringVar();self.tags_var=tk.StringVar();self.query_var=tk.StringVar();self.filter_var=tk.StringVar();self.status_var=tk.StringVar(value="所有内容只保存在本机")
         root.title("知页 · 本地学习知识库");root.geometry("1480x900");root.minsize(1160,720);root.configure(bg=BG)
         self._styles();self._layout()
@@ -97,6 +98,7 @@ class NotebookApp:
         self.smoke_error=str(value);self.error(value)
     def error(self,exc):
         self.status_var.set("操作未完成；未保存内容仍保留在编辑器")
+        if self.store.writes_disabled:self.save_button.configure(state="disabled");self.save_state.configure(text="恢复保护状态 · 已停止写入",fg="#a34b12")
         messagebox.showerror("操作未完成",str(exc),parent=self.root)
     def _changed(self):
         if self.loading or self.current is None or self.current.deleted:return
@@ -108,14 +110,18 @@ class NotebookApp:
     def _text_changed(self,_event):
         if self.editor.edit_modified():self.editor.edit_modified(False);self._changed()
     def _autosave_tick(self):
-        if self.dirty:self.save(silent=True)
+        if self.dirty and not self.modal_guard:self.save(silent=True)
         self.root.after(10000,self._autosave_tick)
     def _schedule_search(self):
         if self.after_search:self.root.after_cancel(self.after_search)
         self.after_search=self.root.after(220,lambda:self.refresh(autoselect=False))
     def guard(self):
         if not self.dirty:return True
-        answer=messagebox.askyesnocancel("有未保存内容","是否先保存？\n选择“否”将在切换时放弃当前修改；备份与导出只使用已保存内容。",parent=self.root)
+        if self.modal_guard:return False
+        if self.after_save:self.root.after_cancel(self.after_save);self.after_save=None
+        self.modal_guard=True
+        try:answer=messagebox.askyesnocancel("有未保存内容","是否先保存？\n选择“否”将在切换时放弃当前修改；备份与导出只使用已保存内容。",parent=self.root)
+        finally:self.modal_guard=False
         if answer is None:return False
         return self.save() if answer else True
     def _selected(self,_event):
@@ -162,6 +168,7 @@ class NotebookApp:
         self.query_var.set("");self.filter_var.set("");self.open_note(note.id,True);self.refresh(note.id);self.title_entry.focus_set();self.title_entry.selection_range(0,"end")
     def save(self,silent=False):
         self.after_save=None
+        if self.modal_guard:return False
         if not self.current or self.current.deleted:return True
         try:
             saved=self.store.save(self.current.id,self.title_var.get(),self.editor.get("1.0","end-1c"),self.tags_var.get(),self.current.revision)

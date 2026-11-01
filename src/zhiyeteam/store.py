@@ -31,6 +31,7 @@ def validate_note(title,body,tags):
 
 class NoteStore:
     def __init__(self,path):
+        self.writes_disabled=False
         self.path=Path(path).resolve();self.path.parent.mkdir(parents=True,exist_ok=True)
         self.conn=sqlite3.connect(self.path,timeout=5)
         self.conn.row_factory=sqlite3.Row
@@ -50,6 +51,8 @@ class NoteStore:
         self.conn.commit()
 
     def close(self): self.conn.close()
+    def _writable(self):
+        if self.writes_disabled:raise ValidationError("当前库处于恢复保护状态，请使用已提示的保护副本重新打开")
     def _note(self,row):
         tags=tuple(r[0] for r in self.conn.execute("SELECT t.name FROM tags t JOIN note_tags nt ON nt.tag_id=t.id WHERE nt.note_id=? ORDER BY t.name",(row["id"],)))
         return Note(row["id"],row["title"],row["body"],tags,row["created_at"],row["updated_at"],row["revision"],bool(row["deleted"]))
@@ -71,6 +74,7 @@ class NoteStore:
         from .links import sync_links
         sync_links(self.conn,note_id,body)
     def create(self,title="未命名笔记",body="",tags=()):
+        self._writable()
         title,body,tags=validate_note(title,body,tags)
         note_id=str(uuid.uuid4());stamp=now()
         with self.conn:
@@ -80,6 +84,7 @@ class NoteStore:
             self._set_tags(note_id,tags);self._sync_links(note_id,body);self._history(note_id,"创建")
         return self.get(note_id)
     def save(self,note_id,title,body,tags=(),expected_revision=None,action="编辑"):
+        self._writable()
         title,body,tags=validate_note(title,body,tags)
         with self.conn:
             old=self.get(note_id)
@@ -91,6 +96,7 @@ class NoteStore:
             self._set_tags(note_id,tags);self._sync_links(note_id,body);self._history(note_id,action)
         return self.get(note_id)
     def set_deleted(self,note_id,deleted):
+        self._writable()
         with self.conn:
             note=self.get(note_id)
             if note.deleted==deleted:return note
@@ -99,6 +105,7 @@ class NoteStore:
             self._history(note_id,"移入回收站" if deleted else "从回收站恢复")
         return self.get(note_id)
     def purge(self,note_id):
+        self._writable()
         with self.conn:
             if not self.get(note_id).deleted:raise ValidationError("请先将笔记移入回收站")
             self.conn.execute("DELETE FROM notes WHERE id=?",(note_id,))
@@ -118,4 +125,5 @@ class NoteStore:
         row=self.conn.execute("SELECT value FROM settings WHERE key=?",(key,)).fetchone()
         return json.loads(row[0]) if row else default
     def set_setting(self,key,value):
+        self._writable()
         with self.conn:self.conn.execute("INSERT INTO settings VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(key,json.dumps(value,ensure_ascii=False)))

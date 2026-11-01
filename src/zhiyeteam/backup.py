@@ -72,7 +72,9 @@ def restore_backup(store,source,protection_dir):
         except Exception as exc:
             old=_validated_connection(protection)
             try:_copy(old,store.conn)
-            except Exception as rollback_error:raise AppError(f"恢复和自动回退均失败。请停止编辑，保护副本：{protection}") from rollback_error
+            except Exception as rollback_error:
+                store.writes_disabled=True
+                raise AppError(f"恢复和自动回退均失败。当前库已停止写入，保护副本：{protection}") from rollback_error
             finally:old.close()
             raise AppError("恢复未完成，已经回退原库；保护副本："+str(protection)) from exc
         return protection

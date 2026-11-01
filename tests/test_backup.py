@@ -34,3 +34,20 @@ class BackupTests(StoreFixture):
         with patch("zhiyeteam.backup._copy",fail_second):
             with self.assertRaises(AppError):restore_backup(self.store,target,self.path.parent/"protection")
         self.assertEqual(self.store.get(n.id).body,"current")
+    def test_failed_rollback_disables_future_writes(self):
+        from zhiyeteam import backup
+        n=self.store.create("A","old");target=self.path.parent/"backup.db";create_backup(self.store,target)
+        real=backup._copy;calls=[]
+        def fail_after_protection(src,dst):
+            calls.append(1)
+            if len(calls)>1:raise OSError("injected failure")
+            real(src,dst)
+        with patch("zhiyeteam.backup._copy",fail_after_protection):
+            with self.assertRaises(AppError):restore_backup(self.store,target,self.path.parent/"p")
+        self.assertTrue(self.store.writes_disabled)
+        with self.assertRaises(ValidationError):self.store.save(n.id,"A","new")
+    def test_unknown_schema_is_refused(self):
+        import sqlite3
+        target=self.path.parent/"altered.db";create_backup(self.store,target)
+        con=sqlite3.connect(target);con.execute("CREATE TABLE unexpected(x)");con.commit();con.close()
+        with self.assertRaises(ValidationError):inspect_backup(target)
