@@ -43,6 +43,8 @@ class NoteStore:
             self.conn.close();raise ValidationError("数据库版本不受支持，请先备份并检查版本")
         self.conn.execute("PRAGMA journal_mode=WAL")
         self.conn.execute("PRAGMA synchronous=FULL")
+        page_size=self.conn.execute("PRAGMA page_size").fetchone()[0]
+        self.conn.execute(f"PRAGMA max_page_count={(256*1024*1024)//page_size}")
         self.conn.executescript(Path(__file__).with_name("schema.sql").read_text(encoding="utf-8"))
         self.conn.execute(f"PRAGMA application_id={APP_ID}");self.conn.execute(f"PRAGMA user_version={SCHEMA_VERSION}")
         self.conn.commit()
