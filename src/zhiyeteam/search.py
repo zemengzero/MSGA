@@ -1,9 +1,9 @@
 """AND keyword/tag filtering with deterministic title-first ordering."""
 
-import re
 from datetime import datetime, timezone
 
 from .models import ValidationError
+from .search_presenter import SearchHit, keyword_words, present_hit
 from .store import ascii_lower, clean_tags
 
 
@@ -39,7 +39,7 @@ def search_notes(
         and updated_from >= updated_before
     ):
         raise ValidationError("更新时间起点必须早于终点")
-    words = [ascii_lower(x) for x in re.split(r"\s+", keywords.strip()) if x]
+    words = keyword_words(keywords)
     wanted = set(clean_tags(tags))
     found = []
     for note in store.list_notes(deleted):
@@ -59,6 +59,24 @@ def search_notes(
     found.sort(key=lambda pair: pair[1].updated_at, reverse=True)
     found.sort(key=lambda pair: pair[0], reverse=True)
     return [n for _, n in found]
+
+
+def search_hits(
+    store,
+    keywords="",
+    tags=(),
+    deleted=False,
+    *,
+    updated_from: datetime | None = None,
+    updated_before: datetime | None = None,
+) -> list[SearchHit]:
+    """Return presentation data for the exact search_notes results and order."""
+    notes = search_notes(
+        store, keywords, tags, deleted,
+        updated_from=updated_from, updated_before=updated_before,
+    )
+    words = keyword_words(keywords)
+    return [present_hit(note, words) for note in notes]
 
 
 def tag_counts(store):
