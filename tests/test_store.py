@@ -28,3 +28,11 @@ class StoreTests(StoreFixture):
         self.assertEqual(self.store.get(note.id).body,"old")
     def test_settings_roundtrip(self):
         self.store.set_setting("font_size",16);self.assertEqual(self.store.settings("font_size"),16)
+    def test_second_connection_cannot_silently_overwrite(self):
+        n=self.store.create("A","original")
+        other=NoteStore(self.path)
+        try:
+            other.save(n.id,"A","other window",expected_revision=1)
+            with self.assertRaises(ConflictError):self.store.save(n.id,"A","stale window",expected_revision=1)
+            self.assertEqual(self.store.get(n.id).body,"other window")
+        finally:other.close()
