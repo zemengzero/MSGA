@@ -229,6 +229,7 @@ class NotebookApp:
                 toolbar,
                 text=text,
                 command=command,
+                width=0,
                 style="Accent.TButton" if text == "新建笔记" else "TButton",
             )
             btn.pack(side="left", padx=3)
@@ -496,11 +497,12 @@ class NotebookApp:
         self.delete_button.configure(text="恢复笔记" if self.trash else "移入回收站")
         stat = self.store.stats()
         self.sidebar_stats.configure(
-            text=f"{stat['active']} 篇有效笔记\n{stat['tags']} 个标签 · {stat['versions']} 个版本\n\n回收站 {stat['trash']} 篇"
+            text=f"{stat['active']} 篇有效笔记\n{stat['tags']} 个标签\n{stat['versions']} 个版本\n回收站 {stat['trash']} 篇"
         )
         for child in self.tag_frame.winfo_children():
             child.destroy()
-        for tag, count in tag_counts(self.store)[:8]:
+        tags = tag_counts(self.store)
+        for tag, count in tags[:100]:
             tk.Button(
                 self.tag_frame,
                 text=f"# {tag}    {count}",
@@ -514,6 +516,16 @@ class NotebookApp:
                 pady=5,
                 font=("Microsoft YaHei UI", 9),
             ).pack(fill="x")
+        if len(tags) > 100:
+            self._label(
+                self.tag_frame,
+                "仅列前100个标签，其他标签可在筛选框输入",
+                8,
+                "#ccdbed",
+                NAV,
+                wraplength=160,
+                justify="left",
+            ).pack(fill="x", padx=12, pady=8)
         pick = select_id or (self.current.id if self.current else None)
         if pick and self.list.exists(pick):
             self.list.selection_set(pick)

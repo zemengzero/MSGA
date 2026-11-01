@@ -1,0 +1,18 @@
+{
+  "executed_at_utc": "2026-11-01T14:14:33.743309+00:00",
+  "mode": "actual Tk controls; isolated synthetic data; not user feedback",
+  "ui_source_sha256": "4fb02f95cbd42a885cf07536b98723489e1efbd50f0529180d33894546355c06",
+  "checks": {
+    "actual_combobox_saves_font": true,
+    "font_does_not_edit_note": true,
+    "sidebar_more_than_eight_tags": true,
+    "editor_long_content_scrolls": true,
+    "preview_long_content_scrolls": true,
+    "narrow_window_hides_preview": true,
+    "narrow_window_keeps_save_and_tags_visible": true,
+    "resize_keeps_editor_content": true,
+    "wide_window_restores_preview": true,
+    "reopened_app_restores_font": true
+  },
+  "passed": true
+}
