@@ -8,13 +8,14 @@
 
 ## 交付与演示
 
-- [Windows发布与报告](https://github.com/IceApplejuice/zhiyeteam-software-engineering/releases/tag/v1.0.0)
+- [Windows发布与报告](https://github.com/zemengzero/MSGA/releases/tag/v1.0.0)
 - [四人分工与每次提交安排](docs/团队分工与提交计划.md)
+- [D今晚的仓库统筹操作单](docs/D_仓库统筹操作单.md)
 - [8分钟现场演示步骤](docs/现场演示步骤.md)
 - [功能与代码定位](docs/功能与代码定位.md)
 - 原始实际测试：`reports/test_results.json`、`reports/frozen_smoke.json`；尚未完成的真人反馈不写成已完成。
 
-仓库目前私有。成员需要被邀请并接受；教师或评分服务若需读取源码，须由所有者配置访问权限或明确决定公开。
+本项目使用小组已有的公开仓库`zemengzero/MSGA`，验收日期已确认2026年11月2日。掌握全员GitHub链接的同学担任D，负责协调协作权限、PR合并、发布和证据汇总；其他成员各用本人账号提交。
 
 ## 开发运行
 

@@ -1,13 +1,13 @@
 {
-  "snapshot_head": "25b7fcf0b704fc98484ffaad7c301c457255d65d",
-  "actual_commits": 15,
+  "snapshot_head": "d6e3cbd2aa7ba8392d10bc0bbd4a2a1c991ca199",
+  "actual_commits": 17,
   "distinct_author_emails": 1,
   "members": [
     {
       "role": "A",
       "name": "赵钦泽",
       "github": "IceApplejuice",
-      "matching_actual_commits": 15,
+      "matching_actual_commits": 17,
       "status": "当前账号已有真实基线；个人增量仍按实际PR核验"
     },
     {

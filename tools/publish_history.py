@@ -16,9 +16,9 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-REPO = "IceApplejuice/zhiyeteam-software-engineering"
+REPO = "zemengzero/MSGA"
 PREFIX = "repos/" + REPO
-STATE = ROOT / ".git/api-publish-state.json"
+STATE = ROOT / ".git/api-publish-zemengzero-MSGA.json"
 state = (
     json.loads(STATE.read_text(encoding="utf-8"))
     if STATE.exists()
@@ -188,7 +188,7 @@ def main():
     save_state()
     report = {
         "repository": "https://github.com/" + REPO,
-        "private": True,
+        "private": api("GET", PREFIX)["private"],
         "method": "Git Data API transport of existing local history",
         "source_commits": len(commits),
         "all_original_commit_hashes_preserved": all(

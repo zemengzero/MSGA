@@ -5,8 +5,8 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-REPO = "IceApplejuice/zhiyeteam-software-engineering"
-statefile = ROOT / ".git/team-issues.json"
+REPO = "zemengzero/MSGA"
+statefile = ROOT / ".git/team-issues-MSGA.json"
 state = json.loads(statefile.read_text(encoding="utf-8")) if statefile.exists() else {}
 tasks = [
     (

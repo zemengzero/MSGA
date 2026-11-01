@@ -1,4 +1,6 @@
 ﻿sha,author,email,authored_at,subject
+d6e3cbd2aa7ba8392d10bc0bbd4a2a1c991ca199,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:58:54+08:00,docs: improve test evidence table readability
+1023f42466c6ef48f468b50c9d33eebcaeef51d7,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:57:04+08:00,build: package verified executable reports and authentic history
 25b7fcf0b704fc98484ffaad7c301c457255d65d,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:52:57+08:00,fix(ui): disable empty editors until a note is created
 419bcaf993640b520893221a53173a3232e586d7,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:48:49+08:00,chore: exclude machine-specific intermediate report HTML
 ec850d3fa27ad40a0cc92af5845f9f85068b9367,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:46:01+08:00,docs: add measured course report four-member tasks and code walkthrough

@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RELEASE = ROOT / "release"
 VERSION = "v1.0.0"
-REPO = "https://github.com/IceApplejuice/zhiyeteam-software-engineering"
+REPO = "https://github.com/zemengzero/MSGA"
 
 
 def git(*args):
@@ -101,6 +101,7 @@ def main():
         "功能与代码定位.md",
         "成员信息.csv",
         "真实用户反馈记录.csv",
+        "D_仓库统筹操作单.md",
     ):
         add(ROOT / "docs" / name, "分工与答辩/" + name)
     for name in ("architecture.png", "desktop.png"):
@@ -133,7 +134,7 @@ def main():
         "4. 默认个人数据在%LOCALAPPDATA%/ZhiYeTeam/personal；演示数据在同级demo，互不覆盖。\n"
         "5. 源码ZIP用于阅读，history.bundle保留真实历史；"
         "可执行 git clone zhiyeteam-history.bundle zhiyeteam-source 恢复仓库。\n"
-        f"6. GitHub：{REPO}，当前私有；老师和成员需要访问权限。\n"
+        f"6. GitHub：{REPO}，当前公开；D负责协调全员协作权限、PR合并和发布。\n"
         f"源代码提交：{head}\n"
         f"本包实际单元/业务测试{tests['tests_run']}项通过，独立exe已在本机启动保存。"
         "第二台电脑验证与至少2名真人试用仍待小组实际执行，不能填成已完成。\n"
@@ -141,7 +142,7 @@ def main():
         "现有基线由当前账号AI辅助建立。其余成员要用本人账号完成有实质改动的任务，不能把计划当贡献。\n"
         "请填写另外三人的姓名/学号/GitHub账号，邀请协作者，认领任务；"
         "每人至少三次实质提交，保留diff、测试与PR，演示时讲本人代码。\n"
-        "暂按2026-11-02验收安排；以老师最新通知为准。\n"
+        "已确认2026-11-02验收，按今晚开发、课前冻结与演练安排。\n"
     ).encode("utf-8-sig")
     manifest = {
         "version": VERSION,
@@ -152,7 +153,7 @@ def main():
         "exe_sha256": build["sha256"],
         "ci_url": ci["url"],
         "repository": REPO,
-        "repository_private": True,
+        "repository_private": False,
         "files": [
             {"path": n, "bytes": len(b), "sha256": digest(b)}
             for n, b in sorted(entries.items())
@@ -161,7 +162,7 @@ def main():
     manifest_bytes = json.dumps(manifest, ensure_ascii=False, indent=2).encode("utf-8")
     entries["文件清单与SHA256.json"] = manifest_bytes
     (ROOT / "reports/release_manifest.json").write_bytes(manifest_bytes)
-    output = RELEASE / f"知页团队验收包_{VERSION}.zip"
+    output = RELEASE / f"ZhiYeTeam-MSGA-{VERSION}.zip"
     with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as z:
         for name, content in sorted(entries.items()):
             z.writestr(name, content)
