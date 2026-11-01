@@ -16,4 +16,4 @@ zhiyeteam = "zhiyeteam.__main__:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-zhiyeteam = ["schema.sql"]
+zhiyeteam = ["schema.sql", "assets/*.ico"]

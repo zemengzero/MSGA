@@ -26,3 +26,6 @@ class TransferTests(StoreFixture):
         folder=self.path.parent/"export";folder.mkdir();(folder/"mine.txt").write_text("keep")
         with self.assertRaises(ValidationError):export_notes(self.store,folder)
         self.assertEqual((folder/"mine.txt").read_text(),"keep")
+    def test_malformed_uri_is_inert(self):
+        result=safe_markdown_html('<a href="http://[">broken</a>')
+        self.assertIn("broken",result);self.assertNotIn("href=",result)

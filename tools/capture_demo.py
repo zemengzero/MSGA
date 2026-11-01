@@ -1,6 +1,6 @@
 """Capture only this app's actual window, not the surrounding desktop."""
 from pathlib import Path
-import sys,ctypes
+import sys,ctypes,uuid
 sys.path.insert(0,str(Path(__file__).resolve().parent.parent/"src"))
 from window_capture import capture_owned_window
 import tkinter as tk
@@ -10,7 +10,7 @@ from zhiyeteam.ui import NotebookApp
 
 ROOT=Path(__file__).resolve().parent.parent
 if sys.platform=="win32":ctypes.windll.user32.SetProcessDPIAware()
-data=ROOT/"runtime"/"capture-demo";data.mkdir(parents=True,exist_ok=True)
+data=ROOT/"runtime"/"capture-demo"/uuid.uuid4().hex[:12];data.mkdir(parents=True,exist_ok=True)
 store=NoteStore(data/"notes.db");seed_demo(store)
 root=tk.Tk();app=NotebookApp(root,store,data,True)
 shots=ROOT/"reports"/"screenshots";shots.mkdir(parents=True,exist_ok=True)

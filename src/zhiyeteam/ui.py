@@ -19,6 +19,8 @@ class NotebookApp:
         self.modal_guard=False
         self.title_var=tk.StringVar();self.tags_var=tk.StringVar();self.query_var=tk.StringVar();self.filter_var=tk.StringVar();self.status_var=tk.StringVar(value="所有内容只保存在本机")
         root.title("知页 · 本地学习知识库");root.geometry("1480x900");root.minsize(1160,720);root.configure(bg=BG)
+        icon=Path(__file__).with_name("assets")/"icon.ico"
+        if os.name=="nt" and icon.exists():root.iconbitmap(str(icon))
         self._styles();self._layout()
         self.title_var.trace_add("write",lambda *_:self._changed());self.tags_var.trace_add("write",lambda *_:self._changed())
         self.query_var.trace_add("write",lambda *_:self._schedule_search());self.filter_var.trace_add("write",lambda *_:self._schedule_search())
@@ -90,7 +92,7 @@ class NotebookApp:
         for name,font,color in [("h1",("Microsoft YaHei UI",20,"bold"),INK),("h2",("Microsoft YaHei UI",15,"bold"),INK),("strong",("Microsoft YaHei UI",11,"bold"),INK),("code",("Consolas",10),"#475873"),("link",("Microsoft YaHei UI",11),BLUE)]:self.preview.tag_configure(name,font=font,foreground=color)
         self._label(previewbox,"反向引用",10,MUTED,anchor="w").pack(fill="x",padx=18,pady=(10,2))
         self.backlink_frame=tk.Frame(previewbox,bg="white",height=90);self.backlink_frame.pack(fill="x",padx=12,pady=(0,12))
-        bottom=tk.Frame(self.root,bg="white");bottom.pack(fill="x")
+        bottom=tk.Frame(self.root,bg="white");bottom.pack(side="bottom",fill="x",before=body)
         self._label(bottom,"",9,MUTED,textvariable=self.status_var,anchor="w").pack(side="left",fill="x",expand=True,padx=22,pady=8)
         self._label(bottom,"Ctrl+N 新建  ·  Ctrl+S 保存  ·  Ctrl+F 搜索",9,MUTED).pack(side="right",padx=20)
 
@@ -140,7 +142,7 @@ class NotebookApp:
         self.delete_button.configure(text="恢复笔记" if self.trash else "移入回收站")
         stat=self.store.stats();self.sidebar_stats.configure(text=f"{stat['active']} 篇有效笔记\n{stat['tags']} 个标签 · {stat['versions']} 个版本\n\n回收站 {stat['trash']} 篇")
         for child in self.tag_frame.winfo_children():child.destroy()
-        for tag,count in tag_counts(self.store)[:12]:
+        for tag,count in tag_counts(self.store)[:8]:
             tk.Button(self.tag_frame,text=f"# {tag}    {count}",command=lambda t=tag:self.filter_var.set(t),anchor="w",bg=NAV,fg="#ccdbed",activebackground="#29476d",bd=0,padx=22,pady=5,font=("Microsoft YaHei UI",9)).pack(fill="x")
         pick=select_id or (self.current.id if self.current else None)
         if pick and self.list.exists(pick):self.list.selection_set(pick);self.list.see(pick)
@@ -158,6 +160,7 @@ class NotebookApp:
         self.loading=True;self.current=note;self.title_entry.configure(state="normal");self.tags_entry.configure(state="normal");self.editor.configure(state="normal")
         self.title_var.set(note.title);self.tags_var.set("，".join(note.tags));self.editor.delete("1.0","end");self.editor.insert("1.0",note.body);self.editor.edit_reset();self.editor.edit_modified(False)
         self.dirty=False;self.loading=False
+        self.title_entry.selection_clear()
         if note.deleted:self.title_entry.configure(state="readonly");self.tags_entry.configure(state="readonly");self.editor.configure(state="disabled")
         self.save_button.configure(state="disabled" if note.deleted else "normal")
         self.save_state.configure(text=f"{'回收站 · 只读' if note.deleted else '已保存到本机'}  ·  v{note.revision}  ·  {note.id[:8]}",fg=MUTED)
@@ -198,9 +201,20 @@ class NotebookApp:
         text=self.preview.get("1.0","end-1c")
         in_code=False
         for number,line in enumerate(text.splitlines(),1):
-            if line.lstrip().startswith(("```","~~~")):in_code=not in_code
+            if line.lstrip().startswith(("```","~~~")):
+                in_code=not in_code;self.preview.delete(f"{number}.0",f"{number}.end");continue
             tag="code" if in_code else ("h1" if line.startswith("# ") else "h2" if line.startswith("## ") else None)
             if tag:self.preview.tag_add(tag,f"{number}.0",f"{number}.end")
+            if not in_code:
+                prefix=re.match(r"^#{1,6} +",line)
+                if prefix:self.preview.delete(f"{number}.0",f"{number}.{len(prefix.group())}")
+                cursor=f"{number}.0"
+                while True:
+                    start=self.preview.search("**",cursor,stopindex=f"{number}.end")
+                    if not start:break
+                    end=self.preview.search("**",start+" +2c",stopindex=f"{number}.end")
+                    if not end:break
+                    self.preview.tag_add("strong",start,end+" +2c");self.preview.delete(end,end+" +2c");self.preview.delete(start,start+" +2c");cursor=start+" +1c"
         self.preview.configure(state="disabled")
     def render_backlinks(self):
         for child in self.backlink_frame.winfo_children():child.destroy()

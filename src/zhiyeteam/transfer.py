@@ -14,7 +14,9 @@ class SafeHTML(HTMLParser):
         clean=[]
         if tag=="a":
             values=dict(attrs);href=values.get("href","")
-            if urlsplit(href).scheme.lower() in ("https","http") or re.fullmatch(r"[\w\-\u4e00-\u9fff]+\.html",href) or href.startswith("#"):
+            try:scheme=urlsplit(href).scheme.lower()
+            except ValueError:scheme="";href=""
+            if scheme in ("https","http") or re.fullmatch(r"[\w\-\u4e00-\u9fff]+\.html",href) or href.startswith("#"):
                 clean.append('href="'+html.escape(href,quote=True)+'"')
             clean.append('rel="noreferrer noopener"')
         self.parts.append("<"+tag+(" "+" ".join(clean) if clean else "")+">")
