@@ -1,15 +1,54 @@
 """AND keyword/tag filtering with deterministic title-first ordering."""
 
 import re
+from datetime import datetime, timezone
 
+from .models import ValidationError
 from .store import ascii_lower, clean_tags
 
 
-def search_notes(store, keywords="", tags=(), deleted=False):
+def _utc_bound(value, name):
+    if value is None:
+        return None
+    if not isinstance(value, datetime):
+        raise ValidationError(f"{name}必须是带时区的datetime")
+    if value.utcoffset() is None:
+        raise ValidationError(f"{name}必须包含时区")
+    return value.astimezone(timezone.utc)
+
+
+def search_notes(
+    store,
+    keywords="",
+    tags=(),
+    deleted=False,
+    *,
+    updated_from: datetime | None = None,
+    updated_before: datetime | None = None,
+):
+    """Return Notes in the original order, optionally within [from, before).
+
+    Bounds must be timezone-aware datetimes; comparison uses UTC instants.
+    Either bound may be omitted. Existing positional arguments remain valid.
+    """
+    updated_from = _utc_bound(updated_from, "updated_from")
+    updated_before = _utc_bound(updated_before, "updated_before")
+    if (
+        updated_from is not None
+        and updated_before is not None
+        and updated_from >= updated_before
+    ):
+        raise ValidationError("更新时间起点必须早于终点")
     words = [ascii_lower(x) for x in re.split(r"\s+", keywords.strip()) if x]
     wanted = set(clean_tags(tags))
     found = []
     for note in store.list_notes(deleted):
+        if updated_from is not None or updated_before is not None:
+            updated_at = datetime.fromisoformat(note.updated_at).astimezone(timezone.utc)
+            if updated_from is not None and updated_at < updated_from:
+                continue
+            if updated_before is not None and updated_at >= updated_before:
+                continue
         title = ascii_lower(note.title)
         haystack = title + "\n" + ascii_lower(note.body)
         if not all(w in haystack for w in words) or not wanted.issubset(set(note.tags)):
