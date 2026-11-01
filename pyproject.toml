@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zhiyeteam"
+version = "1.0.0"
+description = "Offline desktop knowledge notebook for a software engineering team project"
+requires-python = ">=3.12"
+dependencies = ["Markdown==3.10.2"]
+
+[project.scripts]
+zhiyeteam = "zhiyeteam.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

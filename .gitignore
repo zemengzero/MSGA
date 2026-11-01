@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+build/
+dist/
+runtime/
+*.db
+*.db-wal
+*.db-shm
+*.spec
+.coverage
+release/*.zip
+release/*.exe
+reports/screenshots/*.png
+docs/generated/*.docx
+docs/generated/*.pdf
