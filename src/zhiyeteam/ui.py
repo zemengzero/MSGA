@@ -39,6 +39,8 @@ class NotebookApp:
         self.after_search = None
         self.smoke_error = None
         self.modal_guard = False
+        self.editor_font_size = self._read_font_size()
+        self.font_size_var = tk.StringVar(value=str(self.editor_font_size))
         self.title_var = tk.StringVar()
         self.tags_var = tk.StringVar()
         self.query_var = tk.StringVar()
@@ -115,6 +117,25 @@ class NotebookApp:
             background=[("selected", "#e4edff")],
             foreground=[("selected", BLUE)],
         )
+
+    def _read_font_size(self):
+        size = self.store.settings("editor_font_size", 12)
+        return size if type(size) is int and 12 <= size <= 24 else 12
+
+    def set_editor_font_size(self, size):
+        if type(size) is not int or not 12 <= size <= 24:
+            raise ValidationError("编辑器字号必须为12–24之间的整数")
+        self.store.set_setting("editor_font_size", size)
+        self.editor.configure(font=("Consolas", size))
+        self.editor_font_size = size
+        self.font_size_var.set(str(size))
+
+    def _font_selected(self, _event=None):
+        try:
+            self.set_editor_font_size(int(self.font_size_var.get()))
+        except (ValueError, AppError, sqlite3.Error) as exc:
+            self.font_size_var.set(str(self.editor_font_size))
+            messagebox.showerror("字号设置未保存", str(exc), parent=self.root)
 
     def _label(self, parent, text, font=10, fg=INK, bg="white", **kw):
         return tk.Label(
@@ -235,12 +256,24 @@ class NotebookApp:
         self.title_entry.pack(fill="x", padx=16, pady=(16, 7))
         self.save_state = self._label(center, "选择一篇笔记开始", 9, MUTED, anchor="w")
         self.save_state.pack(fill="x", padx=18, pady=(0, 10))
+        fontrow = tk.Frame(center, bg="white")
+        fontrow.pack(fill="x", padx=18, pady=(0, 4))
+        self._label(fontrow, "编辑器字号", 9, MUTED).pack(side="left")
+        self.font_picker = ttk.Combobox(
+            fontrow,
+            textvariable=self.font_size_var,
+            values=tuple(range(12, 25)),
+            width=4,
+            state="readonly",
+        )
+        self.font_picker.pack(side="left", padx=8)
+        self.font_picker.bind("<<ComboboxSelected>>", self._font_selected)
         self.editor = tk.Text(
             center,
             wrap="word",
             undo=True,
             maxundo=200,
-            font=("Consolas", 12),
+            font=("Consolas", self.editor_font_size),
             bg="white",
             fg=INK,
             insertbackground=BLUE,
