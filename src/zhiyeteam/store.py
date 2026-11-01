@@ -77,7 +77,7 @@ class NoteStore:
             self.conn.execute("INSERT INTO notes VALUES(?,?,?,?,?,1,0)",(note_id,title,body,stamp,stamp))
             self._set_tags(note_id,tags);self._sync_links(note_id,body);self._history(note_id,"创建")
         return self.get(note_id)
-    def save(self,note_id,title,body,tags=(),expected_revision=None):
+    def save(self,note_id,title,body,tags=(),expected_revision=None,action="编辑"):
         title,body,tags=validate_note(title,body,tags)
         with self.conn:
             old=self.get(note_id)
@@ -86,8 +86,29 @@ class NoteStore:
                 raise ConflictError("此笔记已在其他窗口修改。请另存当前内容或重新读取，原文未被覆盖。")
             if (title,body,tuple(sorted(tags)))==(old.title,old.body,tuple(sorted(old.tags))): return old
             self.conn.execute("UPDATE notes SET title=?,body=?,updated_at=?,revision=revision+1 WHERE id=?",(title,body,now(),note_id))
-            self._set_tags(note_id,tags);self._sync_links(note_id,body);self._history(note_id,"编辑")
+            self._set_tags(note_id,tags);self._sync_links(note_id,body);self._history(note_id,action)
         return self.get(note_id)
+    def set_deleted(self,note_id,deleted):
+        with self.conn:
+            note=self.get(note_id)
+            if note.deleted==deleted:return note
+            if not deleted and self.stats()["active"]>=MAX_ACTIVE_NOTES:raise ValidationError("有效笔记已达5000篇")
+            self.conn.execute("UPDATE notes SET deleted=?,updated_at=?,revision=revision+1 WHERE id=?",(int(deleted),now(),note_id))
+            self._history(note_id,"移入回收站" if deleted else "从回收站恢复")
+        return self.get(note_id)
+    def purge(self,note_id):
+        with self.conn:
+            if not self.get(note_id).deleted:raise ValidationError("请先将笔记移入回收站")
+            self.conn.execute("DELETE FROM notes WHERE id=?",(note_id,))
+            self.conn.execute("DELETE FROM tags WHERE id NOT IN (SELECT tag_id FROM note_tags)")
+    def versions(self,note_id):
+        self.get(note_id)
+        rows=self.conn.execute("SELECT * FROM history WHERE note_id=? ORDER BY revision DESC",(note_id,)).fetchall()
+        return [dict(r)|{"tags":tuple(json.loads(r["tags_json"]))} for r in rows]
+    def restore_version(self,note_id,history_id,expected_revision=None):
+        row=self.conn.execute("SELECT * FROM history WHERE id=? AND note_id=?",(history_id,note_id)).fetchone()
+        if not row:raise ValidationError("版本不存在")
+        return self.save(note_id,row["title"],row["body"],json.loads(row["tags_json"]),expected_revision,action=f"回退至版本 {row['revision']}")
     def stats(self):
         active,trash=self.conn.execute("SELECT sum(deleted=0),sum(deleted=1) FROM notes").fetchone()
         return {"active":active or 0,"trash":trash or 0,"tags":self.conn.execute("SELECT count(DISTINCT tag_id) FROM note_tags nt JOIN notes n ON n.id=nt.note_id WHERE n.deleted=0").fetchone()[0],"versions":self.conn.execute("SELECT count(*) FROM history").fetchone()[0]}
