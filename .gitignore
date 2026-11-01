@@ -13,6 +13,11 @@ runtime/
 .ruff_cache/
 release/*.zip
 release/*.exe
+release/*.bundle
+release/*.json
+release/*.md
+reports/release_manifest.json
+reports/ci_status.json
 reports/screenshots/*.png
 docs/generated/*.docx
 docs/generated/*.pdf

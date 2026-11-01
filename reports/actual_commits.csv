@@ -1,4 +1,7 @@
 ﻿sha,author,email,authored_at,subject
+25b7fcf0b704fc98484ffaad7c301c457255d65d,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:52:57+08:00,fix(ui): disable empty editors until a note is created
+419bcaf993640b520893221a53173a3232e586d7,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:48:49+08:00,chore: exclude machine-specific intermediate report HTML
+ec850d3fa27ad40a0cc92af5845f9f85068b9367,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:46:01+08:00,docs: add measured course report four-member tasks and code walkthrough
 544e2911b0db77f617a299c9add7d922f546458a,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:36:32+08:00,refactor: standardize Python formatting and record executable validation
 59819586148b3a028faacede38800c63b5e50f24,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:21:11+08:00,fix(storage): lock writes before checking revisions and note limits
 6a725a7126c195b2cdb1f29e74dcdca9eff95972,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:19:48+08:00,build: package standalone Windows app and add automated CI checks

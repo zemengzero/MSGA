@@ -1,10 +1,10 @@
 {
-  "executed_at_utc": "2026-11-01T13:39:45.399739+00:00",
+  "executed_at_utc": "2026-11-01T13:53:30.538912+00:00",
   "platform": "Windows-11-10.0.26200-SP0",
   "python": "3.13.3",
   "sqlite": "3.49.1",
-  "git_revision": "544e2911b0db77f617a299c9add7d922f546458a",
-  "tests_run": 30,
+  "git_revision": "25b7fcf0b704fc98484ffaad7c301c457255d65d",
+  "tests_run": 31,
   "failures": 0,
   "errors": 0,
   "skipped": 0,
@@ -13,340 +13,345 @@
     {
       "test": "test_backup.BackupTests.test_corrupt_input_never_changes_current",
       "status": "passed",
-      "ms": 24.812
+      "ms": 35.01
     },
     {
       "test": "test_backup.BackupTests.test_existing_target_refused",
       "status": "passed",
-      "ms": 19.152
+      "ms": 34.062
     },
     {
       "test": "test_backup.BackupTests.test_failed_copy_rolls_back_from_protection",
       "status": "passed",
-      "ms": 54.888
+      "ms": 76.251
     },
     {
       "test": "test_backup.BackupTests.test_failed_rollback_disables_future_writes",
       "status": "passed",
-      "ms": 53.407
+      "ms": 67.509
     },
     {
       "test": "test_backup.BackupTests.test_roundtrip_includes_versions_and_trash",
       "status": "passed",
-      "ms": 53.425
+      "ms": 71.571
     },
     {
       "test": "test_backup.BackupTests.test_unknown_schema_is_refused",
       "status": "passed",
-      "ms": 38.091
+      "ms": 50.997
     },
     {
       "test": "test_history.HistoryTests.test_deleted_source_not_in_backlinks",
       "status": "passed",
-      "ms": 20.516
+      "ms": 23.638
     },
     {
       "test": "test_history.HistoryTests.test_history_restore_creates_new_version",
       "status": "passed",
-      "ms": 21.012
+      "ms": 24.008
     },
     {
       "test": "test_history.HistoryTests.test_purge_requires_trash_and_retains_dangling_target",
       "status": "passed",
-      "ms": 22.094
+      "ms": 20.999
     },
     {
       "test": "test_history.HistoryTests.test_trash_restore_keeps_uuid_and_links",
       "status": "passed",
-      "ms": 22.608
+      "ms": 22.876
     },
     {
       "test": "test_links.LinkTests.test_code_and_escaped_markers_excluded",
       "status": "passed",
-      "ms": 19.496
+      "ms": 23.127
     },
     {
       "test": "test_links.LinkTests.test_graph_failure_rolls_back_note_and_history",
       "status": "passed",
-      "ms": 20.03
+      "ms": 24.842
     },
     {
       "test": "test_links.LinkTests.test_rename_keeps_target_id_and_occurrence_count",
       "status": "passed",
-      "ms": 20.756
+      "ms": 25.617
     },
     {
       "test": "test_models.ModelTests.test_note_snapshot_is_immutable",
       "status": "passed",
-      "ms": 0.054
+      "ms": 0.065
     },
     {
       "test": "test_search.SearchTests.test_keyword_and_title_priority",
       "status": "passed",
-      "ms": 22.745
+      "ms": 24.671
     },
     {
       "test": "test_search.SearchTests.test_tag_normalization_and_counts",
       "status": "passed",
-      "ms": 22.923
+      "ms": 28.358
     },
     {
       "test": "test_search.SearchTests.test_tags_and_empty_query",
       "status": "passed",
-      "ms": 23.469
+      "ms": 32.219
     },
     {
       "test": "test_store.StoreTests.test_create_update_persist",
       "status": "passed",
-      "ms": 28.708
+      "ms": 36.304
     },
     {
       "test": "test_store.StoreTests.test_empty_title_and_oversize_body_rejected",
       "status": "passed",
-      "ms": 20.74
+      "ms": 26.497
     },
     {
       "test": "test_store.StoreTests.test_failed_tag_validation_is_atomic",
       "status": "passed",
-      "ms": 19.744
+      "ms": 26.7
     },
     {
       "test": "test_store.StoreTests.test_noop_save_does_not_make_history",
       "status": "passed",
-      "ms": 20.587
+      "ms": 25.766
     },
     {
       "test": "test_store.StoreTests.test_optimistic_conflict_preserves_disk",
       "status": "passed",
-      "ms": 23.818
+      "ms": 25.517
     },
     {
       "test": "test_store.StoreTests.test_second_connection_cannot_silently_overwrite",
       "status": "passed",
-      "ms": 24.776
+      "ms": 33.328
     },
     {
       "test": "test_store.StoreTests.test_settings_roundtrip",
       "status": "passed",
-      "ms": 19.642
+      "ms": 27.014
     },
     {
       "test": "test_transfer.TransferTests.test_export_internal_links_are_local",
       "status": "passed",
-      "ms": 49.611
+      "ms": 62.916
     },
     {
       "test": "test_transfer.TransferTests.test_html_strips_active_content",
       "status": "passed",
-      "ms": 21.07
+      "ms": 22.773
     },
     {
       "test": "test_transfer.TransferTests.test_malformed_uri_is_inert",
       "status": "passed",
-      "ms": 19.102
+      "ms": 30.255
     },
     {
       "test": "test_transfer.TransferTests.test_nonempty_export_refused",
       "status": "passed",
-      "ms": 20.051
+      "ms": 26.777
     },
     {
       "test": "test_transfer.TransferTests.test_utf8_import_conflict_and_partial_failure",
       "status": "passed",
-      "ms": 24.124
+      "ms": 30.546
     },
     {
       "test": "test_ui_guard.GuardTests.test_cancel_guard_suppresses_nested_autosave",
       "status": "passed",
-      "ms": 0.553
+      "ms": 0.694
+    },
+    {
+      "test": "test_ui_guard.GuardTests.test_empty_library_disables_unsavable_input",
+      "status": "passed",
+      "ms": 1.577
     }
   ],
   "backend_benchmark": {
     "notes": 200,
     "utf8_bytes_per_note": 2048,
     "samples": 30,
-    "p95_ms": 71.67,
-    "maximum_ms": 75.389,
+    "p95_ms": 89.819,
+    "maximum_ms": 91.321,
     "raw": [
       {
         "sample": 1,
         "query": "动态规划",
         "matches": 200,
-        "ms": 44.509
+        "ms": 54.136
       },
       {
         "sample": 2,
         "query": "不存在",
         "matches": 0,
-        "ms": 53.898
+        "ms": 66.194
       },
       {
         "sample": 3,
         "query": "topic02",
         "matches": 20,
-        "ms": 54.217
+        "ms": 61.914
       },
       {
         "sample": 4,
         "query": "动态规划",
         "matches": 200,
-        "ms": 44.427
+        "ms": 75.517
       },
       {
         "sample": 5,
         "query": "不存在",
         "matches": 0,
-        "ms": 45.153
+        "ms": 62.3
       },
       {
         "sample": 6,
         "query": "topic05",
         "matches": 20,
-        "ms": 44.218
+        "ms": 56.073
       },
       {
         "sample": 7,
         "query": "动态规划",
         "matches": 200,
-        "ms": 45.502
+        "ms": 62.914
       },
       {
         "sample": 8,
         "query": "不存在",
         "matches": 0,
-        "ms": 57.664
+        "ms": 64.384
       },
       {
         "sample": 9,
         "query": "topic08",
         "matches": 20,
-        "ms": 55.86
+        "ms": 60.55
       },
       {
         "sample": 10,
         "query": "动态规划",
         "matches": 200,
-        "ms": 50.665
+        "ms": 59.465
       },
       {
         "sample": 11,
         "query": "不存在",
         "matches": 0,
-        "ms": 49.951
+        "ms": 53.82
       },
       {
         "sample": 12,
         "query": "topic01",
         "matches": 20,
-        "ms": 50.993
+        "ms": 57.543
       },
       {
         "sample": 13,
         "query": "动态规划",
         "matches": 200,
-        "ms": 58.143
+        "ms": 67.126
       },
       {
         "sample": 14,
         "query": "不存在",
         "matches": 0,
-        "ms": 49.657
+        "ms": 69.501
       },
       {
         "sample": 15,
         "query": "topic04",
         "matches": 20,
-        "ms": 53.121
+        "ms": 63.115
       },
       {
         "sample": 16,
         "query": "动态规划",
         "matches": 200,
-        "ms": 50.178
+        "ms": 60.646
       },
       {
         "sample": 17,
         "query": "不存在",
         "matches": 0,
-        "ms": 53.545
+        "ms": 53.295
       },
       {
         "sample": 18,
         "query": "topic07",
         "matches": 20,
-        "ms": 49.69
+        "ms": 52.885
       },
       {
         "sample": 19,
         "query": "动态规划",
         "matches": 200,
-        "ms": 48.076
+        "ms": 85.699
       },
       {
         "sample": 20,
         "query": "不存在",
         "matches": 0,
-        "ms": 48.021
+        "ms": 84.419
       },
       {
         "sample": 21,
         "query": "topic00",
         "matches": 20,
-        "ms": 54.449
+        "ms": 76.968
       },
       {
         "sample": 22,
         "query": "动态规划",
         "matches": 200,
-        "ms": 61.92
+        "ms": 89.819
       },
       {
         "sample": 23,
         "query": "不存在",
         "matches": 0,
-        "ms": 56.197
+        "ms": 83.643
       },
       {
         "sample": 24,
         "query": "topic03",
         "matches": 20,
-        "ms": 41.875
+        "ms": 83.96
       },
       {
         "sample": 25,
         "query": "动态规划",
         "matches": 200,
-        "ms": 39.527
+        "ms": 91.321
       },
       {
         "sample": 26,
         "query": "不存在",
         "matches": 0,
-        "ms": 64.341
+        "ms": 72.272
       },
       {
         "sample": 27,
         "query": "topic06",
         "matches": 20,
-        "ms": 75.389
+        "ms": 75.485
       },
       {
         "sample": 28,
         "query": "动态规划",
         "matches": 200,
-        "ms": 68.381
+        "ms": 87.285
       },
       {
         "sample": 29,
         "query": "不存在",
         "matches": 0,
-        "ms": 71.67
+        "ms": 77.822
       },
       {
         "sample": 30,
         "query": "topic09",
         "matches": 20,
-        "ms": 64.88
+        "ms": 78.769
       }
     ],
     "scope": "后端过滤调用；不是整机界面端到端时延"

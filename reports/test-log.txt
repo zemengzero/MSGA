@@ -28,8 +28,9 @@ test_malformed_uri_is_inert (test_transfer.TransferTests.test_malformed_uri_is_i
 test_nonempty_export_refused (test_transfer.TransferTests.test_nonempty_export_refused) ... ok
 test_utf8_import_conflict_and_partial_failure (test_transfer.TransferTests.test_utf8_import_conflict_and_partial_failure) ... ok
 test_cancel_guard_suppresses_nested_autosave (test_ui_guard.GuardTests.test_cancel_guard_suppresses_nested_autosave) ... ok
+test_empty_library_disables_unsavable_input (test_ui_guard.GuardTests.test_empty_library_disables_unsavable_input) ... ok
 
 ----------------------------------------------------------------------
-Ran 30 tests in 0.754s
+Ran 31 tests in 0.966s
 
 OK
