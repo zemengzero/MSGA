@@ -14,7 +14,10 @@ def _utc_bound(value, name):
         raise ValidationError(f"{name}必须是带时区的datetime")
     if value.utcoffset() is None:
         raise ValidationError(f"{name}必须包含时区")
-    return value.astimezone(timezone.utc)
+    try:
+        return value.astimezone(timezone.utc)
+    except OverflowError as exc:
+        raise ValidationError(f"{name}转换为UTC后超出支持的日期范围") from exc
 
 
 def search_notes(

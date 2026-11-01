@@ -5,7 +5,7 @@ from datetime import date, datetime, timedelta, timezone, tzinfo
 from support import StoreFixture
 
 from zhiyeteam.models import Note, ValidationError
-from zhiyeteam.search import search_notes
+from zhiyeteam.search import search_hits, search_notes
 
 
 UTC = timezone.utc
@@ -97,6 +97,36 @@ class SearchDateTests(StoreFixture):
             with self.subTest(upper=upper):
                 with self.assertRaises(ValidationError):
                     search_notes(self.store, updated_from=START, updated_before=upper)
+
+    def test_utc_conversion_overflow_raises_validation_error_for_both_apis(self):
+        values = (
+            datetime.min.replace(tzinfo=BEIJING),
+            datetime.max.replace(tzinfo=timezone(timedelta(hours=-12))),
+        )
+        for api in (search_notes, search_hits):
+            for name in ("updated_from", "updated_before"):
+                for value in values:
+                    with self.subTest(api=api.__name__, name=name, value=value):
+                        with self.assertRaisesRegex(ValidationError, name):
+                            api(self.store, **{name: value})
+
+    def test_representable_extreme_dates_remain_valid_for_both_apis(self):
+        note = self.note("普通笔记", START)
+        intervals = (
+            (datetime.min.replace(tzinfo=UTC), datetime.max.replace(tzinfo=UTC)),
+            (datetime.min.replace(tzinfo=timezone(timedelta(hours=-8))),
+             datetime.max.replace(tzinfo=BEIJING)),
+        )
+        for lower, upper in intervals:
+            with self.subTest(lower=lower, upper=upper):
+                self.assertEqual(
+                    self.ids(updated_from=lower, updated_before=upper), [note.id]
+                )
+                self.assertEqual(
+                    [hit.note.id for hit in search_hits(
+                        self.store, updated_from=lower, updated_before=upper
+                    )], [note.id],
+                )
 
     def test_keywords_tags_and_dates_intersect_with_title_priority(self):
         title = self.note("AI 动态规划", START)
