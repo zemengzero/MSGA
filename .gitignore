@@ -16,3 +16,4 @@ release/*.exe
 reports/screenshots/*.png
 docs/generated/*.docx
 docs/generated/*.pdf
+docs/generated/*.html
