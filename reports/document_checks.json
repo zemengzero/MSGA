@@ -1,0 +1,22 @@
+[
+  {
+    "file": "01_团队项目实验报告",
+    "pdf_pages": 8,
+    "word_pdf_content_matches": true
+  },
+  {
+    "file": "02_四人分工与提交计划",
+    "pdf_pages": 2,
+    "word_pdf_content_matches": true
+  },
+  {
+    "file": "03_现场演示与代码答辩",
+    "pdf_pages": 2,
+    "word_pdf_content_matches": true
+  },
+  {
+    "file": "04_用户操作手册",
+    "pdf_pages": 1,
+    "word_pdf_content_matches": true
+  }
+]

@@ -1,0 +1,74 @@
+[
+  [
+    "T01 新建与持久保存",
+    "src/zhiyeteam/store.py:202",
+    "NoteStore.save",
+    "test_store；正文、标签、关联和历史在一个事务内；UI调用NotebookApp.save"
+  ],
+  [
+    "T02 事务与并发冲突",
+    "src/zhiyeteam/store.py:112",
+    "NoteStore._write",
+    "test_store/test_links；BEGIN IMMEDIATE先取写锁，expected_revision校验旧窗口，异常回滚"
+  ],
+  [
+    "T03 关键词与标签搜索",
+    "src/zhiyeteam/search.py:8",
+    "search_notes",
+    "test_search；关键词/标签AND、中文子串、ASCII大小写，标题命中优先"
+  ],
+  [
+    "T04 稳定双链与反向引用",
+    "src/zhiyeteam/links.py:15",
+    "extract_links",
+    "test_links；UUID作为身份，排除代码和转义，backlinks按有效来源计数"
+  ],
+  [
+    "T05 回收站与恢复",
+    "src/zhiyeteam/store.py:230",
+    "NoteStore.set_deleted",
+    "test_history；删除标记不换UUID，永久删除须先进入回收站"
+  ],
+  [
+    "T06 历史版本回退",
+    "src/zhiyeteam/store.py:262",
+    "NoteStore.restore_version",
+    "test_history；回退旧内容通过save生成新revision，旧记录保留"
+  ],
+  [
+    "T07 完整备份",
+    "src/zhiyeteam/backup.py:92",
+    "create_backup",
+    "test_backup；SQLite在线备份、临时目标、校验后发布，已存在目标不覆盖"
+  ],
+  [
+    "T08 受保护恢复",
+    "src/zhiyeteam/backup.py:117",
+    "restore_backup",
+    "test_backup；先校验、先保护当前库、再替换，失败回退，回退失败禁写"
+  ],
+  [
+    "T09 Markdown导入",
+    "src/zhiyeteam/transfer.py:87",
+    "import_markdown",
+    "test_transfer；严格UTF-8/BOM，逐项报告，同名导入重命名"
+  ],
+  [
+    "T10 离线导出与安全",
+    "src/zhiyeteam/transfer.py:142",
+    "export_notes",
+    "test_transfer；本地文件链接，HTML白名单去脚本/远程图/危险URI，导出空目录"
+  ],
+  [
+    "T11 桌面与未保存守卫",
+    "src/zhiyeteam/ui.py:339",
+    "NotebookApp.guard",
+    "test_ui_guard/gui_smoke；真实Tk窗口，离开/退出确认时暂停自动保存"
+  ],
+  [
+    "T12 本地部署与启动",
+    "src/zhiyeteam/__main__.py:8",
+    "main",
+    "frozen_smoke；独立exe启动、演示库与正式库分离；不依赖网络服务"
+  ]
+]

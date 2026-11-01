@@ -1,0 +1,13 @@
+﻿sha,author,email,authored_at,subject
+544e2911b0db77f617a299c9add7d922f546458a,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:36:32+08:00,refactor: standardize Python formatting and record executable validation
+59819586148b3a028faacede38800c63b5e50f24,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:21:11+08:00,fix(storage): lock writes before checking revisions and note limits
+6a725a7126c195b2cdb1f29e74dcdca9eff95972,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:19:48+08:00,build: package standalone Windows app and add automated CI checks
+2fb521794c3904a8dc2993105904b7766aad9b8b,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:13:55+08:00,fix(safety): pause autosave prompts and disable writes after failed recovery
+35d827055362048455c765640b366613ea669c0c,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:12:02+08:00,feat(desktop): deliver offline editor preview history and backup workflows
+3e1da32c93363204161ae84c572bf10ab7969849,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:06:42+08:00,feat(transfer): import UTF-8 Markdown and export script-free offline HTML
+48fd58bc0b9f162e87424d8abcffa6b4d001d3d6,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:05:16+08:00,feat(backup): validate SQLite snapshots and protect current data before restore
+5c5de815b91643e913477982c98a87d3d8818274,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:03:36+08:00,feat(history): add recycle bin and non-destructive version restore
+f17dd62f15ffc94aa545d7864e73e4e47ee71659,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:02:41+08:00,feat(links): add stable UUID references and transactional backlink graph
+1912883f6d14af9c7a03ec40443aff82d74f148f,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:01:42+08:00,feat(search): add AND keyword filters and normalized tag search
+5c56a04ab486746eabd4f50dc164d837a74fc73b,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:01:09+08:00,feat(storage): persist notes atomically with revision conflict protection
+665040796533e73b55695ae4d936bf27824d15b4,IceApplejuice,182110627+IceApplejuice@users.noreply.github.com,2026-11-01T21:00:01+08:00,chore: initialize desktop project and immutable domain models

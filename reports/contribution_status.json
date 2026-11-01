@@ -1,0 +1,37 @@
+{
+  "snapshot_head": "544e2911b0db77f617a299c9add7d922f546458a",
+  "actual_commits": 12,
+  "distinct_author_emails": 1,
+  "members": [
+    {
+      "role": "A",
+      "name": "赵钦泽",
+      "github": "IceApplejuice",
+      "matching_actual_commits": 12,
+      "status": "当前账号已有真实基线；个人增量仍按实际PR核验"
+    },
+    {
+      "role": "B",
+      "name": "待补充",
+      "github": "待补充",
+      "matching_actual_commits": 0,
+      "status": "待本人账号和真实提交，未记为完成"
+    },
+    {
+      "role": "C",
+      "name": "待补充",
+      "github": "待补充",
+      "matching_actual_commits": 0,
+      "status": "待本人账号和真实提交，未记为完成"
+    },
+    {
+      "role": "D",
+      "name": "待补充",
+      "github": "待补充",
+      "matching_actual_commits": 0,
+      "status": "待本人账号和真实提交，未记为完成"
+    }
+  ],
+  "all_four_members_completed": false,
+  "scope": "本地真实main记录快照；不把计划分摊给成员，远端身份可在GitHub核验"
+}

@@ -1,0 +1,86 @@
+{
+  "A1": {
+    "role": "A",
+    "title": "编辑器字号设置持久化",
+    "number": 1,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/1",
+    "state": "open"
+  },
+  "A2": {
+    "role": "A",
+    "title": "长文滚动与窄窗口布局",
+    "number": 2,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/2",
+    "state": "open"
+  },
+  "A3": {
+    "role": "A",
+    "title": "界面增量交互回归",
+    "number": 3,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/3",
+    "state": "open"
+  },
+  "B1": {
+    "role": "B",
+    "title": "备份前空间预检",
+    "number": 4,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/4",
+    "state": "open"
+  },
+  "B2": {
+    "role": "B",
+    "title": "恢复结果审计记录",
+    "number": 5,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/5",
+    "state": "open"
+  },
+  "B3": {
+    "role": "B",
+    "title": "备份空间与回退回归",
+    "number": 6,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/6",
+    "state": "open"
+  },
+  "C1": {
+    "role": "C",
+    "title": "可选更新时间过滤",
+    "number": 7,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/7",
+    "state": "open"
+  },
+  "C2": {
+    "role": "C",
+    "title": "检索命中摘要",
+    "number": 8,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/8",
+    "state": "open"
+  },
+  "C3": {
+    "role": "C",
+    "title": "日期摘要及链接边界测试",
+    "number": 9,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/9",
+    "state": "open"
+  },
+  "D1": {
+    "role": "D",
+    "title": "CI结构化证据工件",
+    "number": 10,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/10",
+    "state": "open"
+  },
+  "D2": {
+    "role": "D",
+    "title": "发布门禁与第二台电脑验证",
+    "number": 11,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/11",
+    "state": "open"
+  },
+  "D3": {
+    "role": "D",
+    "title": "真实试用反馈与回归发布",
+    "number": 12,
+    "url": "https://github.com/IceApplejuice/zhiyeteam-software-engineering/issues/12",
+    "state": "open"
+  }
+}

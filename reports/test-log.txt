@@ -30,6 +30,6 @@ test_utf8_import_conflict_and_partial_failure (test_transfer.TransferTests.test_
 test_cancel_guard_suppresses_nested_autosave (test_ui_guard.GuardTests.test_cancel_guard_suppresses_nested_autosave) ... ok
 
 ----------------------------------------------------------------------
-Ran 30 tests in 0.653s
+Ran 30 tests in 0.754s
 
 OK

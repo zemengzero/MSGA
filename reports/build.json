@@ -1,7 +1,7 @@
 {
   "file": "ZhiYeTeam.exe",
-  "bytes": 15888284,
-  "sha256": "510767448d6d0242d6811b0b4c86058c26a3b5c11962cc13a4a864ad4b0125cd",
+  "bytes": 15884824,
+  "sha256": "424f31826d3e449ccf8cd8984b43e313f4c9ecf43bbe606e429d62c252274fee",
   "platform": "win32",
   "build_python": "Python 3.13.3"
 }

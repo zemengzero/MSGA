@@ -4,6 +4,18 @@
 
 团队版选择 Python + Tkinter + SQLite，以离线可运行、代码易讲解和四人可分工为首要目标。前两次实验的 .NET/Markdown 文件方案属于设计探索；本项目独立维护团队需求基线与实际实现说明。
 
+![知页实际桌面窗口](docs/images/desktop.png)
+
+## 交付与演示
+
+- [Windows发布与报告](https://github.com/IceApplejuice/zhiyeteam-software-engineering/releases/tag/v1.0.0)
+- [四人分工与每次提交安排](docs/团队分工与提交计划.md)
+- [8分钟现场演示步骤](docs/现场演示步骤.md)
+- [功能与代码定位](docs/功能与代码定位.md)
+- 原始实际测试：`reports/test_results.json`、`reports/frozen_smoke.json`；尚未完成的真人反馈不写成已完成。
+
+仓库目前私有。成员需要被邀请并接受；教师或评分服务若需读取源码，须由所有者配置访问权限或明确决定公开。
+
 ## 开发运行
 
 ```powershell
@@ -13,6 +25,8 @@ python -m venv .venv
 ```
 
 正式运行不带 `--demo`，默认将数据库保存到当前用户的本地应用数据目录。演示模式使用独立数据库，不覆盖正式笔记。
+
+发布ZIP中的独立exe已在本机启动并验证真实窗口/保存。另一台未安装Python的机器仍需按D成员任务进行实测；本项目没有把本机检查冒称所有Windows版本兼容。
 
 ## 验证
 
@@ -25,3 +39,15 @@ python -m venv .venv
 当前账号建立的基线不替代四位成员的贡献。每位成员使用自己的 GitHub 账号，在功能分支上实际修改、运行测试并提交，PR 中写明功能、代码位置、验证结果和已知限制。分工及逐次提交安排见 `docs/团队分工与提交计划.md`。
 
 报告只记录实际执行的测试和反馈。用户反馈待真人试用后填写，不能把合成演示数据当作调研。最终要求以老师最新课堂说明为准。
+
+## 重新生成报告
+
+安装 `requirements-docs.txt` 后运行 `python tools/build_reports.py`；报告按当前源码AST提取函数位置，并读取真实测试JSON。PDF渲染使用Windows上的Chrome，已经生成的Word/PDF在发布包中，无需为了阅读文档安装这些开发依赖。
+
+## 官方技术参考
+
+- [Python SQLite在线备份](https://docs.python.org/3.13/library/sqlite3.html#sqlite3.Connection.backup)
+- [PyInstaller打包说明](https://pyinstaller.org/en/stable/operating-mode.html)
+- [GitHub提交邮箱与归属](https://docs.github.com/en/account-and-profile/concepts/email-addresses)
+
+第三方运行库许可随发布文件的说明保留；本仓库未另行授予开源许可证。

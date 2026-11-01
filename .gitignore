@@ -10,6 +10,7 @@ runtime/
 *.db-shm
 *.spec
 .coverage
+.ruff_cache/
 release/*.zip
 release/*.exe
 reports/screenshots/*.png

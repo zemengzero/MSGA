@@ -1,0 +1,22 @@
+{
+  "repository": "https://github.com/IceApplejuice/zhiyeteam-software-engineering",
+  "private": true,
+  "method": "Git Data API transport of existing local history",
+  "source_commits": 11,
+  "all_original_commit_hashes_preserved": true,
+  "local_to_remote": {
+    "665040796533e73b55695ae4d936bf27824d15b4": "665040796533e73b55695ae4d936bf27824d15b4",
+    "5c56a04ab486746eabd4f50dc164d837a74fc73b": "5c56a04ab486746eabd4f50dc164d837a74fc73b",
+    "1912883f6d14af9c7a03ec40443aff82d74f148f": "1912883f6d14af9c7a03ec40443aff82d74f148f",
+    "f17dd62f15ffc94aa545d7864e73e4e47ee71659": "f17dd62f15ffc94aa545d7864e73e4e47ee71659",
+    "5c5de815b91643e913477982c98a87d3d8818274": "5c5de815b91643e913477982c98a87d3d8818274",
+    "48fd58bc0b9f162e87424d8abcffa6b4d001d3d6": "48fd58bc0b9f162e87424d8abcffa6b4d001d3d6",
+    "3e1da32c93363204161ae84c572bf10ab7969849": "3e1da32c93363204161ae84c572bf10ab7969849",
+    "35d827055362048455c765640b366613ea669c0c": "35d827055362048455c765640b366613ea669c0c",
+    "2fb521794c3904a8dc2993105904b7766aad9b8b": "2fb521794c3904a8dc2993105904b7766aad9b8b",
+    "6a725a7126c195b2cdb1f29e74dcdca9eff95972": "6a725a7126c195b2cdb1f29e74dcdca9eff95972",
+    "59819586148b3a028faacede38800c63b5e50f24": "59819586148b3a028faacede38800c63b5e50f24"
+  },
+  "head": "59819586148b3a028faacede38800c63b5e50f24",
+  "authors_and_dates_copied_from_actual_local_commits": true
+}
