@@ -1,14 +1,8 @@
-from pathlib import Path
-from tempfile import TemporaryDirectory
-import unittest
+from support import StoreFixture
 from zhiyeteam.store import NoteStore
 from zhiyeteam.models import ValidationError,ConflictError
 
-class StoreCase(unittest.TestCase):
-    def setUp(self):
-        self.temp=TemporaryDirectory();self.path=Path(self.temp.name)/"notes.db";self.store=NoteStore(self.path)
-    def tearDown(self):
-        self.store.close();self.temp.cleanup()
+class StoreTests(StoreFixture):
     def test_create_update_persist(self):
         note=self.store.create("课程","原文",["学习"])
         saved=self.store.save(note.id,"新标题","更新",["课程"],note.revision)

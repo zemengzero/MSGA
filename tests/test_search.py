@@ -1,8 +1,8 @@
-from test_store import StoreCase
+from support import StoreFixture
 from zhiyeteam.search import search_notes,tag_counts
 from zhiyeteam.store import clean_tags
 
-class SearchTests(StoreCase):
+class SearchTests(StoreFixture):
     def prepare(self):
         a=self.store.create("算法","AI 动态规划",["课程","ai"])
         b=self.store.create("注意力","AI 模型",["论文","ai"])

@@ -66,8 +66,8 @@ class NoteStore:
         row=self.get(note_id)
         self.conn.execute("INSERT INTO history(note_id,revision,title,body,tags_json,created_at,action) VALUES(?,?,?,?,?,?,?)",(row.id,row.revision,row.title,row.body,json.dumps(row.tags,ensure_ascii=False),now(),action))
     def _sync_links(self,note_id,body):
-        # Stable-link extraction is supplied by the link module in the next feature step.
-        return None
+        from .links import sync_links
+        sync_links(self.conn,note_id,body)
     def create(self,title="未命名笔记",body="",tags=()):
         title,body,tags=validate_note(title,body,tags)
         note_id=str(uuid.uuid4());stamp=now()
