@@ -1,0 +1,354 @@
+{
+  "executed_at_utc": "2026-11-01T13:22:22.049543+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.3",
+  "sqlite": "3.49.1",
+  "git_revision": "59819586148b3a028faacede38800c63b5e50f24",
+  "tests_run": 30,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "passed": true,
+  "cases": [
+    {
+      "test": "test_backup.BackupTests.test_corrupt_input_never_changes_current",
+      "status": "passed",
+      "ms": 22.087
+    },
+    {
+      "test": "test_backup.BackupTests.test_existing_target_refused",
+      "status": "passed",
+      "ms": 18.644
+    },
+    {
+      "test": "test_backup.BackupTests.test_failed_copy_rolls_back_from_protection",
+      "status": "passed",
+      "ms": 46.048
+    },
+    {
+      "test": "test_backup.BackupTests.test_failed_rollback_disables_future_writes",
+      "status": "passed",
+      "ms": 45.484
+    },
+    {
+      "test": "test_backup.BackupTests.test_roundtrip_includes_versions_and_trash",
+      "status": "passed",
+      "ms": 50.09
+    },
+    {
+      "test": "test_backup.BackupTests.test_unknown_schema_is_refused",
+      "status": "passed",
+      "ms": 32.356
+    },
+    {
+      "test": "test_history.HistoryTests.test_deleted_source_not_in_backlinks",
+      "status": "passed",
+      "ms": 18.466
+    },
+    {
+      "test": "test_history.HistoryTests.test_history_restore_creates_new_version",
+      "status": "passed",
+      "ms": 17.402
+    },
+    {
+      "test": "test_history.HistoryTests.test_purge_requires_trash_and_retains_dangling_target",
+      "status": "passed",
+      "ms": 20.039
+    },
+    {
+      "test": "test_history.HistoryTests.test_trash_restore_keeps_uuid_and_links",
+      "status": "passed",
+      "ms": 18.449
+    },
+    {
+      "test": "test_links.LinkTests.test_code_and_escaped_markers_excluded",
+      "status": "passed",
+      "ms": 16.276
+    },
+    {
+      "test": "test_links.LinkTests.test_graph_failure_rolls_back_note_and_history",
+      "status": "passed",
+      "ms": 16.971
+    },
+    {
+      "test": "test_links.LinkTests.test_rename_keeps_target_id_and_occurrence_count",
+      "status": "passed",
+      "ms": 18.046
+    },
+    {
+      "test": "test_models.ModelTests.test_note_snapshot_is_immutable",
+      "status": "passed",
+      "ms": 0.05
+    },
+    {
+      "test": "test_search.SearchTests.test_keyword_and_title_priority",
+      "status": "passed",
+      "ms": 20.721
+    },
+    {
+      "test": "test_search.SearchTests.test_tag_normalization_and_counts",
+      "status": "passed",
+      "ms": 19.846
+    },
+    {
+      "test": "test_search.SearchTests.test_tags_and_empty_query",
+      "status": "passed",
+      "ms": 19.693
+    },
+    {
+      "test": "test_store.StoreTests.test_create_update_persist",
+      "status": "passed",
+      "ms": 23.954
+    },
+    {
+      "test": "test_store.StoreTests.test_empty_title_and_oversize_body_rejected",
+      "status": "passed",
+      "ms": 17.74
+    },
+    {
+      "test": "test_store.StoreTests.test_failed_tag_validation_is_atomic",
+      "status": "passed",
+      "ms": 17.143
+    },
+    {
+      "test": "test_store.StoreTests.test_noop_save_does_not_make_history",
+      "status": "passed",
+      "ms": 16.366
+    },
+    {
+      "test": "test_store.StoreTests.test_optimistic_conflict_preserves_disk",
+      "status": "passed",
+      "ms": 16.45
+    },
+    {
+      "test": "test_store.StoreTests.test_second_connection_cannot_silently_overwrite",
+      "status": "passed",
+      "ms": 20.48
+    },
+    {
+      "test": "test_store.StoreTests.test_settings_roundtrip",
+      "status": "passed",
+      "ms": 16.574
+    },
+    {
+      "test": "test_transfer.TransferTests.test_export_internal_links_are_local",
+      "status": "passed",
+      "ms": 44.567
+    },
+    {
+      "test": "test_transfer.TransferTests.test_html_strips_active_content",
+      "status": "passed",
+      "ms": 16.978
+    },
+    {
+      "test": "test_transfer.TransferTests.test_malformed_uri_is_inert",
+      "status": "passed",
+      "ms": 17.335
+    },
+    {
+      "test": "test_transfer.TransferTests.test_nonempty_export_refused",
+      "status": "passed",
+      "ms": 18.717
+    },
+    {
+      "test": "test_transfer.TransferTests.test_utf8_import_conflict_and_partial_failure",
+      "status": "passed",
+      "ms": 23.197
+    },
+    {
+      "test": "test_ui_guard.GuardTests.test_cancel_guard_suppresses_nested_autosave",
+      "status": "passed",
+      "ms": 0.482
+    }
+  ],
+  "backend_benchmark": {
+    "notes": 200,
+    "utf8_bytes_per_note": 2048,
+    "samples": 30,
+    "p95_ms": 67.669,
+    "maximum_ms": 69.441,
+    "raw": [
+      {
+        "sample": 1,
+        "query": "动态规划",
+        "matches": 200,
+        "ms": 43.692
+      },
+      {
+        "sample": 2,
+        "query": "不存在",
+        "matches": 0,
+        "ms": 50.013
+      },
+      {
+        "sample": 3,
+        "query": "topic02",
+        "matches": 20,
+        "ms": 48.418
+      },
+      {
+        "sample": 4,
+        "query": "动态规划",
+        "matches": 200,
+        "ms": 48.646
+      },
+      {
+        "sample": 5,
+        "query": "不存在",
+        "matches": 0,
+        "ms": 48.026
+      },
+      {
+        "sample": 6,
+        "query": "topic05",
+        "matches": 20,
+        "ms": 47.898
+      },
+      {
+        "sample": 7,
+        "query": "动态规划",
+        "matches": 200,
+        "ms": 45.433
+      },
+      {
+        "sample": 8,
+        "query": "不存在",
+        "matches": 0,
+        "ms": 43.312
+      },
+      {
+        "sample": 9,
+        "query": "topic08",
+        "matches": 20,
+        "ms": 46.994
+      },
+      {
+        "sample": 10,
+        "query": "动态规划",
+        "matches": 200,
+        "ms": 43.651
+      },
+      {
+        "sample": 11,
+        "query": "不存在",
+        "matches": 0,
+        "ms": 48.633
+      },
+      {
+        "sample": 12,
+        "query": "topic01",
+        "matches": 20,
+        "ms": 44.818
+      },
+      {
+        "sample": 13,
+        "query": "动态规划",
+        "matches": 200,
+        "ms": 46.449
+      },
+      {
+        "sample": 14,
+        "query": "不存在",
+        "matches": 0,
+        "ms": 46.48
+      },
+      {
+        "sample": 15,
+        "query": "topic04",
+        "matches": 20,
+        "ms": 46.709
+      },
+      {
+        "sample": 16,
+        "query": "动态规划",
+        "matches": 200,
+        "ms": 49.088
+      },
+      {
+        "sample": 17,
+        "query": "不存在",
+        "matches": 0,
+        "ms": 66.375
+      },
+      {
+        "sample": 18,
+        "query": "topic07",
+        "matches": 20,
+        "ms": 66.446
+      },
+      {
+        "sample": 19,
+        "query": "动态规划",
+        "matches": 200,
+        "ms": 58.679
+      },
+      {
+        "sample": 20,
+        "query": "不存在",
+        "matches": 0,
+        "ms": 59.967
+      },
+      {
+        "sample": 21,
+        "query": "topic00",
+        "matches": 20,
+        "ms": 62.233
+      },
+      {
+        "sample": 22,
+        "query": "动态规划",
+        "matches": 200,
+        "ms": 57.033
+      },
+      {
+        "sample": 23,
+        "query": "不存在",
+        "matches": 0,
+        "ms": 58.667
+      },
+      {
+        "sample": 24,
+        "query": "topic03",
+        "matches": 20,
+        "ms": 67.669
+      },
+      {
+        "sample": 25,
+        "query": "动态规划",
+        "matches": 200,
+        "ms": 66.946
+      },
+      {
+        "sample": 26,
+        "query": "不存在",
+        "matches": 0,
+        "ms": 69.441
+      },
+      {
+        "sample": 27,
+        "query": "topic06",
+        "matches": 20,
+        "ms": 63.148
+      },
+      {
+        "sample": 28,
+        "query": "动态规划",
+        "matches": 200,
+        "ms": 59.599
+      },
+      {
+        "sample": 29,
+        "query": "不存在",
+        "matches": 0,
+        "ms": 58.052
+      },
+      {
+        "sample": 30,
+        "query": "topic09",
+        "matches": 20,
+        "ms": 64.471
+      }
+    ],
+    "scope": "后端过滤调用；不是整机界面端到端时延"
+  }
+}

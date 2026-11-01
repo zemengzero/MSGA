@@ -1,0 +1,15 @@
+{
+  "mode": "actual Tk widget smoke test",
+  "passed": true,
+  "ui_saved_note_id": "4f34f032-75fc-4e8f-8585-2e1a0302cf39",
+  "preview_nonempty": true,
+  "visible": true,
+  "stats": {
+    "active": 6,
+    "trash": 1,
+    "tags": 9,
+    "versions": 10
+  },
+  "tested_executable": "ZhiYeTeam.exe",
+  "self_contained_executable_launched": true
+}

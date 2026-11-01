@@ -1,5 +1,7 @@
 import unittest
+
 from zhiyeteam.models import Note
+
 
 class ModelTests(unittest.TestCase):
     def test_note_snapshot_is_immutable(self):
