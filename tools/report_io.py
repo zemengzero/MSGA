@@ -32,6 +32,11 @@ def font(run, size=10.5, bold=False):
     run._element.get_or_add_rPr().rFonts.set(qn("w:eastAsia"), "宋体")
 
 
+def table_widths(headers):
+    # Long test identifiers need more room than the short result/duration cells.
+    return [70, 15, 15] if headers == ["测试项", "实际结果", "耗时ms"] else None
+
+
 def render_docx(paper, path):
     d = Document()
     s = d.sections[0]
@@ -64,6 +69,11 @@ def render_docx(paper, path):
             headers, rows = value
             t = d.add_table(rows=1, cols=len(headers))
             t.style = "Table Grid"
+            widths = table_widths(headers)
+            if widths:
+                t.autofit = False
+                for column, width in zip(t.columns, widths):
+                    column.width = Cm(17.4 * width / 100)
             for c, v in zip(t.rows[0].cells, headers):
                 c.text = str(v)
                 for run in c.paragraphs[0].runs:
@@ -72,6 +82,9 @@ def render_docx(paper, path):
             t.rows[0]._tr.get_or_add_trPr().append(repeat)
             for row in rows:
                 cells = t.add_row().cells
+                if widths:
+                    for cell, width in zip(cells, widths):
+                        cell.width = Cm(17.4 * width / 100)
                 for c, v in zip(cells, row):
                     c.text = str(v)
                     for p in c.paragraphs:
@@ -123,9 +136,15 @@ def render_html(paper, path):
             )
         else:
             headers, rows = v
+            widths = table_widths(headers)
             buf.append(
                 "<table><thead><tr>"
-                + "".join("<th>" + html.escape(str(c)) + "</th>" for c in headers)
+                + "".join(
+                    (f'<th style="width:{widths[i]}%">' if widths else "<th>")
+                    + html.escape(str(c))
+                    + "</th>"
+                    for i, c in enumerate(headers)
+                )
                 + "</tr></thead><tbody>"
             )
             buf.extend(
