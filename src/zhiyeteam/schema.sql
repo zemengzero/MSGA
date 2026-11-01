@@ -1,0 +1,27 @@
+CREATE TABLE IF NOT EXISTS notes (
+ id TEXT PRIMARY KEY, title TEXT NOT NULL, body TEXT NOT NULL,
+ created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+ revision INTEGER NOT NULL CHECK(revision>=1),
+ deleted INTEGER NOT NULL DEFAULT 0 CHECK(deleted IN (0,1))
+);
+CREATE TABLE IF NOT EXISTS tags (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE);
+CREATE TABLE IF NOT EXISTS note_tags (
+ note_id TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
+ tag_id INTEGER NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
+ PRIMARY KEY(note_id,tag_id)
+);
+CREATE TABLE IF NOT EXISTS links (
+ source_id TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
+ target_id TEXT NOT NULL, occurrences INTEGER NOT NULL CHECK(occurrences>0),
+ PRIMARY KEY(source_id,target_id)
+);
+CREATE TABLE IF NOT EXISTS history (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ note_id TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
+ revision INTEGER NOT NULL, title TEXT NOT NULL, body TEXT NOT NULL,
+ tags_json TEXT NOT NULL, created_at TEXT NOT NULL, action TEXT NOT NULL,
+ UNIQUE(note_id,revision)
+);
+CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_notes_updated ON notes(deleted,updated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_links_target ON links(target_id,source_id);
