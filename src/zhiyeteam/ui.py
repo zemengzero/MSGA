@@ -427,6 +427,11 @@ class NotebookApp:
         self.editor.configure(state="normal")
         self.editor.delete("1.0", "end")
         self.editor.edit_modified(False)
+        self.editor.configure(state="disabled")
+        self.title_entry.configure(state="disabled")
+        self.tags_entry.configure(state="disabled")
+        self.save_button.configure(state="disabled")
+        self.dirty = False
         self.loading = False
         self.preview.configure(state="normal")
         self.preview.delete("1.0", "end")

@@ -5,6 +5,26 @@ from zhiyeteam.ui import NotebookApp
 
 
 class GuardTests(unittest.TestCase):
+    def test_empty_library_disables_unsavable_input(self):
+        app = object.__new__(NotebookApp)
+        for name in (
+            "title_var",
+            "tags_var",
+            "editor",
+            "title_entry",
+            "tags_entry",
+            "save_button",
+            "preview",
+            "save_state",
+        ):
+            setattr(app, name, Mock())
+        app.dirty = True
+        app._clear_editor()
+        for widget in (app.editor, app.title_entry, app.tags_entry, app.save_button):
+            widget.configure.assert_any_call(state="disabled")
+        self.assertFalse(app.dirty)
+        self.assertFalse(app.loading)
+
     def test_cancel_guard_suppresses_nested_autosave(self):
         app = object.__new__(NotebookApp)
         app.root = Mock()
