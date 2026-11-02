@@ -129,3 +129,42 @@ test("C高亮在最近笔记和卡片中正确处理emoji与HTML，清空查询�
   await expect(card.locator("mark")).toHaveCount(0);
   await expect(card.locator("p")).toHaveText(body);
 });
+
+
+test("C日期边界：最早与最晚结束日期可查询，筛选不修改笔记", async ({ page }) => {
+  await page.goto(url);
+  await page.waitForFunction(() => window.__appReady);
+  const created = await call(page, "create", {
+    title: "C-date-extreme-contract",
+    body: "日期筛选只读取更新时间，不改变正文。",
+  });
+  expect(created.ok).toBe(true);
+  await page.getByLabel("搜索笔记", { exact: true }).fill(created.data.title);
+  const item = page.locator(".recent-item").filter({ hasText: created.data.title });
+  await expect(item).toBeVisible();
+  const endDate = page.getByLabel("结束日期", { exact: true });
+  async function changeEndDate(value) {
+    const response = page.waitForResponse(r =>
+      r.url().endsWith("/api/snapshot") &&
+      r.request().postDataJSON().date_to === value &&
+      r.request().postDataJSON().query === created.data.title);
+    await endDate.fill(value);
+    const result = await (await response).json();
+    expect(result.ok).toBe(true);
+    return result.data;
+  }
+  const lastDay = await changeEndDate("9999-12-31");
+  expect(lastDay.notes.map(n => n.id)).toEqual([created.data.id]);
+  await expect(endDate).toHaveValue("9999-12-31");
+  await expect(item).toBeVisible();
+  const firstDay = await changeEndDate("0001-01-01");
+  expect(firstDay.match_count).toBe(0);
+  await expect(item).toHaveCount(0);
+  const cleared = await changeEndDate("");
+  expect(cleared.notes.map(n => n.id)).toEqual([created.data.id]);
+  await expect(item).toBeVisible();
+  const after = await call(page, "note", { id: created.data.id });
+  expect(after.ok).toBe(true);
+  expect([after.data.body, after.data.revision, after.data.updated_at])
+    .toEqual([created.data.body, created.data.revision, created.data.updated_at]);
+});
