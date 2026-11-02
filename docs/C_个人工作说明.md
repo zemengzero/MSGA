@@ -128,6 +128,21 @@ for hit in hits:
 - [C1：caac12d](https://github.com/zemengzero/MSGA/commit/caac12d53403d896f4a7ad72401a68bcf6c6f9d2)，日期过滤。
 - [C2：1dce38e](https://github.com/zemengzero/MSGA/commit/1dce38ed5562e8305e1df77d5e5b64167016ef1e)，命中字段与摘要。
 - [修正：b64cd0d](https://github.com/zemengzero/MSGA/commit/b64cd0d21da08f2b552294e378db63e51cca2afb)，UTC 日期溢出校验。
-- C3：本次交付采用提交信息 `test(search): cover dates snippets and escaped-link regressions`，实际提交可在 [PR #14 提交列表](https://github.com/zemengzero/MSGA/pull/14/commits)查看。
+- [C3：ef9a962](https://github.com/zemengzero/MSGA/commit/ef9a96287fbb8c0fb3b8365cb15c4edc2dfaf2c9)，搜索/关联回归、演示工具及个人说明。完整历史见 [PR #14 提交列表](https://github.com/zemengzero/MSGA/pull/14/commits)。
 - 姓名、学号已由本人提供并填写。Issue #7–#9 的认领及 D 对最新 main/PR #13 的集成安排，本轮未核验，交接时由本人和 D 确认。
 - D 完成日期和摘要界面接入后再共同做真实界面验收；统一版本演练、另一台机器测试、真人反馈尚未完成。不要把后端通过测试写成这些环节已通过。
+
+## 九、2026-11-02 复查补充
+
+对照 C1–C3 与 C-T01–C-T09 复查，未发现新的日期筛选、关键词/标签 AND、排序、命中字段或摘要核心逻辑错误；已保留先前的 UTC 溢出修正。
+
+本地补齐的交付遗漏：
+
+- `docs/成员信息.csv` 的 C 行此前仍为空，现填写万语 / U202414607 / ZYQY218，并注明 PR 待审核及界面待接入；只修改 C 行。
+- 本文补上 C3 的直接提交链接，C1/C2 交接说明更新“后续另行完成”的过时描述；原阶段测试日志保持不变。
+- 新增 `docs/C_PR交接说明.md`，提供覆盖 C1–C3、日期转参、API 调用及限制的完整 PR 标题/正文草稿；没有更新远程 PR。
+- 新增 `tests/test_c_demo.py` 的三个 CLI 回归测试：核对 9 篇合成笔记、实际 ID 顺序/命中字段/摘要/微秒边界/反链计数；确认已有文件不被覆盖；确认临时库清理。测试读取 SQLite 后显式关闭连接，避免 Windows 文件占用。
+
+本轮实际执行 `.\.venv\Scripts\python.exe -m unittest discover -s tests -v`，最终 **66 项全部通过**，2.030 秒，退出码 0，完整日志在 `reports/C_review_test_results.txt`。前文 63 项及 C3 演示结果是上次正式交付的阶段记录；最新本地复查以本节和新日志为准。
+
+本次修改和新增验证材料随 `feature/c-search-links` 分支交付；PR 正文更新文案见 `C_PR交接说明.md`，该文件不会自动更新 GitHub 上的 PR 正文。Issue #7–#9 的指派属于远程协作操作，不可通过本地文件完成；本轮未修改 Issue。日期和摘要界面接入及整机验收依然待 D 完成，不计入已通过的本地测试。
