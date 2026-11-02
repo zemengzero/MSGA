@@ -103,6 +103,46 @@ test("新建、编辑、自动保存、插入关联并在重载后读回", async
     path: path.join(root, "reports/A/galaxy-editor.png"),
   });
 });
+test("保存未完成时继续输入，后续修改仍会自动保存", async ({ page }) => {
+  const note = (
+    await call(page, "create", { title: "连续编辑保存检查", body: "initial" })
+  ).data;
+  await page.getByLabel("搜索笔记", { exact: true }).fill("连续编辑保存检查");
+  await page
+    .locator(".recent-item")
+    .filter({ hasText: "连续编辑保存检查" })
+    .click();
+  await page.getByRole("button", { name: "编辑", exact: true }).click();
+  let count = 0,
+    holdSnapshot = false,
+    snapshotHeld = false;
+  await page.route("**/api/snapshot", async (route) => {
+    if (holdSnapshot && !snapshotHeld) {
+      snapshotHeld = true;
+      const response = await route.fetch();
+      await new Promise((r) => setTimeout(r, 3500));
+      await route.fulfill({ response });
+    } else await route.continue();
+  });
+  await page.route("**/api/save", async (route) => {
+    const response = await route.fetch();
+    if (++count === 1) {
+      holdSnapshot = true;
+      await new Promise((r) => setTimeout(r, 700));
+    }
+    await route.fulfill({ response });
+  });
+  const first = page.waitForRequest((r) => r.url().endsWith("/api/save"));
+  await page.getByLabel("Markdown正文").fill("第一次修改");
+  await first;
+  await page.getByLabel("Markdown正文").fill("保存中继续输入的最终内容");
+  await expect
+    .poll(async () => (await call(page, "note", { id: note.id })).data.body, {
+      timeout: 15000,
+    })
+    .toBe("保存中继续输入的最终内容");
+  await expect(page.getByText("已保存到本机", { exact: true })).toBeVisible();
+});
 test("版本冲突保留输入，取消离开不丢失缓冲", async ({ page }) => {
   const created = (
     await call(page, "create", { title: "冲突检查专用", body: "original" })

@@ -4,6 +4,7 @@ export default defineConfig({
   workers: 1,
   fullyParallel: false,
   timeout: 40000,
+  expect: { timeout: 10000 },
   use: {
     channel: "chrome",
     headless: true,

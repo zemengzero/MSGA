@@ -123,12 +123,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7616,
+                  "duration": 5662,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T02:31:45.052Z",
+                  "startTime": "2026-11-02T02:47:58.540Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -157,12 +157,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 14477,
+                  "duration": 6805,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T02:31:53.353Z",
+                  "startTime": "2026-11-02T02:48:04.829Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -173,6 +173,40 @@
           "id": "17e37336a941a05a16d4-1b3f75311ac74178d653",
           "file": "galaxy.spec.js",
           "line": 73,
+          "column": 1
+        },
+        {
+          "title": "保存未完成时继续输入，后续修改仍会自动保存",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 40000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9694,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T02:48:11.644Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "17e37336a941a05a16d4-c7e4416a69e4317a1eef",
+          "file": "galaxy.spec.js",
+          "line": 106,
           "column": 1
         },
         {
@@ -191,12 +225,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8000,
+                  "duration": 4279,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T02:32:07.868Z",
+                  "startTime": "2026-11-02T02:48:21.346Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -206,7 +240,7 @@
           ],
           "id": "17e37336a941a05a16d4-7176b31addac7530243b",
           "file": "galaxy.spec.js",
-          "line": 106,
+          "line": 146,
           "column": 1
         },
         {
@@ -225,12 +259,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5614,
+                  "duration": 3694,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T02:32:15.887Z",
+                  "startTime": "2026-11-02T02:48:25.638Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -240,7 +274,7 @@
           ],
           "id": "17e37336a941a05a16d4-50e80f0e6da0f5c09af2",
           "file": "galaxy.spec.js",
-          "line": 134,
+          "line": 174,
           "column": 1
         },
         {
@@ -259,12 +293,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13358,
+                  "duration": 4339,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-02T02:32:21.522Z",
+                  "startTime": "2026-11-02T02:48:29.345Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -274,7 +308,7 @@
           ],
           "id": "17e37336a941a05a16d4-ae8989e2eae9173c55d4",
           "file": "galaxy.spec.js",
-          "line": 160,
+          "line": 200,
           "column": 1
         }
       ]
@@ -282,9 +316,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-02T02:31:44.574Z",
-    "duration": 56467.29,
-    "expected": 5,
+    "startTime": "2026-11-02T02:47:58.083Z",
+    "duration": 35837.649000000005,
+    "expected": 6,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

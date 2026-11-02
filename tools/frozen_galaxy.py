@@ -28,6 +28,7 @@ assert result == 0, (
 value = json.loads(report.read_text(encoding="utf-8"))
 assert value["passed"] and value["native_window"] and value["canvas_present"]
 value["tested_executable"] = exe.name
+value["process_exit_code"] = result
 value["exe_sha256"] = hashlib.sha256(exe.read_bytes()).hexdigest()
 report.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding="utf-8")
 print(json.dumps(value, ensure_ascii=False))

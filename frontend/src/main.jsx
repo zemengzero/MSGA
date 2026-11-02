@@ -96,7 +96,7 @@ function IconButton({ icon, label, onClick, ...props }) {
   );
 }
 
-function Galaxy({ graph, matched, query, onOpen }) {
+function Galaxy({ graph, matched, query, onOpen, paused }) {
   const ref = useRef();
   const host = useRef();
   const [size, setSize] = useState({ width: 700, height: 470 });
@@ -111,6 +111,11 @@ function Galaxy({ graph, matched, query, onOpen }) {
     [graph],
   );
   const hits = useMemo(() => new Set(matched), [matched]);
+  useEffect(() => {
+    if (!ref.current) return;
+    if (paused) ref.current.pauseAnimation();
+    else ref.current.resumeAnimation();
+  }, [paused, data]);
   const neighbours = useMemo(() => {
     const s = new Set(hover ? [hover] : []);
     if (hover)
@@ -401,12 +406,12 @@ function App() {
     return task;
   }
   useEffect(() => {
-    if (!dirty || saveError) return;
+    if (!dirty || saveError || saving) return;
     const timer = setTimeout(() => {
       if (!modal && !confirm) saveDraft();
     }, 1400);
     return () => clearTimeout(timer);
-  }, [draft, dirty, saveError, modal, confirm]);
+  }, [draft, dirty, saveError, modal, confirm, saving]);
   function ask(text, mode = "normal") {
     return new Promise((resolve) => setConfirm({ text, mode, resolve }));
   }
@@ -899,6 +904,7 @@ function App() {
                   <GraphBoundary>
                     <Galaxy
                       graph={snapshot.graph}
+                      paused={Boolean(selected)}
                       matched={snapshot.matched_ids}
                       query={filtered}
                       onOpen={openNote}

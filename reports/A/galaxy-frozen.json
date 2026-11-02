@@ -1,11 +1,12 @@
 {
   "passed": true,
-  "note_id": "3c8bd153-b219-4e4c-808a-793a48645095",
+  "note_id": "7591be8e-0f8a-4ade-8243-ffa4f043daf6",
   "graph_nodes": 31,
   "graph_links": 60,
   "canvas_present": true,
   "frontend_loaded": true,
   "native_window": true,
   "tested_executable": "ZhiYeGalaxy.exe",
-  "exe_sha256": "e4187816bb6206440af27effacc0f42cd47be605582b5fd60110c762bb4e45b3"
+  "process_exit_code": 0,
+  "exe_sha256": "de5d3d413ce714ffa2f8880da161338eb9613e3de9abfa405407b724b5f12d8b"
 }
