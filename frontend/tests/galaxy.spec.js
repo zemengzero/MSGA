@@ -189,7 +189,9 @@ test("保存未完成时继续输入，后续修改仍会自动保存", async ({
   await page.getByLabel("Markdown正文").fill("保存中继续输入的最终内容");
   await expect
     .poll(async () => (await call(page, "note", { id: note.id })).data.body, {
-      timeout: 15000,
+      // This case injects 4.2s of network delay, plus two debounces.
+      // Leave room for Windows CI's software-rendered WebGL scheduling.
+      timeout: 30000,
     })
     .toBe("保存中继续输入的最终内容");
   await expect(page.getByText("已保存到本机", { exact: true })).toBeVisible();
