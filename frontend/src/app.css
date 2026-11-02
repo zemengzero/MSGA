@@ -1,0 +1,444 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter-tight";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/playfair-display";
+@import "@fontsource-variable/playfair-display/wght-italic.css";
+@import "@fontsource-variable/jetbrains-mono";
+
+@theme {
+  /* tokens lifted from the reference export */
+  --color-background: #efe7d2;
+  --color-foreground: #15140f;
+
+  --color-card: #f7f1de;
+  --color-card-foreground: #15140f;
+  --color-popover: #f7f1de;
+  --color-popover-foreground: #15140f;
+
+  --color-primary: #ed6f5c;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #ece4cf;
+  --color-secondary-foreground: #15140f;
+  --color-muted: #ece4cf;
+  --color-muted-foreground: #5a5448;
+  --color-accent: #e8dfc9;
+  --color-accent-foreground: #15140f;
+  --color-destructive: #c0442f;
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: rgba(21, 20, 15, 0.16);
+  --color-input: rgba(21, 20, 15, 0.22);
+  --color-ring: rgba(21, 20, 15, 0.32);
+
+  --color-subtle: #8b8676;
+  --color-ink-soft: #2a2620;
+  --color-ink-mute: #5a5448;
+  --color-bone: #f7f1de;
+  --color-paper-warm: #ece4cf;
+  --color-paper-dark: #ddd2b6;
+  --color-coral: #ed6f5c;
+  --color-mustard: #e9b94a;
+  --color-olive: #6e7448;
+
+  --font-sans:
+    "Inter Tight Variable", "Inter Variable", "PingFang SC",
+    "Microsoft YaHei UI", system-ui, sans-serif;
+  --font-body:
+    "Inter Variable", "PingFang SC", "Microsoft YaHei UI", system-ui,
+    sans-serif;
+  --font-serif: "Playfair Display Variable", "Songti SC", "SimSun", serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, Menlo, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    min-width: 980px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.55;
+    letter-spacing: -0.002em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* the paper itself — same recipe as the reference export */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background-image:
+      radial-gradient(
+        circle at 12% 18%,
+        rgba(106, 92, 56, 0.07) 0,
+        transparent 28%
+      ),
+      radial-gradient(
+        circle at 88% 72%,
+        rgba(106, 92, 56, 0.06) 0,
+        transparent 32%
+      ),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-size:
+      auto,
+      auto,
+      240px 240px;
+    mix-blend-mode: multiply;
+    opacity: 0.92;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: #ed6f5c;
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(21, 20, 15, 0.2);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(21, 20, 15, 0.34);
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* reference type primitives */
+  .u-display {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    letter-spacing: -0.028em;
+    line-height: 1.02;
+    color: var(--color-foreground);
+  }
+
+  .u-display em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.018em;
+  }
+
+  .u-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--color-coral);
+  }
+
+  .u-label::before {
+    content: "";
+    width: 22px;
+    height: 2px;
+    background: var(--color-coral);
+    display: inline-block;
+  }
+
+  .u-meta {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--color-subtle);
+  }
+
+  .u-card {
+    background: var(--color-bone);
+    border-radius: 18px;
+    box-shadow:
+      0 30px 60px -30px rgba(21, 20, 15, 0.18),
+      inset 0 0 0 1px rgba(21, 20, 15, 0.06);
+  }
+}
+
+/* ---------------------------------------------------------------- markdown */
+
+.markdown {
+  color: #2a2620;
+  line-height: 1.72;
+  word-break: break-word;
+}
+
+.markdown > :first-child {
+  margin-top: 0;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: #15140f;
+  line-height: 1.25;
+  margin: 1.5em 0 0.5em;
+}
+
+.markdown h1 {
+  font-size: 1.55em;
+  font-weight: 800;
+}
+
+.markdown h2 {
+  font-size: 1.26em;
+}
+
+.markdown h3 {
+  font-size: 1.06em;
+}
+
+.markdown p {
+  margin: 0.8em 0;
+}
+
+.markdown ul,
+.markdown ol {
+  margin: 0.8em 0;
+  padding-left: 1.3em;
+}
+
+.markdown li {
+  margin: 0.28em 0;
+}
+
+.markdown a {
+  color: #d4543f;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(212, 84, 63, 0.4);
+}
+
+.markdown code {
+  background: rgba(21, 20, 15, 0.06);
+  border-radius: 4px;
+  padding: 0.1em 0.32em;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+.markdown pre {
+  background: #f2ebd8;
+  border-radius: 10px;
+  border-left: 2px solid var(--color-coral);
+  padding: 14px 16px;
+  overflow: auto;
+}
+
+.markdown pre code {
+  background: none;
+  padding: 0;
+}
+
+.markdown blockquote {
+  margin: 1em 0;
+  padding: 0.1em 0 0.1em 1em;
+  border-left: 2px solid var(--color-coral);
+  color: #5a5448;
+  font-size: 1.02em;
+}
+
+.markdown hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: 1.6em 0;
+}
+
+.markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.94em;
+}
+
+.markdown th,
+.markdown td {
+  border: 1px solid rgba(21, 20, 15, 0.14);
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.markdown th {
+  background: #f2ebd8;
+  font-weight: 600;
+}
+
+.markdown img {
+  max-width: 100%;
+  border-radius: 12px;
+}
+
+/* -------------------------------------------------------------- animations */
+
+@keyframes ui-overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ui-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes ui-sheet-in {
+  from {
+    transform: translateX(22px);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------- in-note find (C) */
+.note-find-panel {
+  flex-shrink: 0;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.note-find-toggle,
+.note-find-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 6px 13px;
+  border: 1px solid rgba(21, 20, 15, 0.22);
+  border-radius: 999px;
+  background: transparent;
+  color: #2a2620;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.note-find-toggle[aria-expanded="true"] {
+  border-color: #ed6f5c;
+  background: rgba(237, 111, 92, 0.12);
+  color: #b3361f;
+}
+
+.note-find-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.note-find-controls textarea {
+  flex: 1 1 180px;
+  min-width: 0;
+  width: 100%;
+  min-height: 36px;
+  max-height: 90px;
+  resize: none;
+  overflow-y: auto;
+  border: 1px solid rgba(21, 20, 15, 0.22);
+  background: #f7f1de;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #15140f;
+  outline: none;
+}
+
+.note-find-controls textarea:focus {
+  border-color: #ed6f5c;
+}
+
+.note-find-controls output,
+.note-find-current,
+.note-find-hint {
+  font-size: 14px;
+  color: #5a5448;
+  white-space: nowrap;
+}
+
+.note-find-hint {
+  display: block;
+  margin-top: 8px;
+  white-space: normal;
+}
+
+.note-find-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  min-width: 32px;
+  border: 1px solid rgba(21, 20, 15, 0.22);
+  border-radius: 8px;
+  background: transparent;
+  color: #15140f;
+}
+
+.note-find-nav:disabled {
+  opacity: 0.35;
+}
+
+.note-find-close {
+  border-color: transparent;
+  padding: 6px;
+}
+
+.search-hit {
+  background: rgba(237, 111, 92, 0.28);
+  color: #15140f;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+::highlight(note-find-all) {
+  background-color: #ffe89a;
+  color: #15140f;
+}
+
+::highlight(note-find-current) {
+  background-color: #ed6f5c;
+  color: #fff;
+  text-decoration: underline;
+}
