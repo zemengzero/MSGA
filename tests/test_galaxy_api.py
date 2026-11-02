@@ -151,6 +151,49 @@ class GalaxyTests(StoreFixture):
             datetime(2026, 11, 1, 16, tzinfo=timezone.utc),
         )
 
+    def test_C_last_beijing_day_includes_microseconds_and_excludes_next_midnight(self):
+        before_start = self.store.create("before start")
+        at_start = self.store.create("at start")
+        last_microsecond = self.store.create("last microsecond")
+        next_midnight = self.store.create("next midnight")
+        stamps = (
+            (before_start.id, "9999-12-30T15:59:59.999999+00:00"),
+            (at_start.id, "9999-12-30T16:00:00.000000+00:00"),
+            (last_microsecond.id, "9999-12-31T15:59:59.999999+00:00"),
+            (next_midnight.id, "9999-12-31T16:00:00.000000+00:00"),
+        )
+        with self.store.conn:
+            self.store.conn.executemany(
+                "UPDATE notes SET updated_at=? WHERE id=?",
+                [(stamp, note_id) for note_id, stamp in stamps],
+            )
+        state = self.call(
+            "snapshot", {"date_from": "9999-12-31", "date_to": "9999-12-31"}
+        )
+        self.assertEqual(
+            [n["id"] for n in state["notes"]],
+            [last_microsecond.id, at_start.id],
+        )
+        state = self.call("snapshot", {"date_to": "9999-12-31"})
+        self.assertEqual(
+            [n["id"] for n in state["notes"]],
+            [last_microsecond.id, at_start.id, before_start.id],
+        )
+
+    def test_C_first_beijing_end_day_keeps_its_representable_utc_boundary(self):
+        before_end = self.store.create("before end")
+        at_end = self.store.create("at end")
+        with self.store.conn:
+            self.store.conn.executemany(
+                "UPDATE notes SET updated_at=? WHERE id=?",
+                [
+                    ("0001-01-01T15:59:59.999999+00:00", before_end.id),
+                    ("0001-01-01T16:00:00.000000+00:00", at_end.id),
+                ],
+            )
+        state = self.call("snapshot", {"date_to": "0001-01-01"})
+        self.assertEqual([n["id"] for n in state["notes"]], [before_end.id])
+
     def test_C_search_hit_contract_supports_separate_presenter(self):
         note = self.store.create("C", "original")
         module = ModuleType("zhiyeteam.search_presenter")

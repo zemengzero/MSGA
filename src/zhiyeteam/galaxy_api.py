@@ -152,9 +152,13 @@ class GalaxyAPI:
                         )
                     except ValueError as exc:
                         raise ValidationError("请选择有效日期") from exc
-                    kwargs[parameter] = (
-                        parsed + timedelta(days=1) if key == "date_to" else parsed
-                    )
+                    if key == "date_to":
+                        try:
+                            parsed += timedelta(days=1)
+                        except OverflowError:
+                            # The last Beijing day still ends at a valid UTC instant.
+                            parsed = parsed.astimezone(timezone.utc) + timedelta(days=1)
+                    kwargs[parameter] = parsed
         args = (
             store,
             payload.get("query", ""),
