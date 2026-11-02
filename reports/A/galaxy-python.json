@@ -1,0 +1,308 @@
+{
+  "executed_at_utc": "2026-11-02T02:40:22.664582+00:00",
+  "python": "3.13.3",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "tests_run": 56,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "passed": true,
+  "cases": [
+    {
+      "test": "test_backup.BackupTests.test_corrupt_input_never_changes_current",
+      "status": "passed",
+      "ms": 21.666
+    },
+    {
+      "test": "test_backup.BackupTests.test_existing_target_refused",
+      "status": "passed",
+      "ms": 16.385
+    },
+    {
+      "test": "test_backup.BackupTests.test_failed_copy_rolls_back_from_protection",
+      "status": "passed",
+      "ms": 43.864
+    },
+    {
+      "test": "test_backup.BackupTests.test_failed_rollback_disables_future_writes",
+      "status": "passed",
+      "ms": 39.722
+    },
+    {
+      "test": "test_backup.BackupTests.test_roundtrip_includes_versions_and_trash",
+      "status": "passed",
+      "ms": 44.972
+    },
+    {
+      "test": "test_backup.BackupTests.test_unknown_schema_is_refused",
+      "status": "passed",
+      "ms": 28.242
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_B_audit_wrapper_contract_does_not_change_legacy_restore",
+      "status": "passed",
+      "ms": 23.23
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_C_date_contract_is_aware_and_end_date_inclusive",
+      "status": "passed",
+      "ms": 22.637
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_C_search_hit_contract_supports_separate_presenter",
+      "status": "passed",
+      "ms": 20.888
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_api_requires_revision_and_preserves_stale_buffer",
+      "status": "passed",
+      "ms": 27.365
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_backup_restore_and_export_reuse_existing_modules",
+      "status": "passed",
+      "ms": 76.617
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_calls_work_from_different_worker_threads",
+      "status": "passed",
+      "ms": 53.778
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_failed_restore_keeps_protection_lock_across_requests",
+      "status": "passed",
+      "ms": 35.706
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_font_and_pin_do_not_change_note_revision",
+      "status": "passed",
+      "ms": 29.317
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_graph_does_not_seed_existing_library",
+      "status": "passed",
+      "ms": 22.574
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_graph_uses_actual_links_and_excludes_trash_and_dangling",
+      "status": "passed",
+      "ms": 27.19
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_safe_preview_resolves_renamed_link_without_script",
+      "status": "passed",
+      "ms": 21.295
+    },
+    {
+      "test": "test_galaxy_api.GalaxyTests.test_unimplemented_optional_filters_fail_explicitly",
+      "status": "passed",
+      "ms": 16.563
+    },
+    {
+      "test": "test_galaxy_close.NativeCloseTests.test_cancel_preserves_window_and_can_retry",
+      "status": "passed",
+      "ms": 0.807
+    },
+    {
+      "test": "test_galaxy_close.NativeCloseTests.test_failed_js_query_requires_explicit_confirmation",
+      "status": "passed",
+      "ms": 0.549
+    },
+    {
+      "test": "test_galaxy_close.NativeCloseTests.test_js_is_queried_off_the_closing_event_thread",
+      "status": "passed",
+      "ms": 0.55
+    },
+    {
+      "test": "test_galaxy_server.ServerTests.test_authenticated_same_origin_request_returns_real_data",
+      "status": "passed",
+      "ms": 756.002
+    },
+    {
+      "test": "test_galaxy_server.ServerTests.test_database_and_traversal_cannot_be_served",
+      "status": "passed",
+      "ms": 528.654
+    },
+    {
+      "test": "test_galaxy_server.ServerTests.test_wrong_token_and_cross_origin_are_blocked",
+      "status": "passed",
+      "ms": 543.563
+    },
+    {
+      "test": "test_history.HistoryTests.test_deleted_source_not_in_backlinks",
+      "status": "passed",
+      "ms": 17.735
+    },
+    {
+      "test": "test_history.HistoryTests.test_history_restore_creates_new_version",
+      "status": "passed",
+      "ms": 15.746
+    },
+    {
+      "test": "test_history.HistoryTests.test_purge_requires_trash_and_retains_dangling_target",
+      "status": "passed",
+      "ms": 18.87
+    },
+    {
+      "test": "test_history.HistoryTests.test_trash_restore_keeps_uuid_and_links",
+      "status": "passed",
+      "ms": 18.086
+    },
+    {
+      "test": "test_links.LinkTests.test_code_and_escaped_markers_excluded",
+      "status": "passed",
+      "ms": 15.311
+    },
+    {
+      "test": "test_links.LinkTests.test_graph_failure_rolls_back_note_and_history",
+      "status": "passed",
+      "ms": 15.141
+    },
+    {
+      "test": "test_links.LinkTests.test_rename_keeps_target_id_and_occurrence_count",
+      "status": "passed",
+      "ms": 17.19
+    },
+    {
+      "test": "test_models.ModelTests.test_note_snapshot_is_immutable",
+      "status": "passed",
+      "ms": 0.095
+    },
+    {
+      "test": "test_search.SearchTests.test_keyword_and_title_priority",
+      "status": "passed",
+      "ms": 17.537
+    },
+    {
+      "test": "test_search.SearchTests.test_tag_normalization_and_counts",
+      "status": "passed",
+      "ms": 18.107
+    },
+    {
+      "test": "test_search.SearchTests.test_tags_and_empty_query",
+      "status": "passed",
+      "ms": 19.82
+    },
+    {
+      "test": "test_store.StoreTests.test_create_update_persist",
+      "status": "passed",
+      "ms": 22.801
+    },
+    {
+      "test": "test_store.StoreTests.test_empty_title_and_oversize_body_rejected",
+      "status": "passed",
+      "ms": 13.97
+    },
+    {
+      "test": "test_store.StoreTests.test_failed_tag_validation_is_atomic",
+      "status": "passed",
+      "ms": 13.566
+    },
+    {
+      "test": "test_store.StoreTests.test_noop_save_does_not_make_history",
+      "status": "passed",
+      "ms": 15.012
+    },
+    {
+      "test": "test_store.StoreTests.test_optimistic_conflict_preserves_disk",
+      "status": "passed",
+      "ms": 15.386
+    },
+    {
+      "test": "test_store.StoreTests.test_second_connection_cannot_silently_overwrite",
+      "status": "passed",
+      "ms": 17.011
+    },
+    {
+      "test": "test_store.StoreTests.test_settings_roundtrip",
+      "status": "passed",
+      "ms": 14.004
+    },
+    {
+      "test": "test_transfer.TransferTests.test_export_internal_links_are_local",
+      "status": "passed",
+      "ms": 21.103
+    },
+    {
+      "test": "test_transfer.TransferTests.test_html_strips_active_content",
+      "status": "passed",
+      "ms": 16.008
+    },
+    {
+      "test": "test_transfer.TransferTests.test_malformed_uri_is_inert",
+      "status": "passed",
+      "ms": 15.145
+    },
+    {
+      "test": "test_transfer.TransferTests.test_nonempty_export_refused",
+      "status": "passed",
+      "ms": 17.445
+    },
+    {
+      "test": "test_transfer.TransferTests.test_utf8_import_conflict_and_partial_failure",
+      "status": "passed",
+      "ms": 18.604
+    },
+    {
+      "test": "test_ui_guard.GuardTests.test_cancel_guard_suppresses_nested_autosave",
+      "status": "passed",
+      "ms": 0.487
+    },
+    {
+      "test": "test_ui_guard.GuardTests.test_empty_library_disables_unsavable_input",
+      "status": "passed",
+      "ms": 0.778
+    },
+    {
+      "test": "test_ui_layout.LayoutTests.test_child_resize_does_not_change_layout",
+      "status": "passed",
+      "ms": 0.166
+    },
+    {
+      "test": "test_ui_layout.LayoutTests.test_control_tab_moves_focus_and_stops_tab_insertion",
+      "status": "passed",
+      "ms": 0.205
+    },
+    {
+      "test": "test_ui_layout.LayoutTests.test_font_selection_failure_reverts_control_and_reports_error",
+      "status": "passed",
+      "ms": 1.036
+    },
+    {
+      "test": "test_ui_layout.LayoutTests.test_narrow_resize_hides_once_and_boundary_restores",
+      "status": "passed",
+      "ms": 0.316
+    },
+    {
+      "test": "test_ui_preferences.PreferenceTests.test_failed_preference_write_preserves_displayed_font",
+      "status": "passed",
+      "ms": 14.86
+    },
+    {
+      "test": "test_ui_preferences.PreferenceTests.test_font_preference_persists_without_editing_notes",
+      "status": "passed",
+      "ms": 16.831
+    },
+    {
+      "test": "test_ui_preferences.PreferenceTests.test_invalid_font_values_do_not_overwrite_existing_preference",
+      "status": "passed",
+      "ms": 13.261
+    }
+  ],
+  "source_files_sha256": {
+    "src/zhiyeteam/__init__.py": "985dde08fcd4a97320d852999532267383f1152557f9e7dac7fd2847c76343d2",
+    "src/zhiyeteam/__main__.py": "0470368334bbbe0c0ce4a73397df0b66b8e4e99e57de91c9b971232f3410d1b8",
+    "src/zhiyeteam/backup.py": "fede2e04d0d1735fb8f57553188e8f4ddc5fa3ea31a77c06d5f9d2329b782b17",
+    "src/zhiyeteam/demo.py": "c68d7bd64ebfd94ed9abd7ccfdd469dd793bf4bfae3f0a8f88a3deafff7314a1",
+    "src/zhiyeteam/galaxy.py": "933d892a7fb82eaf127bde543adc75cd86401308142e3cf56a718daa86cffebb",
+    "src/zhiyeteam/galaxy_api.py": "ec7bc4f235d7cc902a41b155956fdd1ced44f2da5b5b48caf1c286b3dfa981e3",
+    "src/zhiyeteam/galaxy_demo.py": "3d78713168d356745d3945f03864b336320e52be14ea60c903465dfa2e63abe6",
+    "src/zhiyeteam/galaxy_server.py": "846c50c6fd58a5a2cd260e85c3c1bf6f5973d41f0877ce3ca01bf1bebe2e4bd4",
+    "src/zhiyeteam/links.py": "9d2f493c3f4e7dcea7a45c965fce9c66018faaa31ffbe5d8bb9b2952b9720148",
+    "src/zhiyeteam/models.py": "60d5e47c7f8dfe260f37d6b32fda0869773a24097710cbb0ac664ff3c10df775",
+    "src/zhiyeteam/search.py": "0d0bd56413f981119160bd4ff94fe4f9eda787b6665229f50c766f966f994ba3",
+    "src/zhiyeteam/store.py": "fbf83c0f196b0a7764107935bf535674d686a5119f131cc6d5a3b933b8457ce6",
+    "src/zhiyeteam/transfer.py": "57947bc8fa94e0deaf47c936dd6c1a7900701b80a1b5fb04d14349ab0259eb11",
+    "src/zhiyeteam/ui.py": "4fb02f95cbd42a885cf07536b98723489e1efbd50f0529180d33894546355c06"
+  }
+}

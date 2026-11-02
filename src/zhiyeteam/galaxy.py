@@ -4,11 +4,45 @@ import argparse
 import json
 import os
 import sys
+import threading
 import time
 from pathlib import Path
 
 from .galaxy_api import GalaxyAPI
 from .galaxy_server import serve
+
+
+def close_guard(window):
+    """Do not synchronously query WebView from its blocking FormClosing event."""
+    state = {"busy": False, "approved": False}
+
+    def decide():
+        try:
+            try:
+                dirty = window.evaluate_js("Boolean(window.__hasUnsavedChanges)")
+                message = (
+                    "仍有未保存内容。确定退出将丢弃这些修改；取消可返回编辑并保存。"
+                    if dirty
+                    else None
+                )
+            except Exception:
+                message = "暂时无法确认编辑状态。请确认已保存需要的内容，仍要退出吗？"
+            if message and not window.create_confirmation_dialog("退出确认", message):
+                return
+            state["approved"] = True
+            window.destroy()
+        finally:
+            state["busy"] = False
+
+    def on_closing():
+        if state["approved"]:
+            return True
+        if not state["busy"]:
+            state["busy"] = True
+            threading.Thread(target=decide, daemon=True).start()
+        return False
+
+    return on_closing
 
 
 def main():
@@ -51,19 +85,7 @@ def main():
         )
         api.window = window
 
-        def closing():
-            try:
-                if window.evaluate_js("Boolean(window.__hasUnsavedChanges)"):
-                    return window.create_confirmation_dialog(
-                        "未保存的内容",
-                        "仍有未保存内容。确定退出将丢弃这些修改；取消可返回编辑并保存。",
-                    )
-            except Exception:
-                # During failed/early startup there is no editor to discard.
-                pass
-            return True
-
-        window.events.closing += closing
+        window.events.closing += close_guard(window)
 
         def smoke():
             if not args.smoke_report:

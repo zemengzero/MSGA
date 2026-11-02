@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "note_id": "3c8bd153-b219-4e4c-808a-793a48645095",
+  "graph_nodes": 31,
+  "graph_links": 60,
+  "canvas_present": true,
+  "frontend_loaded": true,
+  "native_window": true,
+  "tested_executable": "ZhiYeGalaxy.exe",
+  "exe_sha256": "e4187816bb6206440af27effacc0f42cd47be605582b5fd60110c762bb4e45b3"
+}

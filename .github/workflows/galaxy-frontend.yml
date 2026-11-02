@@ -1,0 +1,23 @@
+name: galaxy-ui-and-adapter
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  galaxy:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24'
+      - run: python -m pip install -e .
+      - run: python -m unittest discover -s tests -v
+      - run: npm ci
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend
+      - run: npm test
+        working-directory: frontend

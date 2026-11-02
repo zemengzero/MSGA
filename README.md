@@ -1,5 +1,15 @@
 # 知页 · 本地学习知识库
 
+## 知识星图界面（A新增）
+
+![知识星图实测](reports/A/galaxy-overview.png)
+
+新增React/Three.js深色知识星图与Windows WebView2桌面入口，节点/连线读取同一SQLite库。新建、搜索、关联、自动保存、版本、回收站和备份导出均调用已有业务模块；原Tk入口仍保留。
+
+源码运行：在frontend执行`npm ci`、`npm run build`，回根目录执行`.venv/Scripts/python.exe -m zhiyeteam.galaxy --demo`。打包使用`python tools/build_galaxy.py`，实体exe检查用`python tools/frozen_galaxy.py`；Windows需要Edge WebView2 Runtime。发行exe不要求Python/Node。
+
+给B/C/D：[新版界面对接约定](docs/新版界面_BCD对接说明.md)。B/C的原接口不变，审计包装与日期/摘要扩展按该约定自动接入，契约测试不代表他们已完成实现。A个人交付与答辩见[知识星图说明](docs/A_知识星图交付说明.md)。下面的v1.0.0下载是保留的旧版，知识星图以对应PR/预览包为准。
+
 用于软件工程团队验收的 Windows 桌面程序：记录 Markdown 笔记，按关键词和标签找回知识，用稳定 UUID 关联笔记，通过历史版本、回收站和完整备份保护内容。
 
 团队版选择 Python + Tkinter + SQLite，以离线可运行、代码易讲解和四人可分工为首要目标。前两次实验的 .NET/Markdown 文件方案属于设计探索；本项目独立维护团队需求基线与实际实现说明。
