@@ -24,3 +24,9 @@ The previously flaky conflict regression passed in:
 - full suite run 1: 7 passed
 - full suite run 2: 7 passed
 - full suite after clean npm ci: 7 passed
+
+Additional CI investigation:
+- integration/ac-galaxy-release 65fdfb8 is an ancestor of main 5698dbf
+- B branch does not modify frontend source files
+- GitHub failed at page.reload because the 40s per-test timeout was exceeded
+- Playwright per-test timeout increased to 90s without changing assertions

@@ -56,3 +56,11 @@ Repeat runs:
 - full suite run 1: 7 passed (40.8s)
 - full suite run 2: 7 passed (59.1s)
 - full suite after clean npm ci: 7 passed (1.1m)
+
+Later PR CI timeout:
+- failing test: 字号持久化不修改笔记；收藏与取消收藏有效
+- failure point: page.reload()
+- cause: 40000ms per-test timeout exceeded on the GitHub Windows runner
+- integration/ac-galaxy-release 65fdfb8 is already an ancestor of main 5698dbf
+- no frontend source mismatch; B branch does not modify frontend source
+- remediation: raise Playwright test timeout to 90000ms, assertions unchanged

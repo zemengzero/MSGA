@@ -3,7 +3,8 @@ export default defineConfig({
   testDir: "./tests",
   workers: 1,
   fullyParallel: false,
-  timeout: 40000,
+  // GitHub Windows runners with SwiftShader can take longer to reload the 3D UI.
+  timeout: 90000,
   expect: { timeout: 10000 },
   use: {
     channel: "chrome",

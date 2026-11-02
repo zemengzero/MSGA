@@ -5,6 +5,7 @@
   "new_B_tests": 10,
   "frontend_tests_run": 7,
   "frontend_tests_passed": 7,
+  "playwright_timeout_ms": 90000,
   "npm_ci": "passed",
   "npm_build": "passed",
   "backup_source_sha256": "e7388edd074aa3679e3899acb13c55a227a48d5c8e08ef5a46a52212dffabdc1",
