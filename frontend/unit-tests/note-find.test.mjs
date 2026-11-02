@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { findInNoteText } from "../src/noteFind.js";
+import { mergeFindRanges, snapshotPreview } from "../src/noteFindDOM.js";
 
 test("empty text, empty query and whitespace-only query have no matches", () => {
   for (const [text, query] of [["", "AI"], ["AI", ""], ["AI", " \t\n"]]) {
@@ -77,4 +78,17 @@ test("500 deterministic generated cases agree with a naive code-point oracle", (
     }
     assert.deepEqual(findInNoteText(text, query), expected, `sample ${sample}`);
   }
+});
+
+test("highlight unions do not change overlapping hit counts or input ranges", () => {
+  const matches = findInNoteText("aaaa", "aa");
+  const original = structuredClone(matches);
+  assert.equal(matches.length, 3);
+  assert.deepEqual(mergeFindRanges(matches), [[0, 4]]);
+  assert.deepEqual(matches, original);
+  assert.deepEqual(mergeFindRanges([[0, 2], [2, 4], [7, 9]]), [[0, 4], [7, 9]]);
+  assert.deepEqual(mergeFindRanges([]), []);
+});
+test("missing preview during mount returns an empty safe snapshot", () => {
+  assert.deepEqual(snapshotPreview(null), { text: "", locations: [] });
 });

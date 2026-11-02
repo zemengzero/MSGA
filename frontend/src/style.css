@@ -1809,7 +1809,17 @@ h1 {
 .note-find-toggle, .note-find-close { display: inline-flex; align-items: center; justify-content: center; gap: 7px; background: transparent; border: 1px solid #ffffff20; color: #c6bddf; border-radius: 7px; cursor: pointer; min-height: 32px; padding: 5px 10px; }
 .note-find-toggle[aria-expanded="true"] { background: #a78bfa18; border-color: #a78bfa70; }
 .note-find-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-top: 9px; }
-.note-find-controls input { flex: 1 1 150px; min-width: 0; width: 100%; background: #10121c; color: #edeaf7; border: 1px solid #ffffff25; border-radius: 7px; padding: 8px 10px; font: inherit; }
-.note-find-controls input:focus, .note-find-toggle:focus-visible, .note-find-close:focus-visible { outline: 2px solid #a78bfa; outline-offset: 2px; }
+.note-find-controls input, .note-find-controls textarea { flex: 1 1 150px; min-width: 0; width: 100%; background: #10121c; color: #edeaf7; border: 1px solid #ffffff25; border-radius: 7px; padding: 8px 10px; font: inherit; }
+.note-find-controls input:focus, .note-find-controls textarea:focus, .note-find-toggle:focus-visible, .note-find-close:focus-visible { outline: 2px solid #a78bfa; outline-offset: 2px; }
 .note-find-controls output { color: #bdb3d4; font-size: 12px; white-space: nowrap; }
 .note-find-close { border-color: transparent; padding: 5px; }
+
+::highlight(note-find-all) { background-color: #ffe89a; color: #192539; }
+::highlight(note-find-current) { background-color: #ff9b52; color: #14121b; text-decoration: underline; }
+.note-find-current { color: #e2c6a6; font-size: 12px; white-space: nowrap; }
+.note-find-nav { display: inline-flex; align-items: center; justify-content: center; min-height: 30px; min-width: 30px; border: 1px solid #ffffff25; border-radius: 6px; background: #ffffff05; color: #ddd4ee; cursor: pointer; }
+.note-find-nav:disabled { opacity: .35; cursor: default; }
+.note-find-nav:focus-visible { outline: 2px solid #a78bfa; outline-offset: 2px; }
+.note-find-hint { display: block; margin-top: 8px; color: #c8bda6; }
+
+.note-find-controls textarea { min-height: 36px; max-height: 90px; resize: none; overflow-y: auto; line-height: 1.4; }

@@ -68,6 +68,7 @@ test("只读笔记内查找统计可见文本，不改正文，全局搜索与�
   await toggle.click(); await input.fill("AI");
   await preview.getByRole("link", { name: "切换到第二篇", exact: true }).click();
   await expect(page.getByLabel("笔记标题")).toHaveValue(second.title);
+  await expect.poll(() => highlightTexts(page, "note-find-all")).toEqual([]);
   await expect(input).toHaveCount(0);
   await toggle.click(); await expect(input).toHaveValue("");
   await input.fill("second"); await expect(result).toHaveText("共 1 处");
@@ -101,4 +102,120 @@ test("空正文与窄窗口可查，编辑时隐藏查找并保留自动保存",
   await input.fill("ai");
   await expect(page.getByLabel("笔记内查找结果")).toHaveText("共 2 处");
   await expect(page.locator(".note-drawer .markdown")).toHaveText("😀 Ai Ai");
+});
+
+
+async function highlightTexts(page, name) {
+  return page.evaluate(name => Array.from(CSS.highlights.get(name) || [], range => range.toString()), name);
+}
+
+test("正文高亮跨Markdown节点和emoji，重叠命中可循环跳转并完整清理", async ({ page }) => {
+  await page.goto(url); await page.waitForFunction(() => window.__appReady);
+  const body = '# 第三步\n\n😀 动**态规**划 与 动态规划。\n\nababa\n\n[可见链接](https://example.invalid/hidden-target)';
+  const note = await call(page, "create", { title: "第三步跨节点验收", body });
+  await openCreated(page, note.title);
+  const preview = page.locator(".note-drawer .markdown");
+  const original = await preview.innerHTML();
+  const input = page.getByLabel("笔记内查找关键词");
+  const current = page.getByLabel("当前命中位置");
+  await page.getByRole("button", { name: "笔记内查找", exact: true }).click();
+  await input.fill("动态规划");
+  await expect(page.getByLabel("笔记内查找结果")).toHaveText("共 2 处");
+  await expect.poll(() => highlightTexts(page, "note-find-all")).toEqual(["动态规划", "动态规划"]);
+  await expect.poll(() => highlightTexts(page, "note-find-current")).toEqual(["动态规划"]);
+  const initial = await page.evaluate(() => Array.from(CSS.highlights.get("note-find-current"))[0].startOffset);
+  expect(initial).toBe(3); // Emoji takes two UTF-16 code units plus one space.
+  await expect(current).toHaveText("第 1 处");
+  await input.press("Enter"); await expect(current).toHaveText("第 2 处");
+  await input.press("Shift+Enter"); await expect(current).toHaveText("第 1 处");
+  await page.getByRole("button", { name: "上一处匹配" }).click();
+  await expect(current).toHaveText("第 2 处");
+  await page.getByRole("button", { name: "下一处匹配" }).click();
+  await expect(current).toHaveText("第 1 处");
+  await input.fill("aba");
+  await expect.poll(() => highlightTexts(page, "note-find-all")).toEqual(["ababa"]);
+  await page.getByRole("button", { name: "下一处匹配" }).click();
+  await expect(current).toHaveText("第 2 处");
+  expect(await page.evaluate(() => Array.from(CSS.highlights.get("note-find-current"))[0].startOffset)).toBe(2);
+  await input.fill("不存在");
+  await expect(page.getByRole("button", { name: "下一处匹配" })).toBeDisabled();
+  await expect(current).toHaveText("第 0 处");
+  await expect.poll(() => highlightTexts(page, "note-find-all")).toEqual([]);
+  await input.fill("可见链接");
+  await expect.poll(() => highlightTexts(page, "note-find-current")).toEqual(["可见链接"]);
+  await expect(preview.getByRole("link", { name: "可见链接" })).toHaveAttribute("href", "https://example.invalid/hidden-target");
+  expect(await preview.innerHTML()).toBe(original);
+  await input.press("Escape");
+  await expect.poll(() => highlightTexts(page, "note-find-current")).toEqual([]);
+  await expect.poll(() => highlightTexts(page, "note-find-all")).toEqual([]);
+  expect(await preview.innerHTML()).toBe(original);
+  const after = await call(page, "note", { id: note.id });
+  expect([after.body, after.revision, after.updated_at]).toEqual([body, note.revision, note.updated_at]);
+});
+
+test("长文跳转只滚动详情正文，并清理切换编辑时的高亮", async ({ page }) => {
+  await page.goto(url); await page.waitForFunction(() => window.__appReady);
+  const body = '目标词\n\n' + '普通段落中的正文内容。\n\n'.repeat(90) + '目标词 唯一终点';
+  const note = await call(page, "create", { title: "第三步长文定位验收", body });
+  await openCreated(page, note.title);
+  await page.getByRole("button", { name: "笔记内查找", exact: true }).click();
+  await page.getByLabel("笔记内查找关键词").fill("目标词");
+  await expect.poll(() => highlightTexts(page, "note-find-all")).toEqual(["目标词", "目标词"]);
+  const windowScroll = await page.evaluate(() => window.scrollY);
+  await page.getByRole("button", { name: "下一处匹配" }).click();
+  await expect(page.getByLabel("当前命中位置")).toHaveText("第 2 处");
+  await expect.poll(() => page.locator(".drawer-content").evaluate(e => e.scrollTop)).toBeGreaterThan(1000);
+  const visible = await page.evaluate(() => {
+    const range = Array.from(CSS.highlights.get("note-find-current"))[0];
+    const rect = range.getBoundingClientRect();
+    const box = document.querySelector(".drawer-content").getBoundingClientRect();
+    return rect.top >= box.top && rect.bottom <= box.bottom;
+  });
+  expect(visible).toBe(true);
+  expect(await page.evaluate(() => window.scrollY)).toBe(windowScroll);
+  fs.mkdirSync(path.join(root, "reports/screenshots"), { recursive: true });
+  await page.screenshot({ path: path.join(root, "reports/screenshots/C-note-find-step3.png") });
+  await page.getByLabel("笔记内查找关键词").fill("唯一终点");
+  await expect(page.getByLabel("笔记内查找结果")).toHaveText("共 1 处");
+  await expect.poll(() => page.locator(".drawer-content").evaluate(e => e.scrollTop)).toBeGreaterThan(1000);
+  await page.locator(".drawer-content").evaluate(e => { e.scrollTop = 0; });
+  await page.getByRole("button", { name: "下一处匹配" }).click();
+  await expect.poll(() => page.locator(".drawer-content").evaluate(e => e.scrollTop)).toBeGreaterThan(1000);
+  await page.getByRole("button", { name: "编辑", exact: true }).click();
+  await expect.poll(() => highlightTexts(page, "note-find-all")).toEqual([]);
+  await expect.poll(() => highlightTexts(page, "note-find-current")).toEqual([]);
+  await expect(page.getByLabel("Markdown正文")).toHaveValue(body);
+});
+
+test("不支持CSS高亮时仍可统计和定位", async ({ page }) => {
+  await page.addInitScript(() => { window.Highlight = undefined; });
+  await page.goto(url); await page.waitForFunction(() => window.__appReady);
+  const note = await call(page, "create", { title: "第三步兼容验收", body: "AI ai" });
+  await openCreated(page, note.title);
+  await page.getByRole("button", { name: "笔记内查找", exact: true }).click();
+  await page.getByLabel("笔记内查找关键词").fill("ai");
+  await expect(page.getByLabel("笔记内查找结果")).toHaveText("共 2 处");
+  await expect(page.getByText("当前环境无法显示正文高亮，仍可查看命中数量。", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "下一处匹配" }).click();
+  await expect(page.getByLabel("当前命中位置")).toHaveText("第 2 处");
+});
+
+
+test("跨行、代码块空白和链接内部格式均映射到原始DOM", async ({ page }) => {
+  await page.goto(url); await page.waitForFunction(() => window.__appReady);
+  const body = '😀\n\nA  \nB\n\n```\n  spaced   AI\nline\n```\n\n[跨**节点**链接](https://example.invalid/route)';
+  const note = await call(page, "create", { title: "第三步空白映射验收", body });
+  await openCreated(page, note.title);
+  const preview = page.locator(".note-drawer .markdown");
+  const original = await preview.innerHTML();
+  await page.getByRole("button", { name: "笔记内查找", exact: true }).click();
+  for (const query of ["A\nB", "spaced   AI\nline", "跨节点链接", "😀"]) {
+    await page.getByLabel("笔记内查找关键词").fill(query);
+    await expect(page.getByLabel("笔记内查找结果")).toHaveText("共 1 处");
+    await expect.poll(async () => (await highlightTexts(page, "note-find-current"))
+      .map(text => text.replace(/\s/g, ""))).toEqual([query.replace(/\s/g, "")]);
+    expect(await preview.innerHTML()).toBe(original);
+  }
+  await page.getByRole("button", { name: "关闭笔记", exact: true }).click();
+  await expect.poll(() => highlightTexts(page, "note-find-current")).toEqual([]);
 });
