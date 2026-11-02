@@ -13,11 +13,12 @@ export default function NoteFindPanel({ previewRef, contentVersion }) {
   const inputRef = useRef(null);
   const triggerRef = useRef(null);
   useEffect(() => {
+    if (!open) return;
     // Passive effects run after sibling preview refs are attached.
     // Read what the preview displays, not Markdown, hrefs or HTML attributes.
     setSnapshot(snapshotPreview(previewRef.current));
     setActive(0);
-  }, [previewRef, contentVersion]);
+  }, [open, previewRef, contentVersion]);
   useLayoutEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open]);
