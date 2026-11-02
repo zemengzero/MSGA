@@ -1,0 +1,39 @@
+知页·知识星图 1.1：A + C 集成说明（2026-11-02）
+
+范围与代码
+1. A 的 React / Three.js 图谱、笔记抽屉、自动保存、收藏、字体设置和本地桌面外壳。
+   frontend/src/main.jsx、style.css；src/zhiyeteam/galaxy.py、galaxy_api.py、galaxy_server.py。
+2. C 的带时区更新时间过滤、命中字段、120 字符内正文摘要、回归测试和 CLI 演示。
+   src/zhiyeteam/search.py、search_presenter.py；tools/c_search_demo.py。
+3. 适配器将界面 YYYY-MM-DD 转为 UTC+08:00 时区的起点与次日零点，使用半开区间调用 C。
+   截止日包含全天；回收站过滤、关键词与标签 AND、排序规则沿用业务实现。
+4. 数据库结构与已有备份、导入导出、版本历史、稳定 UUID 关联保持兼容。
+   B 的独立 restore_audit 包装未在本次交付中出现，仍是可选入口；现有保护副本恢复可用。
+   不把这次 A+C 集成写成四人功能全部完成。
+
+真实历史
+A 分支来源 eef0204afc2c7460fe045c330e85e54b33639dd6，原 PR #13。
+C 分支来源 60c2cf5107f1626472253599c132e3f9d70788bc，原 PR #14。
+集成分支使用真实合并保留上述原始提交，集成修正由实际账号 IceApplejuice 提交。
+
+集成修正
+tests/test_galaxy_api.py 中两处测试原先把“C 尚未接入”当成固定前提：
+  presenter 回退测试现在显式隔离 search.search_hits；缺少日期能力测试显式模拟旧搜索签名。
+原来的断言均保留，不修改 C 实现来迎合旧测试。
+frontend/tests/galaxy-c-contract.spec.js 使用真实 C 实现，验证 UI 日期能力、命中摘要和日期包含/排除。
+桌面实体检查还会实际保存，再验证 C 摘要、命中字段及北京时间日期筛选，防止仅源码接上而 EXE 漏打包。
+打包源码哈希现在覆盖业务 Python 文件与 Schema、前端锁文件和界面，包含 C 的实现。
+
+验证与交付
+Python：python -m unittest discover -s tests -v。
+前端：frontend 目录 npm ci、npm run build、npm test。
+打包：Windows 上 python tools/build_galaxy.py。
+实体：python tools/frozen_galaxy.py，使用隔离数据目录，检查原生窗口、画布、保存、C 搜索及正常退出。
+具体本次运行结果、时间、源码提交和 EXE SHA256 以正式发布包“验证”目录与文件清单为准。
+这些检查来自本机自动执行；跨电脑兼容、现场真人使用与尚未接入的 B 功能仍需各自实际验证。
+
+运行
+正式版软件/Start-Demo.cmd：独立演示库，打开即呈现真实笔记与关联组成的星图。
+软件/Start-Personal.cmd 或双击 ZhiYeGalaxy.exe：正式个人库，空库不自动填充演示笔记。
+需要 Windows x64 和 Edge WebView2 Runtime；发行程序无需 Python/Node，运行时不下载前端资源。
+正式版 v1.1.0 应设为 GitHub Latest；v1.0.0 与 v1.1.0-a1 作为历史版本保留。

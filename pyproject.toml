@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zhiyeteam"
-version = "1.0.0"
+version = "1.1.0"
 description = "Offline desktop knowledge notebook for a software engineering team project"
 requires-python = ">=3.12"
-dependencies = ["Markdown==3.10.2"]
+dependencies = ["Markdown==3.10.2", "pywebview==6.2.1; sys_platform == 'win32'"]
 
 [project.scripts]
 zhiyeteam = "zhiyeteam.__main__:main"
+zhiye-galaxy = "zhiyeteam.galaxy:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

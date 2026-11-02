@@ -1,0 +1,17 @@
+{
+  "file": "ZhiYeGalaxy.exe",
+  "bytes": 15180171,
+  "sha256": "de5d3d413ce714ffa2f8880da161338eb9613e3de9abfa405407b724b5f12d8b",
+  "source_revision": "604b2f4537070d76db2c9067bfa0fea46a7b5994",
+  "web_index_sha256": "64f54d3a52b8249f6cda9453b68c34afb20847d680bc5bb9a95a34fb269bd7b3",
+  "runtime": "Windows x64 + installed Edge WebView2 Runtime",
+  "offline_assets_bundled": true,
+  "source_files_sha256": {
+    "src/zhiyeteam/galaxy.py": "933d892a7fb82eaf127bde543adc75cd86401308142e3cf56a718daa86cffebb",
+    "src/zhiyeteam/galaxy_api.py": "ec7bc4f235d7cc902a41b155956fdd1ced44f2da5b5b48caf1c286b3dfa981e3",
+    "src/zhiyeteam/galaxy_demo.py": "3d78713168d356745d3945f03864b336320e52be14ea60c903465dfa2e63abe6",
+    "src/zhiyeteam/galaxy_server.py": "846c50c6fd58a5a2cd260e85c3c1bf6f5973d41f0877ce3ca01bf1bebe2e4bd4",
+    "frontend/src/main.jsx": "16556ebbc9e2547bbaa1a798903f4bfb32e0e43f51e59925bc7ae64f4613355d",
+    "frontend/src/style.css": "aa2a72b530b41b95c100372911743e83da137e796d9fec604924c5e39f01a3f5"
+  }
+}

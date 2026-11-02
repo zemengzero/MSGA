@@ -1,0 +1,43 @@
+test_corrupt_input_never_changes_current (test_backup.BackupTests.test_corrupt_input_never_changes_current) ... ok
+test_existing_target_refused (test_backup.BackupTests.test_existing_target_refused) ... ok
+test_failed_copy_rolls_back_from_protection (test_backup.BackupTests.test_failed_copy_rolls_back_from_protection) ... ok
+test_failed_rollback_disables_future_writes (test_backup.BackupTests.test_failed_rollback_disables_future_writes) ... ok
+test_roundtrip_includes_versions_and_trash (test_backup.BackupTests.test_roundtrip_includes_versions_and_trash) ... ok
+test_unknown_schema_is_refused (test_backup.BackupTests.test_unknown_schema_is_refused) ... ok
+test_deleted_source_not_in_backlinks (test_history.HistoryTests.test_deleted_source_not_in_backlinks) ... ok
+test_history_restore_creates_new_version (test_history.HistoryTests.test_history_restore_creates_new_version) ... ok
+test_purge_requires_trash_and_retains_dangling_target (test_history.HistoryTests.test_purge_requires_trash_and_retains_dangling_target) ... ok
+test_trash_restore_keeps_uuid_and_links (test_history.HistoryTests.test_trash_restore_keeps_uuid_and_links) ... ok
+test_code_and_escaped_markers_excluded (test_links.LinkTests.test_code_and_escaped_markers_excluded) ... ok
+test_graph_failure_rolls_back_note_and_history (test_links.LinkTests.test_graph_failure_rolls_back_note_and_history) ... ok
+test_rename_keeps_target_id_and_occurrence_count (test_links.LinkTests.test_rename_keeps_target_id_and_occurrence_count) ... ok
+test_note_snapshot_is_immutable (test_models.ModelTests.test_note_snapshot_is_immutable) ... ok
+test_keyword_and_title_priority (test_search.SearchTests.test_keyword_and_title_priority) ... ok
+test_tag_normalization_and_counts (test_search.SearchTests.test_tag_normalization_and_counts) ... ok
+test_tags_and_empty_query (test_search.SearchTests.test_tags_and_empty_query) ... ok
+test_create_update_persist (test_store.StoreTests.test_create_update_persist) ... ok
+test_empty_title_and_oversize_body_rejected (test_store.StoreTests.test_empty_title_and_oversize_body_rejected) ... ok
+test_failed_tag_validation_is_atomic (test_store.StoreTests.test_failed_tag_validation_is_atomic) ... ok
+test_noop_save_does_not_make_history (test_store.StoreTests.test_noop_save_does_not_make_history) ... ok
+test_optimistic_conflict_preserves_disk (test_store.StoreTests.test_optimistic_conflict_preserves_disk) ... ok
+test_second_connection_cannot_silently_overwrite (test_store.StoreTests.test_second_connection_cannot_silently_overwrite) ... ok
+test_settings_roundtrip (test_store.StoreTests.test_settings_roundtrip) ... ok
+test_export_internal_links_are_local (test_transfer.TransferTests.test_export_internal_links_are_local) ... ok
+test_html_strips_active_content (test_transfer.TransferTests.test_html_strips_active_content) ... ok
+test_malformed_uri_is_inert (test_transfer.TransferTests.test_malformed_uri_is_inert) ... ok
+test_nonempty_export_refused (test_transfer.TransferTests.test_nonempty_export_refused) ... ok
+test_utf8_import_conflict_and_partial_failure (test_transfer.TransferTests.test_utf8_import_conflict_and_partial_failure) ... ok
+test_cancel_guard_suppresses_nested_autosave (test_ui_guard.GuardTests.test_cancel_guard_suppresses_nested_autosave) ... ok
+test_empty_library_disables_unsavable_input (test_ui_guard.GuardTests.test_empty_library_disables_unsavable_input) ... ok
+test_child_resize_does_not_change_layout (test_ui_layout.LayoutTests.test_child_resize_does_not_change_layout) ... ok
+test_control_tab_moves_focus_and_stops_tab_insertion (test_ui_layout.LayoutTests.test_control_tab_moves_focus_and_stops_tab_insertion) ... ok
+test_font_selection_failure_reverts_control_and_reports_error (test_ui_layout.LayoutTests.test_font_selection_failure_reverts_control_and_reports_error) ... ok
+test_narrow_resize_hides_once_and_boundary_restores (test_ui_layout.LayoutTests.test_narrow_resize_hides_once_and_boundary_restores) ... ok
+test_failed_preference_write_preserves_displayed_font (test_ui_preferences.PreferenceTests.test_failed_preference_write_preserves_displayed_font) ... ok
+test_font_preference_persists_without_editing_notes (test_ui_preferences.PreferenceTests.test_font_preference_persists_without_editing_notes) ... ok
+test_invalid_font_values_do_not_overwrite_existing_preference (test_ui_preferences.PreferenceTests.test_invalid_font_values_do_not_overwrite_existing_preference) ... ok
+
+----------------------------------------------------------------------
+Ran 38 tests in 0.722s
+
+OK

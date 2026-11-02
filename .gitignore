@@ -22,3 +22,7 @@ reports/screenshots/*.png
 docs/generated/*.docx
 docs/generated/*.pdf
 docs/generated/*.html
+frontend/node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/

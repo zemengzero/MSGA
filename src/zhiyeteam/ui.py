@@ -39,6 +39,8 @@ class NotebookApp:
         self.after_search = None
         self.smoke_error = None
         self.modal_guard = False
+        self.editor_font_size = self._read_font_size()
+        self.font_size_var = tk.StringVar(value=str(self.editor_font_size))
         self.title_var = tk.StringVar()
         self.tags_var = tk.StringVar()
         self.query_var = tk.StringVar()
@@ -46,13 +48,14 @@ class NotebookApp:
         self.status_var = tk.StringVar(value="所有内容只保存在本机")
         root.title("知页 · 本地学习知识库")
         root.geometry("1480x900")
-        root.minsize(1160, 720)
+        root.minsize(980, 640)
         root.configure(bg=BG)
         icon = Path(__file__).with_name("assets") / "icon.ico"
         if os.name == "nt" and icon.exists():
             root.iconbitmap(str(icon))
         self._styles()
         self._layout()
+        root.bind("<Configure>", self._window_resized, add="+")
         self.title_var.trace_add("write", lambda *_: self._changed())
         self.tags_var.trace_add("write", lambda *_: self._changed())
         self.query_var.trace_add("write", lambda *_: self._schedule_search())
@@ -116,6 +119,25 @@ class NotebookApp:
             foreground=[("selected", BLUE)],
         )
 
+    def _read_font_size(self):
+        size = self.store.settings("editor_font_size", 12)
+        return size if type(size) is int and 12 <= size <= 24 else 12
+
+    def set_editor_font_size(self, size):
+        if type(size) is not int or not 12 <= size <= 24:
+            raise ValidationError("编辑器字号必须为12–24之间的整数")
+        self.store.set_setting("editor_font_size", size)
+        self.editor.configure(font=("Consolas", size))
+        self.editor_font_size = size
+        self.font_size_var.set(str(size))
+
+    def _font_selected(self, _event=None):
+        try:
+            self.set_editor_font_size(int(self.font_size_var.get()))
+        except (ValueError, AppError, sqlite3.Error) as exc:
+            self.font_size_var.set(str(self.editor_font_size))
+            messagebox.showerror("字号设置未保存", str(exc), parent=self.root)
+
     def _label(self, parent, text, font=10, fg=INK, bg="white", **kw):
         return tk.Label(
             parent, text=text, font=("Microsoft YaHei UI", font), fg=fg, bg=bg, **kw
@@ -166,18 +188,36 @@ class NotebookApp:
         self._label(sidebar, "标签 / TAGS", 9, "#91aacb", NAV, anchor="w").pack(
             fill="x", padx=22, pady=(28, 8)
         )
-        self.tag_frame = tk.Frame(sidebar, bg=NAV)
-        self.tag_frame.pack(fill="x")
+        tagarea = tk.Frame(sidebar, bg=NAV)
+        tagarea.pack(fill="both", expand=True)
+        tagcanvas = tk.Canvas(tagarea, bg=NAV, highlightthickness=0, width=160)
+        tagscroll = ttk.Scrollbar(tagarea, orient="vertical", command=tagcanvas.yview)
+        tagscroll.pack(side="right", fill="y")
+        tagcanvas.pack(side="left", fill="both", expand=True)
+        tagcanvas.configure(yscrollcommand=tagscroll.set)
+        self.tag_frame = tk.Frame(tagcanvas, bg=NAV)
+        tagwindow = tagcanvas.create_window((0, 0), window=self.tag_frame, anchor="nw")
+        self.tag_frame.bind(
+            "<Configure>",
+            lambda _e: tagcanvas.configure(scrollregion=tagcanvas.bbox("all")),
+        )
+        tagcanvas.bind(
+            "<Configure>", lambda e: tagcanvas.itemconfigure(tagwindow, width=e.width)
+        )
         self.sidebar_stats = self._label(
             sidebar, "", 10, "#bdcde3", NAV, justify="left", anchor="w"
         )
-        self.sidebar_stats.pack(side="bottom", fill="x", padx=22, pady=24)
+        self.sidebar_stats.pack(
+            side="bottom", fill="x", padx=22, pady=12, before=tagarea
+        )
         right = tk.Frame(body, bg=BG)
         right.pack(side="left", fill="both", expand=True, padx=18, pady=16)
         heading = tk.Frame(right, bg=BG)
         heading.pack(fill="x", pady=(0, 12))
         self.heading_label = self._label(heading, "我的知识库", 20, INK, BG)
         self.heading_label.pack(side="left")
+        toolbar = tk.Frame(right, bg=BG)
+        toolbar.pack(fill="x", pady=(0, 10))
         for text, command in [
             ("新建笔记", self.new_note),
             ("保存", self.save),
@@ -186,17 +226,19 @@ class NotebookApp:
             ("移入回收站", self.delete_action),
         ]:
             btn = ttk.Button(
-                heading,
+                toolbar,
                 text=text,
                 command=command,
+                width=0,
                 style="Accent.TButton" if text == "新建笔记" else "TButton",
             )
-            btn.pack(side="left" if text == "新建笔记" else "right", padx=3)
+            btn.pack(side="left", padx=3)
             if text == "移入回收站":
                 self.delete_button = btn
             if text == "保存":
                 self.save_button = btn
         paned = tk.PanedWindow(right, orient="horizontal", bg=BG, sashwidth=10, bd=0)
+        self.paned = paned
         paned.pack(fill="both", expand=True)
         left = tk.Frame(paned, bg="white")
         paned.add(left, minsize=225, width=275)
@@ -214,15 +256,22 @@ class NotebookApp:
         )
         self.result_label = self._label(left, "", 9, MUTED, anchor="w")
         self.result_label.pack(fill="x", padx=13, pady=6)
+        listframe = tk.Frame(left, bg="white")
+        listframe.pack(fill="both", expand=True, padx=3, pady=3)
         self.list = ttk.Treeview(
-            left, columns=("title",), show="headings", selectmode="browse"
+            listframe, columns=("title",), show="headings", selectmode="browse"
         )
         self.list.heading("title", text="笔记标题")
         self.list.column("title", width=240)
-        self.list.pack(fill="both", expand=True, padx=3, pady=3)
+        self.list_scrollbar = ttk.Scrollbar(
+            listframe, orient="vertical", command=self.list.yview
+        )
+        self.list_scrollbar.pack(side="right", fill="y")
+        self.list.pack(side="left", fill="both", expand=True)
+        self.list.configure(yscrollcommand=self.list_scrollbar.set)
         self.list.bind("<<TreeviewSelect>>", self._selected)
         actions = tk.Frame(left, bg="white")
-        actions.pack(fill="x", padx=9, pady=10)
+        actions.pack(side="bottom", fill="x", padx=9, pady=10, before=listframe)
         ttk.Button(actions, text="导出 HTML", command=lambda: self.export("html")).pack(
             side="left"
         )
@@ -235,12 +284,28 @@ class NotebookApp:
         self.title_entry.pack(fill="x", padx=16, pady=(16, 7))
         self.save_state = self._label(center, "选择一篇笔记开始", 9, MUTED, anchor="w")
         self.save_state.pack(fill="x", padx=18, pady=(0, 10))
+        fontrow = tk.Frame(center, bg="white")
+        fontrow.pack(fill="x", padx=18, pady=(0, 4))
+        self._label(fontrow, "编辑器字号", 9, MUTED).pack(side="left")
+        self.font_picker = ttk.Combobox(
+            fontrow,
+            textvariable=self.font_size_var,
+            values=tuple(range(12, 25)),
+            width=4,
+            state="readonly",
+        )
+        self.font_picker.pack(side="left", padx=8)
+        self.font_picker.bind("<<ComboboxSelected>>", self._font_selected)
+        self.narrow_hint = self._label(center, "", 8, MUTED, anchor="w")
+        self.narrow_hint.pack(fill="x", padx=18)
+        editor_frame = tk.Frame(center, bg="white")
+        editor_frame.pack(fill="both", expand=True)
         self.editor = tk.Text(
-            center,
+            editor_frame,
             wrap="word",
             undo=True,
             maxundo=200,
-            font=("Consolas", 12),
+            font=("Consolas", self.editor_font_size),
             bg="white",
             fg=INK,
             insertbackground=BLUE,
@@ -250,20 +315,31 @@ class NotebookApp:
             spacing1=3,
             spacing3=5,
         )
-        self.editor.pack(fill="both", expand=True)
+        self.editor_scrollbar = ttk.Scrollbar(
+            editor_frame, orient="vertical", command=self.editor.yview
+        )
+        self.editor_scrollbar.pack(side="right", fill="y")
+        self.editor.pack(side="left", fill="both", expand=True)
+        self.editor.configure(yscrollcommand=self.editor_scrollbar.set)
+        self.editor.bind("<Control-Tab>", self._focus_tags)
         self.editor.bind("<<Modified>>", self._text_changed)
         tagrow = tk.Frame(center, bg="#f7f9fd")
-        tagrow.pack(fill="x")
+        tagrow.pack(side="bottom", fill="x", before=editor_frame)
         self._label(tagrow, "标签", 10, MUTED, "#f7f9fd").pack(side="left", padx=12)
         self.tags_entry = ttk.Entry(tagrow, textvariable=self.tags_var)
         self.tags_entry.pack(side="left", fill="x", expand=True, padx=8, pady=10)
+        self.tags_entry.bind("<Control-Tab>", self._focus_editor)
         previewbox = tk.Frame(paned, bg="white")
+        self.previewbox = previewbox
+        self.preview_visible = True
         paned.add(previewbox, minsize=300, width=385)
         self._label(previewbox, "阅读视图 / PREVIEW", 10, BLUE, anchor="w").pack(
             fill="x", padx=18, pady=(18, 8)
         )
+        preview_frame = tk.Frame(previewbox, bg="white")
+        preview_frame.pack(fill="both", expand=True)
         self.preview = tk.Text(
-            previewbox,
+            preview_frame,
             wrap="word",
             font=("Microsoft YaHei UI", 11),
             bg="white",
@@ -275,7 +351,12 @@ class NotebookApp:
             state="disabled",
             cursor="arrow",
         )
-        self.preview.pack(fill="both", expand=True)
+        self.preview_scrollbar = ttk.Scrollbar(
+            preview_frame, orient="vertical", command=self.preview.yview
+        )
+        self.preview_scrollbar.pack(side="right", fill="y")
+        self.preview.pack(side="left", fill="both", expand=True)
+        self.preview.configure(yscrollcommand=self.preview_scrollbar.set)
         for name, font, color in [
             ("h1", ("Microsoft YaHei UI", 20, "bold"), INK),
             ("h2", ("Microsoft YaHei UI", 15, "bold"), INK),
@@ -284,11 +365,13 @@ class NotebookApp:
             ("link", ("Microsoft YaHei UI", 11), BLUE),
         ]:
             self.preview.tag_configure(name, font=font, foreground=color)
-        self._label(previewbox, "反向引用", 10, MUTED, anchor="w").pack(
-            fill="x", padx=18, pady=(10, 2)
-        )
         self.backlink_frame = tk.Frame(previewbox, bg="white", height=90)
-        self.backlink_frame.pack(fill="x", padx=12, pady=(0, 12))
+        self.backlink_frame.pack(
+            side="bottom", fill="x", padx=12, pady=(0, 12), before=preview_frame
+        )
+        self._label(previewbox, "反向引用", 10, MUTED, anchor="w").pack(
+            side="bottom", fill="x", padx=18, pady=(10, 2), before=preview_frame
+        )
         bottom = tk.Frame(self.root, bg="white")
         bottom.pack(side="bottom", fill="x", before=body)
         self._label(
@@ -297,6 +380,29 @@ class NotebookApp:
         self._label(
             bottom, "Ctrl+N 新建  ·  Ctrl+S 保存  ·  Ctrl+F 搜索", 9, MUTED
         ).pack(side="right", padx=20)
+
+    def _window_resized(self, event):
+        if event.widget is not self.root:
+            return
+        visible = event.width >= 1200
+        if visible == self.preview_visible:
+            return
+        if visible:
+            self.paned.add(self.previewbox, minsize=300, width=385)
+        else:
+            self.paned.forget(self.previewbox)
+        self.preview_visible = visible
+        self.narrow_hint.configure(
+            text="" if visible else "窗口较窄，阅读视图已收起；放宽窗口即可恢复"
+        )
+
+    def _focus_tags(self, _event=None):
+        self.tags_entry.focus_set()
+        return "break"
+
+    def _focus_editor(self, _event=None):
+        self.editor.focus_set()
+        return "break"
 
     def _callback_error(self, kind, value, tb):
         self.smoke_error = str(value)
@@ -391,11 +497,12 @@ class NotebookApp:
         self.delete_button.configure(text="恢复笔记" if self.trash else "移入回收站")
         stat = self.store.stats()
         self.sidebar_stats.configure(
-            text=f"{stat['active']} 篇有效笔记\n{stat['tags']} 个标签 · {stat['versions']} 个版本\n\n回收站 {stat['trash']} 篇"
+            text=f"{stat['active']} 篇有效笔记\n{stat['tags']} 个标签\n{stat['versions']} 个版本\n回收站 {stat['trash']} 篇"
         )
         for child in self.tag_frame.winfo_children():
             child.destroy()
-        for tag, count in tag_counts(self.store)[:8]:
+        tags = tag_counts(self.store)
+        for tag, count in tags[:100]:
             tk.Button(
                 self.tag_frame,
                 text=f"# {tag}    {count}",
@@ -409,6 +516,16 @@ class NotebookApp:
                 pady=5,
                 font=("Microsoft YaHei UI", 9),
             ).pack(fill="x")
+        if len(tags) > 100:
+            self._label(
+                self.tag_frame,
+                "仅列前100个标签，其他标签可在筛选框输入",
+                8,
+                "#ccdbed",
+                NAV,
+                wraplength=160,
+                justify="left",
+            ).pack(fill="x", padx=12, pady=8)
         pick = select_id or (self.current.id if self.current else None)
         if pick and self.list.exists(pick):
             self.list.selection_set(pick)
