@@ -8,7 +8,7 @@
 - B2：恢复结果隐私审计；
 - B3：空间不足、审计失败、恢复回退等故障回归。
 
-未修改 `src/zhiyeteam/ui.py`、`src/zhiyeteam/search.py` 或其他成员的测试文件。A 的 PR #13 尚未合并到本地 `main`，因此本分支从克隆时的最新 `origin/main` 建立。
+未修改 `src/zhiyeteam/ui.py`、`src/zhiyeteam/search.py` 或其他成员的测试文件。PR #16 在检查失败后已变基到最新 `origin/main`（`5698dbf`），该基线已经包含 A 的 galaxy 界面和 C 的搜索扩展。
 
 ## 2. B1：备份前空间预检
 
@@ -39,7 +39,14 @@
 接口：
 
 ```python
-restore_with_audit(store, source, protection_dir, audit_path) -> RestoreReport
+restore_with_audit(
+    store,
+    source,
+    protection_dir,
+    audit_path,
+    *,
+    restore_impl=None,
+) -> RestoreReport
 ```
 
 返回对象：
@@ -55,6 +62,7 @@ class RestoreReport:
 语义：
 
 - 数据恢复成功时返回真实保护副本路径。
+- `restore_impl` 为可选的底层恢复函数注入点，默认调用 `restore_backup`；Galaxy API 用它保留对故障测试和替代实现的兼容性。
 - 审计写入成功时 `audit_warning` 为空。
 - 审计写入失败时不回滚、不重做恢复，返回“数据恢复成功，但审计记录未写入”。
 - 数据恢复失败时尝试写入失败事件，再重新抛出原始恢复异常；审计异常不会覆盖原始异常。
@@ -123,12 +131,12 @@ if report.audit_warning:
 实际结果：
 
 ```text
-Ran 41 tests in 1.849s
+Ran 101 tests in 6.896s
 
 OK
 ```
 
-其中原有 31 项测试全部保留并通过，新增 B 专项测试 10 项全部通过。完整输出见 `reports/B/test-log.txt`，结构化摘要见 `reports/B/unit_checks.json`。
+其中最新 main 的原有测试全部保留并通过，新增 B 专项测试 10 项全部通过。完整输出见 `reports/B/test-log.txt`，结构化摘要见 `reports/B/unit_checks.json`。
 
 ## 6. 90秒演示
 
@@ -165,5 +173,5 @@ OK
 
 - 本分支没有修改界面，D 需要把恢复入口切换到 `restore_with_audit` 并展示保护位置和审计警告。
 - UI 集成截图和实体程序演练待 D 合并后完成。
-- 本地提交作者已设置为 `DKLSOUL <2553675108@qq.com>`。B1 提交为 `3c204cb`，B2 提交为 `d4facc6`，B3 测试与说明由当前提交保存。
-- 由于 A 的 PR #13 尚未合并到本地 `main`，本分支从当前 `origin/main` 建立；B 的改动不涉及 A 的 `ui.py`，后续可正常 rebase 或由 D 合并。
+- 本地提交作者已设置为 `DKLSOUL <2553675108@qq.com>`。变基后的 B1 提交为 `2f721b7`，B2 提交为 `1344730`，B3 提交为 `ae7a711`，CI 兼容修复由后续提交保存。
+- 本机没有 Node.js，因此前端 `npm ci`、`npm run build`、`npm test` 待 GitHub Actions 验证；Python 101 项测试已在本机全部通过。

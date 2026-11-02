@@ -55,18 +55,21 @@ def _file_name(value):
     return Path(value).name if value else ""
 
 
-def restore_with_audit(store, source, protection_dir, audit_path):
+def restore_with_audit(
+    store, source, protection_dir, audit_path, *, restore_impl=None
+):
     """Restore once and append start/result events without blocking recovery."""
     source = Path(source)
     operation_id = uuid.uuid4().hex
     backup_file = _file_name(source)
+    restore_impl = restore_impl or restore_backup
     audit_ok = _try_append(
         audit_path,
         _record(store, operation_id, "started", backup_file),
     )
 
     try:
-        protection = restore_backup(store, source, protection_dir)
+        protection = restore_impl(store, source, protection_dir)
     except Exception as exc:
         _try_append(
             audit_path,

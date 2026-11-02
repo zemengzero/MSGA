@@ -307,11 +307,17 @@ class GalaxyAPI:
                 raise ValidationError("请重新选择并确认备份")
             audited = optional_function("restore_audit", "restore_with_audit")
             if audited:
-                report = audited(
+                audit_args = (
                     store,
                     path,
                     self.data_dir / "backups",
                     self.data_dir / "audit/restore.jsonl",
+                )
+                audit_params = inspect.signature(audited).parameters
+                report = (
+                    audited(*audit_args, restore_impl=restore_backup)
+                    if "restore_impl" in audit_params
+                    else audited(*audit_args)
                 )
                 protected = (
                     report["protection_path"]
