@@ -20,6 +20,14 @@ A 的界面与 C 的真实搜索实现已接入：更新时间按北京时间筛
 
 ![知页实际桌面窗口](docs/images/desktop.png)
 
+## 当前笔记内查找 / Find in current note
+
+当前源码支持：打开笔记详情并保持“阅读”模式，点击“笔记内查找”，输入关键词即可统计、高亮并定位正文中的匹配。支持中文、ASCII 大小写、emoji、粘贴多行、跨 Markdown 节点和重叠命中；上下箭头循环跳转，Enter / Shift+Enter 切换，Esc 关闭。查找不修改正文或触发保存。
+
+Source feature: use **Find in note** in the read-only detail view; all matches and the active hit are highlighted, with wraparound navigation and note-body scrolling. This source update has not been repackaged into the existing v1.1.0 EXE release.
+
+操作、验收清单、演示及限制见 [四步验收与交接](docs/C_笔记内查找_第四步验收与演示.md)。当前已发布 EXE 尚未重新打包这些新增能力；请按源码运行步骤构建后体验。
+
 ## 交付与演示
 
 - [Windows 最新正式发布](https://github.com/zemengzero/MSGA/releases/latest)

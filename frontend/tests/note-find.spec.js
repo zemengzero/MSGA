@@ -219,3 +219,92 @@ test("跨行、代码块空白和链接内部格式均映射到原始DOM", async
   await page.getByRole("button", { name: "关闭笔记", exact: true }).click();
   await expect.poll(() => highlightTexts(page, "note-find-current")).toEqual([]);
 });
+
+
+test("第四步：查找后恢复历史版本会重算高亮，回收恢复后没有残留状态", async ({ page }) => {
+  await page.goto(url); await page.waitForFunction(() => window.__appReady);
+  const note = await call(page, "create", { title: "第四步历史组合验收", body: "旧版本 目标词" });
+  await call(page, "save", { ...note, body: "新版本 目标词 目标词" });
+  await openCreated(page, note.title);
+  await page.getByRole("button", { name: "笔记内查找", exact: true }).click();
+  await page.getByLabel("笔记内查找关键词").fill("目标词");
+  await expect(page.getByLabel("笔记内查找结果")).toHaveText("共 2 处");
+  await page.getByRole("button", { name: "下一处匹配" }).click();
+  await page.getByRole("button", { name: "历史版本", exact: true }).click();
+  await page.locator(".version").last().getByRole("button", { name: "恢复", exact: true }).click();
+  await page.getByRole("button", { name: "确定", exact: true }).click();
+  await expect(page.locator(".note-drawer .markdown")).toHaveText("旧版本 目标词");
+  await expect(page.getByLabel("笔记内查找结果")).toHaveText("共 1 处");
+  await expect(page.getByLabel("当前命中位置")).toHaveText("第 1 处");
+  await expect.poll(() => highlightTexts(page, "note-find-all")).toEqual(["目标词"]);
+  await page.getByRole("button", { name: "移入回收站", exact: true }).click();
+  await page.getByRole("button", { name: "确定", exact: true }).click();
+  await expect(page.getByTestId("note-drawer")).toHaveCount(0);
+  await expect.poll(() => highlightTexts(page, "note-find-all")).toEqual([]);
+  await page.getByRole("button", { name: "回收站", exact: true }).click();
+  await page.locator(".note-card").filter({ hasText: note.title }).click();
+  await page.getByRole("button", { name: "恢复笔记", exact: true }).click();
+  await page.getByRole("button", { name: "确定", exact: true }).click();
+  await expect.poll(async () => (await call(page, "note", { id: note.id })).deleted).toBe(false);
+  await page.getByRole("button", { name: "知识星图", exact: false }).click();
+  await openCreated(page, note.title);
+  await expect(page.getByLabel("笔记内查找关键词")).toHaveCount(0);
+  await page.getByRole("button", { name: "笔记内查找", exact: true }).click();
+  await expect(page.getByLabel("笔记内查找关键词")).toHaveValue("");
+});
+
+test("第四步：查找后编辑遇保存失败，取消关闭仍保留缓冲并可再次保存", async ({ page }) => {
+  await page.goto(url); await page.waitForFunction(() => window.__appReady);
+  const note = await call(page, "create", { title: "第四步关闭确认验收", body: "原始 AI" });
+  await openCreated(page, note.title);
+  await page.getByRole("button", { name: "笔记内查找", exact: true }).click();
+  await page.getByLabel("笔记内查找关键词").fill("AI");
+  await expect.poll(() => highlightTexts(page, "note-find-current")).toEqual(["AI"]);
+  await page.getByRole("button", { name: "编辑", exact: true }).click();
+  await expect.poll(() => highlightTexts(page, "note-find-current")).toEqual([]);
+  await page.route("**/api/save", route => route.fulfill({ status: 200, contentType: "application/json",
+    body: JSON.stringify({ ok: false, type: "ValidationError", error: "验收注入的保存失败" }) }));
+  await page.getByLabel("Markdown正文").fill("我的未保存缓冲 AI");
+  await expect(page.getByText("保存失败，修改已保留", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "关闭笔记", exact: true }).click();
+  await page.getByRole("button", { name: "返回编辑", exact: true }).click();
+  await expect(page.getByLabel("Markdown正文")).toHaveValue("我的未保存缓冲 AI");
+  expect((await call(page, "note", { id: note.id })).body).toBe("原始 AI");
+  await page.unroute("**/api/save");
+  await page.getByRole("button", { name: "保存", exact: true }).click();
+  await expect.poll(async () => (await call(page, "note", { id: note.id })).body).toBe("我的未保存缓冲 AI");
+  await page.getByRole("button", { name: "关闭笔记", exact: true }).click();
+  await expect(page.getByTestId("note-drawer")).toHaveCount(0);
+  await openCreated(page, note.title);
+  await expect(page.locator(".note-drawer .markdown")).toHaveText("我的未保存缓冲 AI");
+  await expect(page.getByLabel("笔记内查找关键词")).toHaveCount(0);
+});
+
+test("第四步：千处Unicode长文匹配可定位末项，窄窗口无溢出", async ({ page }) => {
+  await page.goto(url); await page.waitForFunction(() => window.__appReady);
+  const body = '😀 AI 课程段落。\n\n'.repeat(1000);
+  const note = await call(page, "create", { title: "第四步千处长文验收", body });
+  await openCreated(page, note.title);
+  await page.setViewportSize({ width: 800, height: 900 });
+  await page.getByRole("button", { name: "笔记内查找", exact: true }).click();
+  await page.getByLabel("笔记内查找关键词").fill("aI");
+  await expect(page.getByLabel("笔记内查找结果")).toHaveText("共 1000 处");
+  await expect.poll(() => page.evaluate(() => CSS.highlights.get("note-find-all")?.size)).toBe(1000);
+  await page.getByRole("button", { name: "上一处匹配" }).click();
+  await expect(page.getByLabel("当前命中位置")).toHaveText("第 1000 处");
+  await expect.poll(() => page.locator(".drawer-content").evaluate(e => e.scrollTop)).toBeGreaterThan(10000);
+  const box = await page.getByLabel("笔记内查找关键词").boundingBox();
+  const drawer = await page.getByTestId("note-drawer").boundingBox();
+  expect(box.x + box.width).toBeLessThanOrEqual(drawer.x + drawer.width);
+  const rangeText = await highlightTexts(page, "note-find-current");
+  expect(rangeText).toEqual(["AI"]);
+  fs.mkdirSync(path.join(root, "reports/screenshots"), { recursive: true });
+  await page.screenshot({ path: path.join(root, "reports/screenshots/C-note-find-step4.png") });
+  await page.getByLabel("笔记内查找关键词").fill("没有这个结果");
+  await expect(page.getByLabel("笔记内查找结果")).toHaveText("共 0 处");
+  await expect.poll(() => highlightTexts(page, "note-find-all")).toEqual([]);
+  await expect(page.getByRole("button", { name: "下一处匹配" })).toBeDisabled();
+  await expect(page.getByLabel("当前命中位置")).toHaveText("第 0 处");
+  const after = await call(page, "note", { id: note.id });
+  expect([after.body, after.revision, after.updated_at]).toEqual([body, note.revision, note.updated_at]);
+});
