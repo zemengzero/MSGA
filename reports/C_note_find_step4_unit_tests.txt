@@ -1,0 +1,112 @@
+TAP version 13
+# Subtest: empty text, empty query and whitespace-only query have no matches
+ok 1 - empty text, empty query and whitespace-only query have no matches
+  ---
+  duration_ms: 1.0745
+  type: 'test'
+  ...
+# Subtest: Chinese substring occurrences preserve original offsets
+ok 2 - Chinese substring occurrences preserve original offsets
+  ---
+  duration_ms: 0.2041
+  type: 'test'
+  ...
+# Subtest: ASCII case is ignored for every occurrence
+ok 3 - ASCII case is ignored for every occurrence
+  ---
+  duration_ms: 0.144
+  type: 'test'
+  ...
+# Subtest: emoji offsets count Unicode code points, not UTF-16 units
+ok 4 - emoji offsets count Unicode code points, not UTF-16 units
+  ---
+  duration_ms: 0.105
+  type: 'test'
+  ...
+# Subtest: overlapping hits stay separate for future hit counts and navigation
+ok 5 - overlapping hits stay separate for future hit counts and navigation
+  ---
+  duration_ms: 0.0837
+  type: 'test'
+  ...
+# Subtest: adjacent occurrences are not merged
+ok 6 - adjacent occurrences are not merged
+  ---
+  duration_ms: 0.0711
+  type: 'test'
+  ...
+# Subtest: the whole query is a literal phrase, not AND tokens
+ok 7 - the whole query is a literal phrase, not AND tokens
+  ---
+  duration_ms: 0.0843
+  type: 'test'
+  ...
+# Subtest: meaningful spaces and line breaks are not collapsed
+ok 8 - meaningful spaces and line breaks are not collapsed
+  ---
+  duration_ms: 0.082
+  type: 'test'
+  ...
+# Subtest: regular-expression symbols and HTML-looking text remain literal
+ok 9 - regular-expression symbols and HTML-looking text remain literal
+  ---
+  duration_ms: 0.0936
+  type: 'test'
+  ...
+# Subtest: Unicode case and composition are not silently changed
+ok 10 - Unicode case and composition are not silently changed
+  ---
+  duration_ms: 0.1199
+  type: 'test'
+  ...
+# Subtest: missing and longer queries have no matches
+ok 11 - missing and longer queries have no matches
+  ---
+  duration_ms: 0.0961
+  type: 'test'
+  ...
+# Subtest: wrong input types are rejected before searching
+ok 12 - wrong input types are rejected before searching
+  ---
+  duration_ms: 0.3696
+  type: 'test'
+  ...
+# Subtest: calls return independent arrays without modifying inputs
+ok 13 - calls return independent arrays without modifying inputs
+  ---
+  duration_ms: 0.0676
+  type: 'test'
+  ...
+# Subtest: long repeated-prefix text returns the exact distant match
+ok 14 - long repeated-prefix text returns the exact distant match
+  ---
+  duration_ms: 6.1712
+  type: 'test'
+  ...
+# Subtest: 500 deterministic generated cases agree with a naive code-point oracle
+ok 15 - 500 deterministic generated cases agree with a naive code-point oracle
+  ---
+  duration_ms: 8.1421
+  type: 'test'
+  ...
+# Subtest: highlight unions do not change overlapping hit counts or input ranges
+ok 16 - highlight unions do not change overlapping hit counts or input ranges
+  ---
+  duration_ms: 0.3783
+  type: 'test'
+  ...
+# Subtest: missing preview during mount returns an empty safe snapshot
+ok 17 - missing preview during mount returns an empty safe snapshot
+  ---
+  duration_ms: 0.2782
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 91.9253

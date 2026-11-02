@@ -1,0 +1,51 @@
+{
+  "executed_at_utc": "2026-11-02T07:03:08.417775+00:00",
+  "baseline_commit": "9113605c3d4be63876c6f6281524132ba19b6c34",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3",
+    "node": "v24.22.1",
+    "browser": "Microsoft Edge (msedge, headless)"
+  },
+  "python": {
+    "tests": 107,
+    "passed": true,
+    "log": "C_note_find_step4_python_tests.txt"
+  },
+  "matcher_unit": {
+    "tests": 17,
+    "passed": true,
+    "log": "C_note_find_step4_unit_tests.txt"
+  },
+  "browser": {
+    "tests": 17,
+    "passed": true,
+    "duration_ms": 144884.85,
+    "report": "C_note_find_step4_full_browser_tests.json"
+  },
+  "targeted_browser": {
+    "tests": 3,
+    "passed": true,
+    "report": "C_note_find_step4_targeted_browser_tests.json"
+  },
+  "frontend_build": {
+    "passed": true,
+    "log": "C_note_find_step4_build.txt",
+    "existing_large_chunk_warning": true
+  },
+  "tested_source_sha256": {
+    "frontend/src/noteFind.js": "92ae09f2d9f410e9c4e88b874bdd295ebf1af0adbe8dc3224bf5318c815d68c2",
+    "frontend/src/noteFindDOM.js": "98efde75d0683ce14f6514cbb2ffd3048167dfb2c0a6d7e0f252ef0dc978ec72",
+    "frontend/src/NoteFindPanel.jsx": "8ff3c0b697b8e41f21d74411e4c7b72d801bf06f337f8acbcb88c6890fa75a6b",
+    "frontend/src/main.jsx": "0c527462f568eab10dad28f57fb0c4d4337d7d3ef08aa4deeafff09f37a4d5f2",
+    "frontend/src/style.css": "f607e7109ab2ee977f63b9fa8da5a3b28e3e89b25e7f187c4e1c7a451f796d08",
+    "frontend/tests/note-find.spec.js": "38e58f9c8482e2a0e2e62cb9e58c0a5447d27d14d2218f9d696f196c86db2099",
+    "frontend/unit-tests/note-find.test.mjs": "b1ae30815f6b68777f6c57523cbe93e4f86a8bd22b65181dc12648d2a68f7108",
+    "frontend/package.json": "4263f599ee172b310915d42b0a01fca9acc6844690e1ad63c4044bc7c686bae2",
+    ".github/workflows/galaxy-frontend.yml": "a37ecf1f4fe88e5e43767b5eb68a51f718b77ce6c5f4bc72a6d488e95b7b749b"
+  },
+  "scope": "Local Windows source acceptance; baseline plus local test/CI/documentation changes. Source hashes identify the tested files.",
+  "new_exe_built": false,
+  "cross_machine_tested": false,
+  "cloud_ci_verified": false
+}

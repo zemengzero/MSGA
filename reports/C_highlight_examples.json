@@ -1,0 +1,58 @@
+[
+  {
+    "title": "中文、ASCII 大小写与 emoji",
+    "query": "动态规划 AI",
+    "snippet": "😀 动态规划 Ai ai",
+    "snippet_highlights": [
+      [
+        2,
+        6
+      ],
+      [
+        7,
+        9
+      ],
+      [
+        10,
+        12
+      ]
+    ]
+  },
+  {
+    "title": "长文中只有部分查询词可见",
+    "query": "动态规划 AI",
+    "snippet": "…甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲动态规划乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙…",
+    "snippet_highlights": [
+      [
+        31,
+        35
+      ]
+    ]
+  },
+  {
+    "title": "重叠命中合并",
+    "query": "aba bab",
+    "snippet": "ababa",
+    "snippet_highlights": [
+      [
+        0,
+        5
+      ]
+    ]
+  },
+  {
+    "title": "HTML 作为字面文本显示",
+    "query": "AI 动态规划",
+    "snippet": "<script>alert(\"AI\")</script> 动态规划",
+    "snippet_highlights": [
+      [
+        15,
+        17
+      ],
+      [
+        29,
+        33
+      ]
+    ]
+  }
+]

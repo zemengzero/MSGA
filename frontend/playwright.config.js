@@ -7,7 +7,7 @@ export default defineConfig({
   timeout: 90000,
   expect: { timeout: 10000 },
   use: {
-    channel: "chrome",
+    channel: process.env.PLAYWRIGHT_CHANNEL || "chrome",
     headless: true,
     viewport: { width: 1460, height: 940 },
     launchOptions: {

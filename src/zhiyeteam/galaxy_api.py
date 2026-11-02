@@ -18,7 +18,7 @@ from .search import search_notes, tag_counts
 from .store import NoteStore
 from .transfer import export_notes, import_markdown, safe_markdown_html
 
-PALETTE = ["#a78bfa", "#67b8fa", "#f29cc8", "#64d7be", "#f6c176", "#8d9ef5", "#bfc5d8"]
+PALETTE = ["#7b86c9", "#4f9a94", "#c09a62", "#b5738a", "#6d8fb8", "#87a06a", "#9b7fb5"]
 
 
 def optional_function(module, name):
@@ -174,9 +174,15 @@ class GalaxyAPI:
                     if isinstance(hit, dict)
                     else hit.matched_fields
                 )
+                highlights = (
+                    hit.get("snippet_highlights", ())
+                    if isinstance(hit, dict)
+                    else getattr(hit, "snippet_highlights", ())
+                )
                 snippets[note.id] = {
                     "excerpt": str(snippet),
                     "matched_fields": list(fields),
+                    "snippet_highlights": [list(bounds) for bounds in highlights],
                 }
         font_size = store.settings("editor_font_size", 14)
         return {
