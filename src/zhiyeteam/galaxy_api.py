@@ -174,9 +174,15 @@ class GalaxyAPI:
                     if isinstance(hit, dict)
                     else hit.matched_fields
                 )
+                highlights = (
+                    hit.get("snippet_highlights", ())
+                    if isinstance(hit, dict)
+                    else getattr(hit, "snippet_highlights", ())
+                )
                 snippets[note.id] = {
                     "excerpt": str(snippet),
                     "matched_fields": list(fields),
+                    "snippet_highlights": [list(bounds) for bounds in highlights],
                 }
         font_size = store.settings("editor_font_size", 14)
         return {

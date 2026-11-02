@@ -48,6 +48,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import "./style.css";
+import HighlightedSnippet from "./HighlightedSnippet.jsx";
 
 export async function api(action, payload = {}) {
   const response = await fetch("/api/" + action, {
@@ -976,7 +977,7 @@ function App() {
                         </span>
                         <div>
                           <strong>{n.title}</strong>
-                          <p>{n.excerpt.replace(/^#+\s*/, "").slice(0, 45)}</p>
+                          <p><HighlightedSnippet text={n.excerpt} ranges={n.snippet_highlights} /></p>
                           <small>
                             {dateLabel(n.updated_at)}
                             <span>·</span>
@@ -1061,7 +1062,7 @@ function App() {
                       </button>
                     </div>
                     <h3>{n.title}</h3>
-                    <p>{n.excerpt.replace(/^#+\s*/, "")}</p>
+                    <p><HighlightedSnippet text={n.excerpt} ranges={n.snippet_highlights} /></p>
                     <div className="note-card-tags">
                       {n.tags.slice(0, 3).map((t) => (
                         <span key={t}># {t}</span>

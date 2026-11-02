@@ -94,3 +94,38 @@ test("真实C摘要、命中字段与北京时间日期筛选接入A界面", asy
     path: path.join(root, "reports/A/C-date-filter-audit.png"),
   });
 });
+
+
+test("C高亮在最近笔记和卡片中正确处理emoji与HTML，清空查询后消失", async ({ page }) => {
+  await page.goto(url);
+  await page.waitForFunction(() => window.__appReady);
+  const title = "C-highlight-visual";
+  const body = '## 😀 动态规划 Ai ai <script>window.__highlightInjected=1</script>';
+  await call(page, "create", { title, body, tags: ["highlight"] });
+  await page.getByLabel("搜索笔记", { exact: true }).fill("动态规划 AI");
+  const item = page.locator(".recent-item").filter({ hasText: title });
+  await expect(item).toBeVisible();
+  await expect(item.locator("mark")).toHaveText(["动态规划", "Ai", "ai"]);
+  await expect(item.locator("p")).toHaveText(body);
+  await expect(item.locator("script")).toHaveCount(0);
+  expect(await page.evaluate(() => window.__highlightInjected)).toBeUndefined();
+  const navigated = page.waitForResponse(r => r.url().endsWith("/api/snapshot") &&
+    r.request().postDataJSON().query === "");
+  await page.getByRole("button", { name: "全部笔记", exact: false }).click();
+  await navigated;
+  await expect.poll(() => page.locator(".note-card").count()).toBeGreaterThan(1);
+  // Wait for the debounced query result, rather than a stale transition frame.
+  const filtered = page.waitForResponse(r => r.url().endsWith("/api/snapshot") &&
+    r.request().postDataJSON().query === "动态规划 AI");
+  await page.getByLabel("搜索笔记", { exact: true }).fill("动态规划 AI");
+  await filtered;
+  await expect(page.locator(".note-card")).toHaveCount(1);
+  const card = page.locator(".note-card").filter({ hasText: title });
+  await expect(card.locator("mark")).toHaveText(["动态规划", "Ai", "ai"]);
+  await expect(card.locator("p")).toHaveText(body);
+  fs.mkdirSync(path.join(root, "reports/screenshots"), { recursive: true });
+  await page.screenshot({ path: path.join(root, "reports/screenshots/C-highlight-main.png") });
+  await page.getByLabel("搜索笔记", { exact: true }).fill("");
+  await expect(card.locator("mark")).toHaveCount(0);
+  await expect(card.locator("p")).toHaveText(body);
+});
