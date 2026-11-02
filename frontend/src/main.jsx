@@ -1126,7 +1126,7 @@ function App() {
               <ShieldCheck className="size-3.5" />
               数据保存在本机，不会上传
             </span>
-            <span>知页 1.1.0</span>
+            <span>知页 1.2.0</span>
           </footer>
         </main>
       </div>
