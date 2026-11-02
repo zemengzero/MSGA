@@ -94,6 +94,12 @@ def _copy(source, target):
     source.backup(target, pages=128, sleep=0.01)
 
 
+def _error_with_protection(message, protection):
+    error = AppError(message)
+    error.protection_path = protection
+    return error
+
+
 def _estimated_snapshot_bytes(store):
     page_size = int(store.conn.execute("PRAGMA page_size").fetchone()[0])
     page_count = int(store.conn.execute("PRAGMA page_count").fetchone()[0])
@@ -171,13 +177,15 @@ def restore_backup(store, source, protection_dir):
                 _copy(old, store.conn)
             except Exception as rollback_error:
                 store.writes_disabled = True
-                raise AppError(
-                    f"恢复和自动回退均失败。当前库已停止写入，保护副本：{protection}"
+                raise _error_with_protection(
+                    f"恢复和自动回退均失败。当前库已停止写入，保护副本：{protection}",
+                    protection,
                 ) from rollback_error
             finally:
                 old.close()
-            raise AppError(
-                "恢复未完成，已经回退原库；保护副本：" + str(protection)
+            raise _error_with_protection(
+                "恢复未完成，已经回退原库；保护副本：" + str(protection),
+                protection,
             ) from exc
         return protection
     finally:
