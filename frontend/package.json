@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:note-find": "node --test unit-tests/note-find.test.mjs"
   },
   "dependencies": {
     "lucide-react": "1.66.0",
