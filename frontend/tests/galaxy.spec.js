@@ -21,7 +21,12 @@ test.beforeAll(async () => {
       "--server-info",
       info,
     ],
-    { cwd: root, windowsHide: true, stdio: "ignore" },
+    {
+      cwd: root,
+      windowsHide: true,
+      stdio: "ignore",
+      env: { ...process.env, PYTHONPATH: path.join(root, "src") },
+    },
   );
   for (let i = 0; i < 100; i++) {
     if (fs.existsSync(info)) {
@@ -36,6 +41,52 @@ test.afterAll(() => processHandle?.kill());
 test.beforeEach(async ({ page }) => {
   await page.goto(url);
   await page.waitForFunction(() => window.__appReady);
+});
+
+test("沉浸星图可退出，柔光与巡航控制不改变真实笔记", async ({ page }) => {
+  await page.waitForFunction(() => window.__observatoryReady);
+  const before = await call(page, "snapshot");
+  await page.getByRole("button", { name: "沉浸展示", exact: true }).click();
+  await expect(page.locator(".observatory-cinema")).toBeVisible();
+  const bounds = await page.getByTestId("graph-stage").boundingBox();
+  expect(bounds.width).toBe(page.viewportSize().width);
+  expect(bounds.height).toBe(page.viewportSize().height);
+  await page.getByRole("button", { name: "切换柔光", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "切换柔光", exact: true }),
+  ).not.toHaveClass(/on/);
+  await page.getByRole("button", { name: "自动巡航", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "暂停巡航", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "暂停巡航", exact: true }).click();
+  await page.getByRole("button", { name: "切换柔光", exact: true }).click();
+  await page.waitForTimeout(1200);
+  await page.screenshot({
+    path: path.join(root, "reports/A/cosmic-cinema.png"),
+  });
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".observatory-cinema")).toHaveCount(0);
+  const after = await call(page, "snapshot");
+  expect(after.data.stats).toEqual(before.data.stats);
+  expect(after.data.graph.links).toEqual(before.data.graph.links);
+});
+
+test("图形上下文丢失后仍可打开真实笔记", async ({ page }) => {
+  await page.waitForFunction(() => window.__observatoryReady);
+  await page
+    .locator("canvas")
+    .evaluate((canvas) =>
+      canvas.dispatchEvent(new Event("webglcontextlost", { cancelable: true })),
+    );
+  await expect(page.getByText("图形暂不可用", { exact: true })).toBeVisible();
+  await page
+    .getByRole("button", { name: "全部笔记", exact: false })
+    .first()
+    .click();
+  await page.locator(".note-card").first().click();
+  await expect(page.getByTestId("note-drawer")).toBeVisible();
+  await expect(page.locator(".markdown")).not.toBeEmpty();
 });
 async function call(page, action, payload = {}) {
   return page.evaluate(
@@ -138,7 +189,9 @@ test("保存未完成时继续输入，后续修改仍会自动保存", async ({
   await page.getByLabel("Markdown正文").fill("保存中继续输入的最终内容");
   await expect
     .poll(async () => (await call(page, "note", { id: note.id })).data.body, {
-      timeout: 15000,
+      // This case injects 4.2s of network delay, plus two debounces.
+      // Leave room for Windows CI's software-rendered WebGL scheduling.
+      timeout: 30000,
     })
     .toBe("保存中继续输入的最终内容");
   await expect(page.getByText("已保存到本机", { exact: true })).toBeVisible();
@@ -159,7 +212,15 @@ test("版本冲突保留输入，取消离开不丢失缓冲", async ({ page }) 
     body: "external revision",
     revision: created.revision,
   });
+  const conflictResponse = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/api/save") &&
+      response.request().method() === "POST",
+  );
   await page.getByLabel("Markdown正文").fill("我的尚未保存缓冲");
+  // This case verifies conflict handling; autosave timing has separate cases.
+  await page.getByRole("button", { name: "保存", exact: true }).click();
+  expect((await (await conflictResponse).json()).type).toBe("ConflictError");
   await expect(
     page.getByText("保存失败，修改已保留", { exact: true }),
   ).toBeVisible();
