@@ -642,16 +642,40 @@ function App() {
         });
         const back = await api("note", { id: n.id });
         const state = await refresh();
+        const day = new Date(new Date(saved.updated_at).getTime() + 8 * 3600000)
+          .toISOString()
+          .slice(0, 10);
+        const matching = await api("snapshot", {
+          query: "保存成功",
+          date_from: day,
+          date_to: day,
+        });
+        const excluded = await api("snapshot", {
+          query: "保存成功",
+          date_from: "2000-01-01",
+          date_to: "2000-01-01",
+        });
+        const hit = matching.notes.find((item) => item.id === n.id);
+        const cSearchReady = Boolean(
+          state.capabilities.date_filters &&
+          state.capabilities.hit_snippets &&
+          hit?.excerpt.includes("保存成功") &&
+          hit?.matched_fields.includes("body") &&
+          !excluded.notes.some((item) => item.id === n.id),
+        );
         window.__desktopSmokeResult = {
           passed:
             back.title === saved.title &&
             back.body.includes("保存成功") &&
-            Boolean(document.querySelector("canvas")),
+            Boolean(document.querySelector("canvas")) &&
+            cSearchReady,
           note_id: n.id,
           graph_nodes: state.graph.nodes.length,
           graph_links: state.graph.links.length,
           canvas_present: Boolean(document.querySelector("canvas")),
           frontend_loaded: true,
+          c_search_ready: cSearchReady,
+          capabilities: state.capabilities,
         };
       } catch (e) {
         window.__desktopSmokeResult = { passed: false, error: e.message };

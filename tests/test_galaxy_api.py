@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 from types import ModuleType, SimpleNamespace
 from unittest.mock import patch
 
+import zhiyeteam.search as search_module
+
 from support import StoreFixture
 from zhiyeteam.backup import create_backup
 from zhiyeteam.galaxy_api import GalaxyAPI
@@ -155,7 +157,10 @@ class GalaxyTests(StoreFixture):
         module.search_hits = lambda *a, **k: [
             SimpleNamespace(note=note, snippet="C生成的摘要", matched_fields=("body",))
         ]
-        with patch.dict(sys.modules, {module.__name__: module}):
+        with (
+            patch.object(search_module, "search_hits", None, create=True),
+            patch.dict(sys.modules, {module.__name__: module}),
+        ):
             state = self.call("snapshot")
         self.assertEqual(state["notes"][0]["excerpt"], "C生成的摘要")
         self.assertEqual(state["notes"][0]["matched_fields"], ["body"])
@@ -179,7 +184,11 @@ class GalaxyTests(StoreFixture):
         self.assertEqual(seen[0], self.path.parent / "audit/restore.jsonl")
 
     def test_unimplemented_optional_filters_fail_explicitly(self):
-        result = self.api.invoke("snapshot", {"date_from": "2026-11-01"})
+        def legacy_search(store, keywords="", tags=(), deleted=False):
+            return search_notes(store, keywords, tags, deleted)
+
+        with patch("zhiyeteam.galaxy_api.search_notes", legacy_search):
+            result = self.api.invoke("snapshot", {"date_from": "2026-11-01"})
         self.assertFalse(result["ok"])
         self.assertIn("日期", result["error"])
         self.assertFalse(self.api.invoke("unknown", {})["ok"])

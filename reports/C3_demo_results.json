@@ -1,0 +1,59 @@
+{
+  "synthetic": true,
+  "note_ids": {
+    "target": "eeee75f7-b7ea-43db-b512-189bbfc0638a",
+    "title_hit": "f313eaf2-b687-44e3-a458-00e8ee7c4f3d",
+    "body_hit": "c0bc4ede-f6c0-455d-94d1-fe48374de496",
+    "before_start": "587d9986-c3a3-416d-acd6-eeaaa8364f96",
+    "at_end": "354073a8-38f7-484d-b809-9d2e7ab3552d",
+    "missing_tag": "ad613f5c-2108-4ed3-be08-bbd881af2804",
+    "missing_word": "5d66bd48-f423-4330-a467-d68d77e924ed",
+    "trash": "0dbcd317-bcb5-4a9d-8073-d3555cbfe0c5",
+    "empty": "871caf5e-133c-46af-b26b-e4ccf0e68119"
+  },
+  "interval": [
+    "2026-11-01T00:00:00+08:00",
+    "2026-11-02T00:00:00+08:00"
+  ],
+  "active_hits": [
+    {
+      "key": "title_hit",
+      "id": "f313eaf2-b687-44e3-a458-00e8ee7c4f3d",
+      "title": "动态规划 AI 提纲",
+      "matched_fields": [
+        "title"
+      ],
+      "snippet": "记录状态转移。",
+      "snippet_length": 7
+    },
+    {
+      "key": "body_hit",
+      "id": "c0bc4ede-f6c0-455d-94d1-fe48374de496",
+      "title": "长文练习",
+      "matched_fields": [
+        "body"
+      ],
+      "snippet": "…甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲甲动态规划乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙乙…",
+      "snippet_length": 120
+    }
+  ],
+  "trash_hits": [
+    {
+      "key": "trash",
+      "id": "0dbcd317-bcb5-4a9d-8073-d3555cbfe0c5",
+      "title": "动态规划 AI 回收站",
+      "matched_fields": [
+        "title"
+      ],
+      "snippet": "需要显式查询。",
+      "snippet_length": 7
+    }
+  ],
+  "target_backlinks": [
+    {
+      "id": "c0bc4ede-f6c0-455d-94d1-fe48374de496",
+      "key": "body_hit",
+      "count": 1
+    }
+  ]
+}

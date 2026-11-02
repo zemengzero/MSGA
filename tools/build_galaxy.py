@@ -64,7 +64,9 @@ data = {
     "source_files_sha256": {
         p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
         for p in [
-            *sorted((ROOT / "src/zhiyeteam").glob("galaxy*.py")),
+            *sorted((ROOT / "src/zhiyeteam").glob("*.py")),
+            ROOT / "src/zhiyeteam/schema.sql",
+            ROOT / "frontend/package-lock.json",
             *sorted((ROOT / "frontend/src").glob("*")),
         ]
         if p.is_file()

@@ -1,24 +1,29 @@
 # 知页 · 本地学习知识库
 
-## 知识星图界面（A新增）
+## 知识星图 1.1（A 界面 + C 搜索已集成）
 
 ![知识星图实测](reports/A/galaxy-overview.png)
 
 新增React/Three.js深色知识星图与Windows WebView2桌面入口，节点/连线读取同一SQLite库。新建、搜索、关联、自动保存、版本、回收站和备份导出均调用已有业务模块；原Tk入口仍保留。
 
+**[下载最新正式版](https://github.com/zemengzero/MSGA/releases/latest)**：完整解压 `ZhiYeGalaxy-v1.1.0-Windows-x64.zip`，打开 `软件/Start-Demo.cmd` 展示星图，或打开 `软件/Start-Personal.cmd` 使用正式笔记库。需要 Windows x64 和 Edge WebView2 Runtime，无需安装 Python/Node，图形资源随程序离线打包。
+
+A 的界面与 C 的真实搜索实现已接入：更新时间按北京时间筛选，截止日期包含当天；关键词和标签维持 AND 规则；正文摘要来自实际命中位置。B 的独立恢复审计仍作为可选扩展，当前发行使用已有的保护副本及恢复机制，不能作为 B 已完成的证据。集成范围、源码位置及验证方式见 [AC 集成说明](docs/AC_INTEGRATION.txt)。
+
 源码运行：在frontend执行`npm ci`、`npm run build`，回根目录执行`.venv/Scripts/python.exe -m zhiyeteam.galaxy --demo`。打包使用`python tools/build_galaxy.py`，实体exe检查用`python tools/frozen_galaxy.py`；Windows需要Edge WebView2 Runtime。发行exe不要求Python/Node。
 
-给B/C/D：[新版界面对接约定](docs/新版界面_BCD对接说明.md)。B/C的原接口不变，审计包装与日期/摘要扩展按该约定自动接入，契约测试不代表他们已完成实现。A个人交付与答辩见[知识星图说明](docs/A_知识星图交付说明.md)。下面的v1.0.0下载是保留的旧版，知识星图以对应PR/预览包为准。
+给B/C/D：[新版界面对接约定](docs/新版界面_BCD对接说明.md)。原业务接口和数据库结构保持兼容；C 的扩展已实际集成，B 的审计包装仍可按约定接入。A个人交付与答辩见[知识星图说明](docs/A_知识星图交付说明.md)，其中预览版测试数量是该阶段的历史证据；当前发行的实测记录随正式发布包提供。
 
 用于软件工程团队验收的 Windows 桌面程序：记录 Markdown 笔记，按关键词和标签找回知识，用稳定 UUID 关联笔记，通过历史版本、回收站和完整备份保护内容。
 
-团队版选择 Python + Tkinter + SQLite，以离线可运行、代码易讲解和四人可分工为首要目标。前两次实验的 .NET/Markdown 文件方案属于设计探索；本项目独立维护团队需求基线与实际实现说明。
+团队版使用 Python + SQLite 业务层，正式星图界面为 React + Three.js + Windows WebView2，保留 Tkinter 旧入口。前两次实验的 .NET/Markdown 文件方案属于设计探索；本项目独立维护团队需求基线与实际实现说明。
 
 ![知页实际桌面窗口](docs/images/desktop.png)
 
 ## 交付与演示
 
-- [Windows发布与报告](https://github.com/zemengzero/MSGA/releases/tag/v1.0.0)
+- [Windows 最新正式发布](https://github.com/zemengzero/MSGA/releases/latest)
+- [保留的 v1.0.0 历史报告与旧程序](https://github.com/zemengzero/MSGA/releases/tag/v1.0.0)
 - [四人分工与每次提交安排](docs/团队分工与提交计划.md)
 - [D今晚的仓库统筹操作单](docs/D_仓库统筹操作单.md)
 - [8分钟现场演示步骤](docs/现场演示步骤.md)
@@ -32,10 +37,16 @@
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e .
-.\.venv\Scripts\python.exe -m zhiyeteam --demo
+cd frontend
+npm ci
+npm run build
+cd ..
+.\.venv\Scripts\python.exe -m zhiyeteam.galaxy --demo
 ```
 
 正式运行不带 `--demo`，默认将数据库保存到当前用户的本地应用数据目录。演示模式使用独立数据库，不覆盖正式笔记。
+
+旧 Tk 界面开发入口为 `python -m zhiyeteam --demo`。正式演示请使用上面的星图入口或发行包中的 `Start-Demo.cmd`。
 
 发布ZIP中的独立exe已在本机启动并验证真实窗口/保存。另一台未安装Python的机器仍需按D成员任务进行实测；本项目没有把本机检查冒称所有Windows版本兼容。
 
