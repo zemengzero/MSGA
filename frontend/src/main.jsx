@@ -48,6 +48,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import "./style.css";
+import NoteFindPanel from "./NoteFindPanel.jsx";
 import HighlightedSnippet from "./HighlightedSnippet.jsx";
 
 export async function api(action, payload = {}) {
@@ -310,6 +311,7 @@ function App() {
   const [draft, setDraft] = useState(null);
   const draftRef = useRef(null);
   const selectedRef = useRef(null);
+  const previewRef = useRef(null);
   const [dirty, setDirty] = useState(false);
   const dirtyRef = useRef(false);
   const [saving, setSaving] = useState(false);
@@ -1224,6 +1226,8 @@ function App() {
                 </button>
               </div>
             )}
+            {!edit && <NoteFindPanel key={selected.id} previewRef={previewRef}
+              contentVersion={selected.html} />}
             <div className="drawer-content">
               {edit ? (
                 <textarea
@@ -1237,6 +1241,7 @@ function App() {
               ) : (
                 <div
                   className="markdown"
+                  ref={previewRef}
                   style={{ fontSize }}
                   dangerouslySetInnerHTML={{ __html: selected.html || "" }}
                   onClick={(e) => {
