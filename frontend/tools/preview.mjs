@@ -1,0 +1,13 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
+const root=path.resolve('..');
+const info=JSON.parse(fs.readFileSync(path.join(root,'runtime/galaxy-server.json'),'utf8'));
+const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+const page=await browser.newPage({viewport:{width:1460,height:940},deviceScaleFactor:1});
+const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.goto(info.url);await page.waitForFunction(()=>window.__appReady);
+await page.waitForTimeout(4000);
+await page.screenshot({path:path.join(root,'runtime/galaxy-preview.png')});
+console.log(JSON.stringify({url:info.url,canvas:await page.locator('canvas').count(),errors}));
+await browser.close();
