@@ -1,0 +1,72 @@
+PR #16 CI diagnosis
+
+Failed workflow:
+- galaxy-ui-and-adapter / galaxy (pull_request)
+- backend-and-workflow-tests / tests (pull_request)
+
+Both workflows failed at:
+python -m unittest discover -s tests -v
+
+Actual failing test:
+test_failed_restore_keeps_protection_lock_across_requests
+(test_galaxy_api.GalaxyTests)
+
+Root cause:
+After restore_with_audit became available, GalaxyAPI selected the audit wrapper.
+The existing fault test patched galaxy_api.restore_backup, but the wrapper called
+restore_audit.restore_backup directly, so the injected failure never ran.
+
+Fix:
+- restore_with_audit now accepts an optional restore_impl keyword.
+- The default remains restore_backup.
+- GalaxyAPI passes its existing restore_backup dependency when the wrapper
+  supports restore_impl.
+- Four-argument wrappers remain compatible.
+
+Verified locally after merging origin/main db2555c into the B branch:
+
+Command:
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+
+Result:
+Ran 117 tests in 8.228s
+
+OK
+
+Focused Galaxy API result:
+Ran 12 tests in 0.985s
+
+OK
+
+Frontend CI-equivalent verification with portable Node 24:
+
+npm ci
+added 67 packages, audited 68 packages
+found 0 vulnerabilities
+
+npm run build
+2430 modules transformed
+built successfully
+
+playwright test
+17 passed (2.5m)
+
+Repeat runs:
+- isolated conflict regression: 1 passed
+- full suite run 1: 7 passed (40.8s)
+- full suite run 2: 7 passed (59.1s)
+- full suite after clean npm ci: 7 passed (1.1m)
+
+After merging latest main db2555c:
+- npm ci: 172 packages, 0 vulnerabilities
+- npm run test:note-find: 17 passed
+- npm run build: passed
+- playwright test: 17 passed
+
+Later PR CI timeout:
+- failing test: 字号持久化不修改笔记；收藏与取消收藏有效
+- failure point: page.reload()
+- cause: 40000ms per-test timeout exceeded on the GitHub Windows runner
+- integration/ac-galaxy-release 65fdfb8 is already an ancestor of main 5698dbf
+- no frontend source mismatch; B branch does not modify frontend source
+- remediation: raise Playwright test timeout to 90000ms, assertions unchanged

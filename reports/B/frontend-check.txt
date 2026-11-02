@@ -1,0 +1,38 @@
+Command:
+npm ci
+
+Result:
+added 67 packages, and audited 68 packages in 1m
+found 0 vulnerabilities
+
+Command:
+npm run build
+
+Result:
+vite v8.3.5 building client environment for production
+2430 modules transformed
+built successfully
+
+Command:
+playwright test
+
+Result:
+17 passed (2.5m)
+
+The previously flaky conflict regression passed in:
+- isolated run: 1 passed
+- full suite run 1: 7 passed
+- full suite run 2: 7 passed
+- full suite after clean npm ci: 7 passed
+
+Additional CI investigation:
+- integration/ac-galaxy-release 65fdfb8 is an ancestor of main 5698dbf
+- B branch does not modify frontend source files
+- GitHub failed at page.reload because the 40s per-test timeout was exceeded
+- Playwright per-test timeout increased to 90s without changing assertions
+
+After merging latest main db2555c:
+- npm ci: 172 packages, 0 vulnerabilities
+- npm run test:note-find: 17 passed
+- npm run build: passed
+- playwright test: 17 passed

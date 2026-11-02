@@ -1,0 +1,18 @@
+{
+  "executed_at_utc": "2026-11-02T08:11:58.3869074Z",
+  "passed": true,
+  "tests_run": 117,
+  "new_B_tests": 10,
+  "frontend_tests_run": 17,
+  "frontend_tests_passed": 17,
+  "frontend_unit_tests_run": 17,
+  "frontend_unit_tests_passed": 17,
+  "playwright_timeout_ms": 90000,
+  "npm_ci": "passed",
+  "npm_build": "passed",
+  "backup_source_sha256": "e7388edd074aa3679e3899acb13c55a227a48d5c8e08ef5a46a52212dffabdc1",
+  "restore_audit_source_sha256": "9c8868ccfd2dd164e6eb1b508641d8f104d08a2b5fac9c33d2bae4fd140b9999",
+  "galaxy_api_source_sha256": "1cb83353dc4a1f3cf33dfddf0ae2e8d50843fe56cd40ba04cfa3c97ba91cb8a9",
+  "base_main_commit": "db2555c",
+  "command": ".\\.venv\\Scripts\\python.exe -m unittest discover -s tests -v"
+}

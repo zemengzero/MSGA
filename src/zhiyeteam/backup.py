@@ -1,5 +1,7 @@
 """Online SQLite snapshots, strict input validation and protected restore."""
 
+import math
+import shutil
 import sqlite3
 import uuid
 from functools import lru_cache
@@ -7,6 +9,9 @@ from pathlib import Path
 
 from .models import AppError, ValidationError
 from .store import APP_ID, SCHEMA_VERSION, now, validate_note
+
+MIN_SAFETY_MARGIN = 16 * 1024 * 1024
+SAFETY_MARGIN_RATIO = 0.10
 
 
 def _signature(conn):
@@ -89,6 +94,44 @@ def _copy(source, target):
     source.backup(target, pages=128, sleep=0.01)
 
 
+def _error_with_protection(message, protection):
+    error = AppError(message)
+    error.protection_path = protection
+    return error
+
+
+def _estimated_snapshot_bytes(store):
+    page_size = int(store.conn.execute("PRAGMA page_size").fetchone()[0])
+    page_count = int(store.conn.execute("PRAGMA page_count").fetchone()[0])
+    return page_size * page_count
+
+
+def _nearest_existing_directory(path):
+    candidate = Path(path).resolve()
+    while not candidate.exists():
+        parent = candidate.parent
+        if parent == candidate:
+            break
+        candidate = parent
+    if not candidate.is_dir():
+        candidate = candidate.parent
+    return candidate
+
+
+def _check_snapshot_space(store, target):
+    estimate = _estimated_snapshot_bytes(store)
+    margin = max(MIN_SAFETY_MARGIN, math.ceil(estimate * SAFETY_MARGIN_RATIO))
+    required = estimate + margin
+    volume = _nearest_existing_directory(Path(target).parent)
+    free = shutil.disk_usage(volume).free
+    if free < required:
+        raise ValidationError(
+            "目标卷可用空间不足，未创建备份："
+            f"预计需要 {required / (1024 * 1024):.1f} MiB，"
+            f"当前可用 {free / (1024 * 1024):.1f} MiB"
+        )
+
+
 def create_backup(store, target):
     target = Path(target).resolve()
     if target == store.path:
@@ -97,6 +140,7 @@ def create_backup(store, target):
         raise ValidationError("备份目标已存在，请换一个文件名")
     if store.conn.in_transaction:
         raise AppError("请等待当前保存完成")
+    _check_snapshot_space(store, target)
     target.parent.mkdir(parents=True, exist_ok=True)
     temporary = target.with_name(target.name + ".partial-" + uuid.uuid4().hex)
     dest = sqlite3.connect(temporary)
@@ -120,7 +164,6 @@ def restore_backup(store, source, protection_dir):
         raise ValidationError("请选择库外备份文件")
     validated = _validated_connection(source)
     protection_dir = Path(protection_dir).resolve()
-    protection_dir.mkdir(parents=True, exist_ok=True)
     protection = protection_dir / ("恢复前保护_" + uuid.uuid4().hex[:12] + ".db")
     try:
         create_backup(store, protection)
@@ -134,13 +177,15 @@ def restore_backup(store, source, protection_dir):
                 _copy(old, store.conn)
             except Exception as rollback_error:
                 store.writes_disabled = True
-                raise AppError(
-                    f"恢复和自动回退均失败。当前库已停止写入，保护副本：{protection}"
+                raise _error_with_protection(
+                    f"恢复和自动回退均失败。当前库已停止写入，保护副本：{protection}",
+                    protection,
                 ) from rollback_error
             finally:
                 old.close()
-            raise AppError(
-                "恢复未完成，已经回退原库；保护副本：" + str(protection)
+            raise _error_with_protection(
+                "恢复未完成，已经回退原库；保护副本：" + str(protection),
+                protection,
             ) from exc
         return protection
     finally:
