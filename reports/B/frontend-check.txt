@@ -17,7 +17,7 @@ Command:
 playwright test
 
 Result:
-7 passed (1.1m)
+17 passed (2.5m)
 
 The previously flaky conflict regression passed in:
 - isolated run: 1 passed
@@ -30,3 +30,9 @@ Additional CI investigation:
 - B branch does not modify frontend source files
 - GitHub failed at page.reload because the 40s per-test timeout was exceeded
 - Playwright per-test timeout increased to 90s without changing assertions
+
+After merging latest main db2555c:
+- npm ci: 172 packages, 0 vulnerabilities
+- npm run test:note-find: 17 passed
+- npm run build: passed
+- playwright test: 17 passed

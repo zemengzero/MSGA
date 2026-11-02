@@ -8,7 +8,7 @@
 - B2：恢复结果隐私审计；
 - B3：空间不足、审计失败、恢复回退等故障回归。
 
-未修改 `src/zhiyeteam/ui.py`、`src/zhiyeteam/search.py` 或其他成员的测试文件。PR #16 在检查失败后已变基到最新 `origin/main`（`5698dbf`），该基线已经包含 A 的 galaxy 界面和 C 的搜索扩展。
+未修改 `src/zhiyeteam/ui.py`、`src/zhiyeteam/search.py` 或其他成员的测试文件。PR #16 已把最新 `origin/main`（`db2555c`）合并进 B 分支，该基线包含 A 的 galaxy 界面、C 的搜索扩展和最新笔记查找界面。
 
 ## 2. B1：备份前空间预检
 
@@ -131,7 +131,7 @@ if report.audit_warning:
 实际结果：
 
 ```text
-Ran 101 tests in 6.896s
+Ran 117 tests in 8.228s
 
 OK
 ```
@@ -143,7 +143,8 @@ OK
 ```text
 npm ci             成功，安装 67 个包，0 个漏洞
 npm run build      成功
-playwright test    7 passed
+node --test        17 passed
+playwright test    17 passed
 ```
 
 其中此前偶发失败的“版本冲突保留输入”用例，在隔离运行、完整套件重复运行和干净 `npm ci` 后运行中均通过。
@@ -186,4 +187,4 @@ playwright test    7 passed
 - 本分支没有修改界面，D 需要把恢复入口切换到 `restore_with_audit` 并展示保护位置和审计警告。
 - UI 集成截图和实体程序演练待 D 合并后完成。
 - 本地提交作者已设置为 `DKLSOUL <2553675108@qq.com>`。变基后的 B1 提交为 `2f721b7`，B2 提交为 `1344730`，B3 提交为 `ae7a711`，CI 兼容修复由后续提交保存。
-- 本机已使用便携 Node 24 完成 `npm ci`、`npm run build` 和 7 项 Playwright 测试；Python 101 项与前端 7 项测试均已实际通过。
+- 本机已使用便携 Node 24 完成 `npm ci`、`npm run build`、17 项 note-find 单元测试和 17 项 Playwright 测试；Python 117 项与前端两组 17 项测试均已实际通过。

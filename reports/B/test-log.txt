@@ -23,13 +23,13 @@ Fix:
   supports restore_impl.
 - Four-argument wrappers remain compatible.
 
-Verified locally after rebasing onto origin/main 5698dbf:
+Verified locally after merging origin/main db2555c into the B branch:
 
 Command:
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 
 Result:
-Ran 101 tests in 6.896s
+Ran 117 tests in 8.228s
 
 OK
 
@@ -49,13 +49,19 @@ npm run build
 built successfully
 
 playwright test
-7 passed (1.1m)
+17 passed (2.5m)
 
 Repeat runs:
 - isolated conflict regression: 1 passed
 - full suite run 1: 7 passed (40.8s)
 - full suite run 2: 7 passed (59.1s)
 - full suite after clean npm ci: 7 passed (1.1m)
+
+After merging latest main db2555c:
+- npm ci: 172 packages, 0 vulnerabilities
+- npm run test:note-find: 17 passed
+- npm run build: passed
+- playwright test: 17 passed
 
 Later PR CI timeout:
 - failing test: 字号持久化不修改笔记；收藏与取消收藏有效
