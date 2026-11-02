@@ -24,6 +24,8 @@ args = [
     str(ROOT / "src/zhiyeteam/schema.sql") + ";zhiyeteam",
     "--add-data",
     str(ROOT / "frontend/dist") + ";zhiyeteam/web",
+    "--add-data",
+    str(ROOT / "third_party") + ";third_party",
     "--icon",
     str(ROOT / "src/zhiyeteam/assets/icon.ico"),
     "--collect-all",
@@ -67,6 +69,7 @@ data = {
             *sorted((ROOT / "src/zhiyeteam").glob("*.py")),
             ROOT / "src/zhiyeteam/schema.sql",
             ROOT / "frontend/package-lock.json",
+            *sorted((ROOT / "third_party").rglob("*")),
             *sorted((ROOT / "frontend/src").glob("*")),
         ]
         if p.is_file()

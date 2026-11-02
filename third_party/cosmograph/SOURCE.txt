@@ -1,0 +1,10 @@
+Upstream: https://github.com/n1ghtmare-dev/obsidian-cosmograph
+Inspected on: 2026-11-02 (branch main, official raw source)
+File: src/graph/SphericalGraph.ts
+Adapted portions: seededRandom; radial canvas glow texture technique.
+Original file URL: https://github.com/n1ghtmare-dev/obsidian-cosmograph/blob/main/src/graph/SphericalGraph.ts
+Changes: integrate these small rendering helpers into a React/react-force-graph scene;
+use the existing notebook API and actual UUID links, independent procedural planet/sky textures,
+new local camera/lighting/UI controls and the existing save/search/backup implementation.
+The original Obsidian plugin, vault parser, brand graphics and full renderer are not bundled.
+MIT notice is preserved alongside this file. Unrelated third-party code retains its own license.

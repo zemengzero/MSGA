@@ -58,9 +58,14 @@ for directory in sorted(site.glob("*.dist-info")):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(p.read_bytes())
 python_license = Path(sys.base_prefix) / "LICENSE.txt"
+for source in (ROOT / "third_party").rglob("*"):
+    if source.is_file():
+        target = OUT / "AdaptedCode" / source.relative_to(ROOT / "third_party")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(source.read_bytes())
 (OUT / "Python-LICENSE.txt").write_bytes(python_license.read_bytes())
 (OUT / "软件来源说明.txt").write_text(
-    "知页知识星图：本组界面与业务适配代码。\n3D图谱使用react-force-graph-3d/Three.js；界面参考Blinko布局但未复制其GPL源码。\n本目录包含运行库及开发工具的原始许可文件，不表示所有开发工具都被打包进exe。\nWindows窗口使用系统已安装的Microsoft Edge WebView2 Runtime。\n",
+    "知页知识星图：本组界面与业务适配代码。\n3D图谱使用react-force-graph-3d/Three.js；随机与光晕辅助实现改编自MIT许可的CosmoGraph，见AdaptedCode原文。\n本目录包含运行库及开发工具的原始许可文件，不表示所有开发工具都被打包进exe。\nWindows窗口使用系统已安装的Microsoft Edge WebView2 Runtime。\n",
     encoding="utf-8-sig",
 )
 (OUT / "JavaScript-packages.json").write_text(

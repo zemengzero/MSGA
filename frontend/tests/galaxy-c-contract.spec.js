@@ -21,7 +21,7 @@ test.beforeAll(async () => {
       "--server-info",
       info,
     ],
-    { cwd: root, windowsHide: true, stdio: "ignore" },
+    { cwd: root, windowsHide: true, stdio: "ignore", env: { ...process.env, PYTHONPATH: path.join(root, "src") } },
   );
   for (let i = 0; i < 100; i++) {
     if (fs.existsSync(info)) {

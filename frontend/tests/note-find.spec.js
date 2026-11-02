@@ -11,7 +11,7 @@ test.beforeAll(async () => {
   child = spawn(fs.existsSync(venv) ? venv : "python", [
     "-m", "zhiyeteam.galaxy", "--demo", "--server", "--data-dir",
     path.join(root, "runtime", run), "--server-info", info,
-  ], { cwd: root, windowsHide: true, stdio: "ignore" });
+  ], { cwd: root, windowsHide: true, stdio: "ignore", env: { ...process.env, PYTHONPATH: path.join(root, "src") } });
   for (let i = 0; i < 100; i++) {
     if (fs.existsSync(info)) { url = JSON.parse(fs.readFileSync(info, "utf8")).url; return; }
     await new Promise(r => setTimeout(r, 150));

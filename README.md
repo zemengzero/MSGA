@@ -1,18 +1,20 @@
 # 知页 · 本地学习知识库
 
-## 知识星图 1.1（A 界面 + C 搜索已集成）
+## 知识星图 1.3 · 沉浸式星际界面
 
-![知识星图实测](reports/A/galaxy-overview.png)
+![沉浸星图实测](docs/images/cosmic-overview.png)
 
 新增React/Three.js深色知识星图与Windows WebView2桌面入口，节点/连线读取同一SQLite库。新建、搜索、关联、自动保存、版本、回收站和备份导出均调用已有业务模块；原Tk入口仍保留。
 
-**[下载最新正式版](https://github.com/zemengzero/MSGA/releases/latest)**：完整解压 `ZhiYeGalaxy-v1.1.0-Windows-x64.zip`，打开 `软件/Start-Demo.cmd` 展示星图，或打开 `软件/Start-Personal.cmd` 使用正式笔记库。需要 Windows x64 和 Edge WebView2 Runtime，无需安装 Python/Node，图形资源随程序离线打包。
+新版提供程序生成的星云与星体材质、光环、大气层、真实笔记节点、可切换柔光、自动巡航和一键沉浸展示（Esc 退出）。主星体与背景星光是视觉装饰，计数只包括实际笔记和实际关联。[视觉设计、复用来源与演示说明](docs/A_沉浸星图视觉升级.md)。
 
-A 的界面与 C 的真实搜索实现已接入：更新时间按北京时间筛选，截止日期包含当天；关键词和标签维持 AND 规则；正文摘要来自实际命中位置。B 的独立恢复审计仍作为可选扩展，当前发行使用已有的保护副本及恢复机制，不能作为 B 已完成的证据。集成范围、源码位置及验证方式见 [AC 集成说明](docs/AC_INTEGRATION.txt)。
+**[下载最新正式版](https://github.com/zemengzero/MSGA/releases/latest)**：完整解压对应版本 Windows ZIP，打开 `软件/Start-Demo.cmd` 展示星图，或打开 `软件/Start-Personal.cmd` 使用正式笔记库。需要 Windows x64 和 Edge WebView2 Runtime，无需安装 Python/Node，图形资源和字体随程序离线打包。
+
+A 的界面与 C 的真实搜索实现已接入：更新时间按北京时间筛选，截止日期包含当天；关键词和标签维持 AND 规则；摘要高亮、笔记内查找与命中跳转保留。当前源码基于已合入 B 恢复审计的主干，恢复接口与数据库沿用既有实现。早期 A+C 交接记录见 [AC 集成说明](docs/AC_INTEGRATION.txt)，其中 B 未接入的描述属于 1.1 阶段历史状态。
 
 源码运行：在frontend执行`npm ci`、`npm run build`，回根目录执行`.venv/Scripts/python.exe -m zhiyeteam.galaxy --demo`。打包使用`python tools/build_galaxy.py`，实体exe检查用`python tools/frozen_galaxy.py`；Windows需要Edge WebView2 Runtime。发行exe不要求Python/Node。
 
-给B/C/D：[新版界面对接约定](docs/新版界面_BCD对接说明.md)。原业务接口和数据库结构保持兼容；C 的扩展已实际集成，B 的审计包装仍可按约定接入。A个人交付与答辩见[知识星图说明](docs/A_知识星图交付说明.md)，其中预览版测试数量是该阶段的历史证据；当前发行的实测记录随正式发布包提供。
+给B/C/D：[新版界面对接约定](docs/新版界面_BCD对接说明.md)。本次只更换视觉组件与样式，保留 B/C 模块与对接协议。A 早期交付见[知识星图说明](docs/A_知识星图交付说明.md)，本次新增代码定位见[沉浸星图说明](docs/A_沉浸星图视觉升级.md)；各阶段历史测试数量不混用，当前发行实测记录随发布包提供。
 
 用于软件工程团队验收的 Windows 桌面程序：记录 Markdown 笔记，按关键词和标签找回知识，用稳定 UUID 关联笔记，通过历史版本、回收站和完整备份保护内容。
 
@@ -24,9 +26,9 @@ A 的界面与 C 的真实搜索实现已接入：更新时间按北京时间筛
 
 当前源码支持：打开笔记详情并保持“阅读”模式，点击“笔记内查找”，输入关键词即可统计、高亮并定位正文中的匹配。支持中文、ASCII 大小写、emoji、粘贴多行、跨 Markdown 节点和重叠命中；上下箭头循环跳转，Enter / Shift+Enter 切换，Esc 关闭。查找不修改正文或触发保存。
 
-Source feature: use **Find in note** in the read-only detail view; all matches and the active hit are highlighted, with wraparound navigation and note-body scrolling. This source update has not been repackaged into the existing v1.1.0 EXE release.
+Use **Find in note** in the read-only detail view; all matches and the active hit are highlighted, with wraparound navigation and note-body scrolling. This feature is preserved in the 1.3 source and included when building the 1.3 executable.
 
-操作、验收清单、演示及限制见 [四步验收与交接](docs/C_笔记内查找_第四步验收与演示.md)。当前已发布 EXE 尚未重新打包这些新增能力；请按源码运行步骤构建后体验。
+操作、验收清单、演示及限制见 [四步验收与交接](docs/C_笔记内查找_第四步验收与演示.md)。1.1 旧版 EXE 不包含后续新增能力，体验时请核对下载版本。
 
 ## 交付与演示
 

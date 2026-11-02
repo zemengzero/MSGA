@@ -6,8 +6,7 @@ import React, {
   useMemo,
 } from "react";
 import { createRoot } from "react-dom/client";
-import ForceGraph3D from "react-force-graph-3d";
-import * as THREE from "three";
+import Observatory from "./Observatory.jsx";
 import { toast } from "sonner";
 import {
   Orbit,
@@ -127,194 +126,7 @@ function IconButton({ icon: Icon, label, className, ...props }) {
 
 /* ------------------------------------------------------------------ galaxy */
 
-function Galaxy({ graph, matched, query, onOpen, paused }) {
-  const ref = useRef();
-  const host = useRef();
-  const [size, setSize] = useState({ width: 700, height: 470 });
-  const [hover, setHover] = useState(null);
-  const [failed, setFailed] = useState(false);
-  const data = useMemo(
-    () => ({
-      nodes: graph.nodes.map((n, i) => ({ ...n, featured: i % 5 === 0 })),
-      links: graph.links.map((l) => ({ ...l })),
-    }),
-    [graph],
-  );
-  const hits = useMemo(() => new Set(matched), [matched]);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    if (paused) ref.current.pauseAnimation();
-    else ref.current.resumeAnimation();
-  }, [paused, data]);
-
-  const neighbours = useMemo(() => {
-    const s = new Set(hover ? [hover] : []);
-    if (hover)
-      for (const l of data.links) {
-        const a = l.source.id || l.source,
-          b = l.target.id || l.target;
-        if (a === hover) s.add(b);
-        if (b === hover) s.add(a);
-      }
-    return s;
-  }, [hover, data]);
-
-  useEffect(() => {
-    const observer = new ResizeObserver(([e]) =>
-      setSize({
-        width: Math.floor(e.contentRect.width),
-        height: Math.floor(e.contentRect.height),
-      }),
-    );
-    observer.observe(host.current);
-    return () => observer.disconnect();
-  }, []);
-
-  // Fit then push the camera closer: a 3D force graph has depth, so a plain
-  // zoomToFit leaves the cloud floating in a lot of empty canvas.
-  const fitGraph = useCallback(() => {
-    const graph = ref.current;
-    if (!graph) return;
-    graph.zoomToFit(0, 48);
-    const camera = graph.camera();
-    const controls = graph.controls?.();
-    const target = controls?.target?.clone?.() ?? new THREE.Vector3();
-    camera.position.sub(target).multiplyScalar(0.72).add(target);
-    camera.updateProjectionMatrix();
-    controls?.update?.();
-  }, []);
-
-  useEffect(() => {
-    const t = setTimeout(fitGraph, 1600);
-    return () => clearTimeout(t);
-  }, [data, fitGraph]);
-
-  // keep the graph fitted when the plate resizes (layout changes)
-  useEffect(() => {
-    if (!size.width) return;
-    const t = setTimeout(fitGraph, 160);
-    return () => clearTimeout(t);
-  }, [size.width, size.height, fitGraph]);
-
-  const sphere = useCallback(
-    (n) => {
-      const group = new THREE.Group();
-      const lit =
-        (!query || hits.has(n.id)) && (!hover || neighbours.has(n.id));
-      const r = 2.6 + Math.min(n.degree, 8) * 0.34;
-      const orb = new THREE.Mesh(
-        new THREE.SphereGeometry(r, 18, 14),
-        new THREE.MeshBasicMaterial({
-          color: lit ? n.color : "#d8cfb8",
-          transparent: true,
-          opacity: lit ? 0.92 : 0.3,
-        }),
-      );
-      group.add(orb);
-      if (n.featured || n.id === hover) {
-        const canvas = document.createElement("canvas");
-        canvas.width = 640;
-        canvas.height = 100;
-        const ctx = canvas.getContext("2d");
-        ctx.font = '44px "Geist Variable", "Microsoft YaHei UI", sans-serif';
-        ctx.textAlign = "center";
-        ctx.fillStyle = lit ? "#15140f" : "#8b8676";
-        ctx.fillText(n.title.slice(0, 16), 320, 55);
-        const texture = new THREE.CanvasTexture(canvas);
-        const sprite = new THREE.Sprite(
-          new THREE.SpriteMaterial({
-            map: texture,
-            transparent: true,
-            depthWrite: false,
-          }),
-        );
-        sprite.scale.set(96, 16, 1);
-        sprite.position.y = -r - 7;
-        group.add(sprite);
-      }
-      return group;
-    },
-    [hover, neighbours, hits, query],
-  );
-
-  return (
-    <div
-      className="relative h-full w-full overflow-hidden bg-[#efe7d2]"
-      ref={host}
-      data-testid="graph-stage"
-    >
-      {!failed && data.nodes.length > 0 ? (
-        <ForceGraph3D
-          ref={ref}
-          graphData={data}
-          width={size.width}
-          height={size.height}
-          backgroundColor="#efe7d2"
-          showNavInfo={false}
-          nodeThreeObject={sphere}
-          nodeLabel={(n) => escapeHtml(n.title)}
-          nodeRelSize={5}
-          linkColor={(l) =>
-            hover &&
-            neighbours.has(l.source.id || l.source) &&
-            neighbours.has(l.target.id || l.target)
-              ? "rgba(21,20,15,0.5)"
-              : "rgba(21,20,15,0.13)"
-          }
-          linkWidth={(l) =>
-            hover && (l.source.id === hover || l.target.id === hover) ? 1 : 0.3
-          }
-          linkOpacity={0.7}
-          linkDirectionalParticles={(l) =>
-            hover && (l.source.id === hover || l.target.id === hover) ? 2 : 0
-          }
-          linkDirectionalParticleWidth={1}
-          onNodeHover={(n) => setHover(n?.id || null)}
-          onNodeClick={(n) => onOpen(n.id)}
-          enableNodeDrag={true}
-          cooldownTicks={120}
-          warmupTicks={60}
-          onEngineStop={() => {
-            window.__graphRendered = true;
-          }}
-          rendererConfig={{ antialias: true, alpha: true }}
-        />
-      ) : (
-        <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
-          <Orbit className="size-8 text-subtle" strokeWidth={1.4} />
-          <p className="text-[14px] font-medium">
-            {failed ? "当前设备未能加载 3D 图谱" : "让第一条灵感，成为起点"}
-          </p>
-          <p className="text-[14px] text-subtle">
-            {failed
-              ? "笔记仍可在「全部笔记」中正常使用"
-              : "新建笔记，再用关联把想法连接起来"}
-          </p>
-        </div>
-      )}
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between border-t border-[#15140f1f] bg-[#efe7d2]/92 px-3.5 py-2 text-[14px] font-semibold uppercase tracking-[0.16em] text-[#8b8676]">
-        <span>拖动旋转 · 滚轮缩放 · 点击阅读</span>
-        <span className="tabular-nums">
-          {data.nodes.length} 节点 · {data.links.length} 关联
-        </span>
-      </div>
-
-      <div className="absolute right-3 top-3">
-        <Button
-          variant="secondary"
-          size="icon-sm"
-          aria-label="图谱居中"
-          title="图谱居中"
-          onClick={fitGraph}
-        >
-          <Maximize2 />
-        </Button>
-      </div>
-    </div>
-  );
-}
+const Galaxy = Observatory;
 
 class GraphBoundary extends React.Component {
   constructor(p) {
@@ -761,7 +573,7 @@ function App() {
     ) || [];
   const filtered = Boolean(query || tag || dateFrom || dateTo);
   const pageTitle = {
-    graph: "Galaxy",
+    graph: "知识星图",
     notes: "Notes",
     favorites: "Favourites",
     trash: "Trash",
@@ -798,9 +610,14 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div
+      className={
+        "cosmic-app min-h-screen bg-background text-foreground " +
+        (route === "graph" ? "cosmic-graph" : "cosmic-library")
+      }
+    >
       {/* ---------------------------------------------------------- sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-30 flex w-[236px] flex-col border-r border-[#15140f1f] bg-[#ece4cf]">
+      <aside className="observatory-sidebar fixed inset-y-0 left-0 z-30 flex w-[236px] flex-col border-r border-[#15140f1f] bg-[#ece4cf]">
         <div className="flex h-[52px] shrink-0 items-center gap-2 px-4">
           <span className="grid size-[22px] place-items-center rounded-[5px] bg-primary text-[14px] font-semibold text-primary-foreground">
             知
@@ -881,7 +698,7 @@ function App() {
 
       {/* ------------------------------------------------------------- main */}
       <div className="ml-[236px] flex h-screen flex-col overflow-hidden">
-        <header className="sticky top-0 z-20 flex h-[52px] shrink-0 items-center gap-4 border-b border-[#15140f1f] bg-[#efe7d2] px-7">
+        <header className="observatory-topbar sticky top-0 z-20 flex h-[52px] shrink-0 items-center gap-4 border-b border-[#15140f1f] bg-[#efe7d2] px-7">
           <div className="flex items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.16em] text-[#8b8676]">
             <span>Workspace</span>
             <span className="text-[#8b8676]">/</span>
@@ -918,13 +735,15 @@ function App() {
           </div>
         </header>
 
-        <main className="flex min-h-0 flex-1 flex-col px-14 pt-11">
-          <div className="flex items-start justify-between gap-12">
+        <main className="observatory-main flex min-h-0 flex-1 flex-col px-14 pt-11">
+          <div className="observatory-page-heading flex items-start justify-between gap-12">
             <div className="min-w-0">
               <h1 className="mt-5 font-serif text-[104px] font-normal italic leading-[0.9] tracking-[-0.03em]">
                 {pageTitle}
               </h1>
-
+              <p className="observatory-page-subtitle">
+                YOUR PERSONAL KNOWLEDGE OBSERVATORY
+              </p>
             </div>
 
             <div className="flex shrink-0 items-center gap-3 pt-3">
@@ -971,10 +790,9 @@ function App() {
           </div>
 
           {route === "graph" ? (
-          <div className="mt-10 grid min-h-0 flex-1 grid-cols-[minmax(0,1.62fr)_258px] gap-12 pb-6">
+            <div className="observatory-dashboard mt-10 grid min-h-0 flex-1 grid-cols-[minmax(0,1.62fr)_258px] gap-12 pb-6">
               <section className="flex min-h-0 flex-col">
-
-                <div className="min-h-0 flex-1 border-y border-[#15140f26]">
+                <div className="observatory-plate min-h-0 flex-1 border-y border-[#15140f26]">
                   {snapshot ? (
                     <GraphBoundary>
                       <Galaxy
@@ -994,7 +812,7 @@ function App() {
                 </div>
               </section>
 
-              <aside className="flex min-h-0 flex-col overflow-y-auto pr-1">
+              <aside className="observatory-updates flex min-h-0 flex-col overflow-y-auto pr-1">
                 <div className="flex items-baseline justify-between border-b border-[#15140f26] pb-3">
                   <span className="text-[18px] font-normal tracking-[-0.01em]">
                     {filtered ? "搜索结果" : "最近更新"}
@@ -1041,11 +859,57 @@ function App() {
                     没有符合条件的笔记
                   </p>
                 )}
+                <div className="observatory-distribution">
+                  <header>
+                    <span>星系分布</span>
+                    <small>BY TAG</small>
+                  </header>
+                  {snapshot?.tags.slice(0, 4).map((item, index) => (
+                    <button
+                      key={item.name}
+                      onClick={() => setTag(tag === item.name ? "" : item.name)}
+                      aria-label={"筛选标签 " + item.name}
+                    >
+                      <span>
+                        <i
+                          style={{
+                            background: [
+                              "#a5bbff",
+                              "#b8a0ed",
+                              "#f1c68a",
+                              "#70cec2",
+                            ][index],
+                          }}
+                        />
+                        {item.name}
+                        <small>{item.count}</small>
+                      </span>
+                      <span className="obs-tag-track">
+                        <i
+                          style={{
+                            width:
+                              Math.max(
+                                5,
+                                (item.count /
+                                  Math.max(1, snapshot.stats.active)) *
+                                  100,
+                              ) + "%",
+                            background: [
+                              "#a5bbff",
+                              "#b8a0ed",
+                              "#f1c68a",
+                              "#70cec2",
+                            ][index],
+                          }}
+                        />
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </aside>
             </div>
           ) : (
             <section className="mt-10 min-h-0 flex-1 overflow-y-auto pb-4">
-
               {displayed.map((n, index) => (
                 <article
                   key={n.id}
@@ -1126,7 +990,7 @@ function App() {
               <ShieldCheck className="size-3.5" />
               数据保存在本机，不会上传
             </span>
-            <span>知页 1.2.0</span>
+            <span>知页 1.3.0</span>
           </footer>
         </main>
       </div>
@@ -1457,6 +1321,11 @@ function App() {
               <div className="flex items-start gap-2.5 px-3.5 py-3 text-[14px] leading-5 text-subtle">
                 <ShieldCheck className="mt-0.5 size-3.5 shrink-0" />
                 知识库保存在本机，没有云端账号，也不会自动上传笔记。
+              </div>
+              <div className="px-3.5 py-3 text-[11px] leading-5 text-subtle">
+                星图渲染使用 Three.js /
+                react-force-graph；随机与光晕辅助实现改编自 CosmoGraph（© 2026
+                n1ghtmare-dev，MIT）。场景主星体为视觉装饰，笔记节点和关联来自实际知识库。
               </div>
             </div>
           )}

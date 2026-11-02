@@ -1,0 +1,603 @@
+/* Local assets only. The backdrop and every texture are generated in Three.js. */
+.cosmic-app,
+:root:has(.cosmic-app) {
+  --color-background: #080c17;
+  --color-foreground: #e4e8f3;
+  --color-card: #101724;
+  --color-card-foreground: #e4e8f3;
+  --color-popover: #111a2b;
+  --color-popover-foreground: #e4e8f3;
+  --color-primary: #d6bd94;
+  --color-primary-foreground: #15151b;
+  --color-secondary: #182235;
+  --color-secondary-foreground: #e4e8f3;
+  --color-muted: #111a2b;
+  --color-muted-foreground: #929eb6;
+  --color-accent: #1a2438;
+  --color-accent-foreground: #f5f2ee;
+  --color-border: #a8bcdf1c;
+  --color-input: #a8bcdf2b;
+  --color-ring: #d6bd9455;
+  --color-subtle: #7c8aa4;
+  --color-ink-soft: #d3daeb;
+  --color-ink-mute: #929eb6;
+  --color-bone: #101724;
+  --color-paper-warm: #111b2b;
+  --color-paper-dark: #1a263b;
+  --color-coral: #d7b98b;
+  --color-mustard: #d7b98b;
+  --color-olive: #8fb3a5;
+  background:
+    radial-gradient(ellipse at 78% 0, #18243844, transparent 50%), #080c17;
+  color: #e4e8f3;
+}
+html:has(.cosmic-app) {
+  color-scheme: dark;
+  background: #080c17;
+}
+body:has(.cosmic-app)::before {
+  display: none;
+}
+.cosmic-app .observatory-sidebar {
+  background: linear-gradient(180deg, #0d1421, #0a101b);
+  border-right: 1px solid #a8bcdf16;
+  padding-top: 17px;
+}
+.cosmic-app .observatory-topbar {
+  background: #080d18cc;
+  border-color: #a8bcdf15;
+  backdrop-filter: blur(20px);
+}
+.cosmic-app .observatory-main {
+  padding: 26px 30px 0;
+}
+.cosmic-app .observatory-page-heading {
+  gap: 20px;
+  align-items: center;
+}
+.cosmic-app .observatory-page-heading h1 {
+  font-family: var(--font-sans);
+  font-size: 44px;
+  font-weight: 500;
+  line-height: 1.15;
+  font-style: normal;
+  letter-spacing: -0.045em;
+  margin: 0;
+}
+.observatory-page-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #7f8ba5;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin: 9px 0 0;
+}
+.observatory-page-subtitle::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: #d9bd8f;
+}
+.cosmic-app .observatory-dashboard {
+  gap: 22px;
+  margin-top: 24px;
+  grid-template-columns: minmax(0, 1fr) 234px;
+}
+.cosmic-app .observatory-plate {
+  border: 1px solid #a8bcdf24;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 80px #0004;
+}
+.cosmic-app .observatory-updates {
+  border: 1px solid #a8bcdf18;
+  border-radius: 18px;
+  padding: 18px;
+  background: linear-gradient(150deg, #14203588, #0b132088);
+}
+.cosmic-app .observatory-updates .recent-item {
+  border-color: #a8bcdf13;
+  padding-top: 19px;
+  padding-bottom: 19px;
+}
+.cosmic-app .observatory-updates .recent-item:hover {
+  background: #a8bcdf09;
+}
+.cosmic-app .observatory-updates .recent-item > span > span:first-child {
+  color: #d3dbeb;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.cosmic-app .observatory-updates .recent-item > span > span:last-child {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #7d8ba6;
+}
+.cosmic-app [class*="text-[#15140f]"] {
+  color: #e5e8ef;
+}
+.cosmic-app [class*="text-[#5a5448]"] {
+  color: #a3aec2;
+}
+.cosmic-app [class*="text-[#8b8676]"] {
+  color: #7c8aa4;
+}
+.cosmic-app [class*="bg-[#f7f1de]"] {
+  background: #101927;
+}
+.cosmic-app [class*="bg-[#efe7d2]"] {
+  background: #080d18;
+}
+.cosmic-app [class*="bg-[#ece4cf]"] {
+  background: #101827;
+}
+.cosmic-app .observatory-main > footer {
+  margin: 0 -30px;
+  padding: 12px 30px;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+}
+.cosmic-app .markdown {
+  color: #b9c5da;
+}
+.cosmic-app .markdown h1,
+.cosmic-app .markdown h2,
+.cosmic-app .markdown h3,
+.cosmic-app .markdown h4 {
+  color: #e1e7f3;
+}
+.cosmic-app .markdown a {
+  color: #dcbf94;
+}
+.cosmic-app .markdown pre,
+.cosmic-app .markdown th {
+  background: #080f1d;
+}
+.cosmic-app .markdown code {
+  background: #a8bcdf0c;
+}
+.cosmic-app .markdown pre code {
+  background: transparent;
+}
+.cosmic-app .markdown blockquote {
+  color: #92a3be;
+}
+.cosmic-app .note-find-toggle,
+.cosmic-app .note-find-nav,
+.cosmic-app .note-find-close {
+  color: #becbe0;
+  border-color: #a8bcdf25;
+}
+.cosmic-app .note-find-controls textarea {
+  background: #080f1d;
+  color: #d3deef;
+  border-color: #a8bcdf29;
+}
+.cosmic-app .note-find-controls output,
+.cosmic-app .note-find-current,
+.cosmic-app .note-find-hint {
+  color: #8c9fbd;
+}
+.cosmic-app .search-hit {
+  background: #ddc18e;
+  color: #15151d;
+}
+.cosmic-app [class*="bg-[#ed6f5c]"] {
+  background: linear-gradient(110deg, #ccb08926, #8c7ab91c);
+  color: #e8cda3;
+  box-shadow: inset 2px 0 #d7bb91;
+}
+.cosmic-app [class*="border-[#15140f"] {
+  border-color: #a8bcdf20;
+}
+.cosmic-app [class*="hover:bg-[#f7f1de"]:hover {
+  background: #a8bcdf08;
+}
+.cosmic-app input[type="date"] {
+  color-scheme: dark;
+  color: #aab6cc;
+}
+.cosmic-app .observatory-topbar kbd {
+  font-size: 9px;
+}
+.cosmic-app .observatory-topbar input {
+  font-size: 12px;
+}
+.cosmic-app .observatory-sidebar nav {
+  margin-top: 34px;
+}
+.cosmic-app .observatory-sidebar nav button {
+  border-radius: 8px;
+  height: 42px;
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+.cosmic-app .observatory-sidebar > div:first-child {
+  height: 60px;
+  gap: 11px;
+  padding: 0 22px;
+}
+.cosmic-app .observatory-sidebar > div:first-child > span:first-child {
+  background: linear-gradient(145deg, #d7c098, #786e99);
+  color: #11131f;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+}
+.cosmic-app .observatory-sidebar > div:first-child > span:last-child {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+.cosmic-app .observatory-page-heading > div:last-child {
+  padding-top: 0;
+}
+.cosmic-app .observatory-page-heading input {
+  font-size: 10px;
+  width: 100px;
+}
+.cosmic-app .observatory-page-heading button {
+  font-size: 12px;
+}
+.cosmic-app .observatory-page-heading > div:last-child > div {
+  font-size: 10px;
+  border-color: #a8bcdf20;
+  border-radius: 9px;
+}
+.cosmic-app
+  .observatory-page-heading
+  [data-slot="button"]:not([data-variant="ghost"]) {
+  box-shadow: 0 5px 22px #c6a67912;
+}
+.observatory {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 470px;
+  isolation: isolate;
+  overflow: hidden;
+  background: #040713;
+  color: #e3e9f4;
+  font-family: var(--font-body, "Segoe UI", sans-serif);
+}
+.observatory > div:has(> canvas),
+.observatory canvas {
+  position: relative;
+  z-index: 0;
+}
+.observatory-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    linear-gradient(180deg, #0508141a, transparent 55%, #050814dd),
+    linear-gradient(90deg, #05091499, transparent 65%);
+}
+.observatory-caption {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  right: 28px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: #a6b1c6;
+  pointer-events: none;
+}
+.obs-live {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #dbbb8e;
+  box-shadow: 0 0 9px #dbbb8e88;
+}
+.obs-coordinate {
+  margin-left: auto;
+  color: #697792;
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.1em;
+}
+.observatory-heading {
+  position: absolute;
+  top: 74px;
+  left: 30px;
+  z-index: 3;
+  pointer-events: none;
+  max-width: 290px;
+}
+.observatory-heading > span {
+  color: #a59580;
+  font-size: 8px;
+  letter-spacing: 0.25em;
+}
+.observatory-heading h2 {
+  font-size: clamp(34px, 3.2vw, 50px);
+  font-weight: 300;
+  line-height: 1.37;
+  letter-spacing: 0.06em;
+  margin: 16px 0;
+  text-shadow: 0 4px 22px #000b;
+  color: #e6e9f3;
+}
+.observatory-heading h2 em {
+  font-style: normal;
+  color: #dfc5a0;
+}
+.observatory-heading p {
+  color: #7e899f;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.observatory-orbit-label {
+  position: absolute;
+  right: 23px;
+  top: 45%;
+  z-index: 3;
+  writing-mode: vertical-rl;
+  color: #626d87;
+  font-size: 7px;
+  letter-spacing: 0.23em;
+  pointer-events: none;
+}
+.observatory-orbit-label span {
+  color: #d2b78e;
+  margin-top: 19px;
+  font-size: 14px;
+}
+.observatory-hover {
+  position: absolute;
+  left: 30px;
+  bottom: 96px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  z-index: 3;
+  pointer-events: none;
+}
+.observatory-hover > span {
+  height: 5px;
+  width: 5px;
+  background: #9ca7d1;
+  border-radius: 50%;
+}
+.observatory-hover strong {
+  color: #bac6df;
+  font-size: 11px;
+  font-weight: 400;
+}
+.observatory-hover small {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #606f8c;
+  font-size: 9px;
+  flex-basis: 100%;
+  margin-left: 14px;
+}
+.observatory-controls {
+  position: absolute;
+  bottom: 90px;
+  right: 24px;
+  z-index: 4;
+  padding: 5px;
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  border: 1px solid #a8bcdf22;
+  background: #0a1123bb;
+  border-radius: 10px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 5px 25px #0004;
+}
+.observatory-controls button {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 30px;
+  border-radius: 6px;
+  color: #7e8daa;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.observatory-controls button:hover {
+  color: #e5d5b9;
+  background: #a8bcdf12;
+}
+.observatory-controls button.on {
+  color: #debf8e;
+  background: #ddbd8e10;
+}
+.observatory-controls button:focus-visible {
+  outline: 2px solid #dbbf94;
+  outline-offset: 2px;
+}
+.observatory-controls > span {
+  height: 18px;
+  width: 1px;
+  background: #a8bcdf1c;
+  margin: 0 4px;
+}
+.observatory-footer {
+  position: absolute;
+  inset: auto 28px 25px;
+  z-index: 3;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  border-top: 1px solid #a8bcdf1b;
+  padding-top: 18px;
+  pointer-events: none;
+}
+.observatory-footer > div {
+  display: flex;
+  gap: 9px;
+  align-items: baseline;
+}
+.observatory-footer b {
+  font-size: 24px;
+  font-family: var(--font-sans, system-ui);
+  font-weight: 350;
+  letter-spacing: -0.06em;
+  color: #d8e0f1;
+}
+.observatory-footer span {
+  color: #62728e;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+.observatory-footer i {
+  height: 18px;
+  width: 1px;
+  background: #a8bcdf22;
+  align-self: center;
+  margin: 0 8px;
+}
+.observatory-footer > span {
+  font-size: 6px;
+  letter-spacing: 0.17em;
+}
+.observatory-empty {
+  height: 100%;
+  min-height: 470px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  color: #a6b0ca;
+}
+.observatory-empty h3 {
+  font-size: 18px;
+  font-weight: 400;
+}
+.observatory-empty p {
+  font-size: 11px;
+  color: #68758f;
+}
+.observatory-distribution {
+  margin-top: auto;
+  padding-top: 25px;
+}
+.observatory-distribution header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #bdc8dd;
+  margin-bottom: 16px;
+}
+.observatory-distribution header small {
+  font-size: 7px;
+  letter-spacing: 0.18em;
+  color: #667694;
+}
+.observatory-distribution button {
+  width: 100%;
+  text-align: left;
+  display: block;
+  margin-top: 13px;
+}
+.observatory-distribution button > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: #8b9bb6;
+}
+.observatory-distribution button > span:first-child > i {
+  height: 4px;
+  width: 4px;
+  border-radius: 50%;
+}
+.observatory-distribution button small {
+  margin-left: auto;
+  font-size: 9px;
+  color: #6e809e;
+}
+.obs-tag-track {
+  display: block;
+  height: 2px;
+  margin-top: 8px;
+  background: #a8bcdf0a;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.obs-tag-track > i {
+  display: block;
+  height: 100%;
+  opacity: 0.65;
+}
+.observatory-cinema {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+}
+.observatory-cinema .observatory-heading {
+  top: 15%;
+  left: 6%;
+  max-width: 430px;
+}
+.observatory-cinema .observatory-heading h2 {
+  font-size: clamp(44px, 5.2vw, 86px);
+}
+.observatory-cinema .observatory-heading p {
+  font-size: 13px;
+}
+.observatory-cinema .observatory-caption {
+  top: 35px;
+  left: 6%;
+  right: 6%;
+}
+.observatory-cinema .observatory-footer {
+  left: 6%;
+  right: 6%;
+  bottom: 35px;
+}
+.observatory-cinema .observatory-controls {
+  right: 6%;
+  bottom: 110px;
+}
+.observatory-cinema .observatory-hover {
+  left: 6%;
+  bottom: 115px;
+}
+@media (max-width: 1190px) {
+  .cosmic-app .observatory-main {
+    padding: 22px 22px 0;
+  }
+  .cosmic-app .observatory-dashboard {
+    grid-template-columns: minmax(0, 1fr) 200px;
+    gap: 16px;
+  }
+  .cosmic-app .observatory-updates {
+    padding: 14px;
+  }
+  .observatory-heading h2 {
+    font-size: 34px;
+  }
+  .observatory-heading {
+    left: 24px;
+    top: 65px;
+  }
+  .observatory-footer > span {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cosmic-app * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
