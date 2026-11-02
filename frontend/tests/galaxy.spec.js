@@ -210,7 +210,15 @@ test("版本冲突保留输入，取消离开不丢失缓冲", async ({ page }) 
     body: "external revision",
     revision: created.revision,
   });
+  const conflictResponse = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/api/save") &&
+      response.request().method() === "POST",
+  );
   await page.getByLabel("Markdown正文").fill("我的尚未保存缓冲");
+  // This case verifies conflict handling; autosave timing has separate cases.
+  await page.getByRole("button", { name: "保存", exact: true }).click();
+  expect((await (await conflictResponse).json()).type).toBe("ConflictError");
   await expect(
     page.getByText("保存失败，修改已保留", { exact: true }),
   ).toBeVisible();
