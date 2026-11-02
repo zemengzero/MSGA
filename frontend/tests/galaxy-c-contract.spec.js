@@ -8,8 +8,9 @@ let child, url;
 test.beforeAll(async () => {
   const run = "c-contract-" + Date.now();
   const info = path.join(root, "runtime", run + ".json");
+  const venv = path.join(root, ".venv/Scripts/python.exe");
   child = spawn(
-    path.join(root, ".venv/Scripts/python.exe"),
+    fs.existsSync(venv) ? venv : "python",
     [
       "-m",
       "zhiyeteam.galaxy",
