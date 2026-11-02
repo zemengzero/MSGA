@@ -138,6 +138,16 @@ OK
 
 其中最新 main 的原有测试全部保留并通过，新增 B 专项测试 10 项全部通过。完整输出见 `reports/B/test-log.txt`，结构化摘要见 `reports/B/unit_checks.json`。
 
+前端按 CI 等价步骤另行验证：
+
+```text
+npm ci             成功，安装 67 个包，0 个漏洞
+npm run build      成功
+playwright test    7 passed
+```
+
+其中此前偶发失败的“版本冲突保留输入”用例，在隔离运行、完整套件重复运行和干净 `npm ci` 后运行中均通过。
+
 ## 6. 90秒演示
 
 1. 先说明：空间预检用于避免明显不足，但不能替代实际写入异常处理和恢复回退。
@@ -174,4 +184,4 @@ OK
 - 本分支没有修改界面，D 需要把恢复入口切换到 `restore_with_audit` 并展示保护位置和审计警告。
 - UI 集成截图和实体程序演练待 D 合并后完成。
 - 本地提交作者已设置为 `DKLSOUL <2553675108@qq.com>`。变基后的 B1 提交为 `2f721b7`，B2 提交为 `1344730`，B3 提交为 `ae7a711`，CI 兼容修复由后续提交保存。
-- 本机没有 Node.js，因此前端 `npm ci`、`npm run build`、`npm test` 待 GitHub Actions 验证；Python 101 项测试已在本机全部通过。
+- 本机已使用便携 Node 24 完成 `npm ci`、`npm run build` 和 7 项 Playwright 测试；Python 101 项与前端 7 项测试均已实际通过。

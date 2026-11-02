@@ -1,0 +1,26 @@
+Command:
+npm ci
+
+Result:
+added 67 packages, and audited 68 packages in 1m
+found 0 vulnerabilities
+
+Command:
+npm run build
+
+Result:
+vite v8.3.5 building client environment for production
+2430 modules transformed
+built successfully
+
+Command:
+playwright test
+
+Result:
+7 passed (1.1m)
+
+The previously flaky conflict regression passed in:
+- isolated run: 1 passed
+- full suite run 1: 7 passed
+- full suite run 2: 7 passed
+- full suite after clean npm ci: 7 passed

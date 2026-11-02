@@ -1,8 +1,12 @@
 {
-  "executed_at_utc": "2026-11-02T03:48:07.6652647Z",
+  "executed_at_utc": "2026-11-02T04:41:17.9765920Z",
   "passed": true,
   "tests_run": 101,
   "new_B_tests": 10,
+  "frontend_tests_run": 7,
+  "frontend_tests_passed": 7,
+  "npm_ci": "passed",
+  "npm_build": "passed",
   "backup_source_sha256": "e7388edd074aa3679e3899acb13c55a227a48d5c8e08ef5a46a52212dffabdc1",
   "restore_audit_source_sha256": "9c8868ccfd2dd164e6eb1b508641d8f104d08a2b5fac9c33d2bae4fd140b9999",
   "galaxy_api_source_sha256": "ce3fee3757ffdee79860ed59f9171944ade63a51787a1d43f346bcef30eee732",
