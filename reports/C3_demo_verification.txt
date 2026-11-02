@@ -1,0 +1,3 @@
+PASS: 9 synthetic notes; active/trash IDs, order, snippet lengths, UTC microseconds and backlinks verified.
+PASS: existing database refused with exit code 2; SHA-256 unchanged.
+PASS: default temporary-database demo completed and cleaned up.
